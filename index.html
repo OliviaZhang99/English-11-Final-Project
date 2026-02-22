@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Choices</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">HC</div>
+      <div class="brand-text">
+        <div class="title">The Weight of Becoming</div>
+        <div class="subtitle">choices • tradeoffs • consequences</div>
+      </div>
+    </div>
+
+    <div class="topbar-actions">
+      <button id="btnReset" class="btn btn-ghost" type="button" title="Reset">
+        Reset
+      </button>
+    </div>
+  </header>
+
+  <!-- START SCREEN -->
+  <main id="screenStart" class="screen screen-active" role="main">
+    <section class="card hero">
+      <h1 class="hero-title">Start a life.</h1>
+      <p class="hero-desc">
+        Pick an identity, choose your starting hobby, then begin your timeline.
+      </p>
+
+      <div class="setup-grid">
+        <!-- Identity -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Identity</h2>
+            <p class="muted">Your starting background + traits.</p>
+          </div>
+
+          <div id="identityGrid" class="choice-grid" aria-label="Choose identity"></div>
+
+          <div class="panel-foot">
+            <div class="pill" id="identityPicked">Not selected</div>
+          </div>
+        </div>
+
+        <!-- Starting Hobby -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Starting Hobby</h2>
+            <p class="muted">A small stat boost + story flavor.</p>
+          </div>
+
+          <div class="hobby-row">
+            <button id="btnPickHobby" class="btn btn-primary" type="button">
+              Choose Starting Hobby
+            </button>
+
+            <div class="pill" id="hobbyPicked">Not selected</div>
+          </div>
+
+          <div class="hint">
+            Tip: your hobby can influence early opportunities.
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <button id="btnStartLife" class="btn btn-start" type="button" disabled>
+          Start Life
+        </button>
+        <div class="muted small" id="startStatus">
+          Select an identity and a starting hobby to begin.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- GAME SCREEN -->
+  <main id="screenGame" class="screen" role="main">
+    <section class="game-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar card">
+        <div class="sidebar-head">
+          <div class="sidebar-title">Status</div>
+          <div class="sidebar-sub" id="sidebarIdentity">—</div>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-label">Age</div>
+            <div class="stat-value" id="statAge">0</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">Background</div>
+            <div class="stat-value" id="statBackground">—</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">Education</div>
+            <div class="stat-value" id="statEducation">Child</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">Money</div>
+            <div class="stat-value" id="statMoney">$0</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">Hobby</div>
+            <div class="stat-value" id="statHobby">—</div>
+          </div>
+        </div>
+
+        <hr class="sep" />
+
+        <div class="bars">
+          <div class="bar">
+            <div class="bar-top">
+              <span>Health</span>
+              <span id="barHealthVal">50</span>
+            </div>
+            <div class="bar-track"><div id="barHealth" class="bar-fill"></div></div>
+          </div>
+
+          <div class="bar">
+            <div class="bar-top">
+              <span>Hope</span>
+              <span id="barHopeVal">50</span>
+            </div>
+            <div class="bar-track"><div id="barHope" class="bar-fill"></div></div>
+          </div>
+
+          <div class="bar">
+            <div class="bar-top">
+              <span>Trust</span>
+              <span id="barTrustVal">50</span>
+            </div>
+            <div class="bar-track"><div id="barTrust" class="bar-fill"></div></div>
+          </div>
+
+          <div class="bar">
+            <div class="bar-top">
+              <span>Connections</span>
+              <span id="barConnVal">15</span>
+            </div>
+            <div class="bar-track"><div id="barConn" class="bar-fill"></div></div>
+          </div>
+        </div>
+
+        <div class="sidebar-actions">
+          <button id="btnNextYear" class="btn btn-primary" type="button">Advance Year</button>
+          <button id="btnBackToStart" class="btn btn-ghost" type="button">Back to Start</button>
+        </div>
+      </aside>
+
+      <!-- Main Story -->
+      <section class="main card">
+        <div class="main-head">
+          <div>
+            <div class="main-title">Timeline</div>
+            <div class="muted" id="timelineSub">Your life begins now.</div>
+          </div>
+          <div class="chip" id="yearChip">Year 0</div>
+        </div>
+
+        <div id="eventCard" class="event-card">
+          <div class="event-title" id="eventTitle">Press “Advance Year”.</div>
+          <div class="event-body" id="eventBody">
+            You’ll get a short story moment + choices that affect your stats.
+          </div>
+        </div>
+
+        <div id="choiceRow" class="choice-row" aria-label="Event choices"></div>
+
+        <div class="log-wrap">
+          <div class="log-title">Life Log</div>
+          <div id="lifeLog" class="log" aria-live="polite"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- HOBBY MODAL -->
+  <div id="modalOverlay" class="modal-overlay" hidden></div>
+
+  <section
+    id="hobbyModal"
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="hobbyModalTitle"
+    hidden
+  >
+    <div class="modal-head">
+      <h2 id="hobbyModalTitle">Choose your starting hobby</h2>
+      <button id="btnCloseModal" class="icon-btn" type="button" aria-label="Close">
+        ✕
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <p class="muted">
+        Pick one. You can change hobbies later in life, but this sets your first boosts.
+      </p>
+
+      <div id="hobbyGrid" class="choice-grid" aria-label="Choose starting hobby"></div>
+    </div>
+
+    <div class="modal-foot">
+      <button id="btnConfirmHobby" class="btn btn-primary" type="button" disabled>
+        Confirm Hobby
+      </button>
+      <div class="muted small" id="modalHint">Select a hobby to confirm.</div>
+    </div>
+  </section>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
