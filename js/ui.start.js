@@ -1,5 +1,4 @@
 import { identities } from "./data.identities.js";
-import { hobbies } from "./data.hobbies.js";
 
 export function renderIdentityChoices(state, E, updateStartReady) {
   E.identityGrid.innerHTML = "";
@@ -32,20 +31,12 @@ export function renderIdentityChoices(state, E, updateStartReady) {
   }
 }
 
-export function syncHobbyPill(state, E) {
-  if (!state.selectedHobbyId) E.hobbyPicked.textContent = "Not selected";
-  else {
-    const chosen = hobbies.find(h => h.id === state.selectedHobbyId);
-    E.hobbyPicked.textContent = chosen ? chosen.title : "Selected";
-  }
-}
-
 export function updateStartReady(state, E) {
-  const ok = Boolean(state.selectedIdentityId && state.selectedHobbyId);
+  // Only identity required now
+  const ok = Boolean(state.selectedIdentityId);
   E.btnStartLife.disabled = !ok;
 
-  if (ok) E.startStatus.textContent = "Ready. Start your life when you’re ready.";
-  else if (!state.selectedIdentityId && !state.selectedHobbyId) E.startStatus.textContent = "Select an identity and a starting hobby to begin.";
-  else if (!state.selectedIdentityId) E.startStatus.textContent = "Select an identity to begin.";
-  else E.startStatus.textContent = "Choose a starting hobby to begin.";
+  E.startStatus.textContent = ok
+    ? "Ready. Start your life when you’re ready."
+    : "Select an identity to begin.";
 }
