@@ -8,19 +8,9 @@ export const els = () => ({
   // start screen
   identityGrid: $("#identityGrid"),
   identityPicked: $("#identityPicked"),
-  btnPickHobby: $("#btnPickHobby"),
-  hobbyPicked: $("#hobbyPicked"),
   btnStartLife: $("#btnStartLife"),
   startStatus: $("#startStatus"),
   btnReset: $("#btnReset"),
-
-  // modal
-  modalOverlay: $("#modalOverlay"),
-  hobbyModal: $("#hobbyModal"),
-  hobbyGrid: $("#hobbyGrid"),
-  btnCloseModal: $("#btnCloseModal"),
-  btnConfirmHobby: $("#btnConfirmHobby"),
-  modalHint: $("#modalHint"),
 
   // game screen
   btnBackToStart: $("#btnBackToStart"),
