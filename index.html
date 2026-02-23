@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Choices</title>
+  <title>The Weight of Becoming</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -32,7 +32,7 @@
     <section class="card hero">
       <h1 class="hero-title">Start a life.</h1>
       <p class="hero-desc">
-        Pick an identity, choose your starting hobby, then begin your timeline.
+        Choose where you begin. The rest will unfold.
       </p>
 
       <div class="setup-grid">
@@ -40,7 +40,7 @@
         <div class="panel">
           <div class="panel-head">
             <h2>Identity</h2>
-            <p class="muted">Your starting background + traits.</p>
+            <p class="muted">Your starting background + early conditions.</p>
           </div>
 
           <div id="identityGrid" class="choice-grid" aria-label="Choose identity"></div>
@@ -50,23 +50,17 @@
           </div>
         </div>
 
-        <!-- Starting Hobby -->
+        <!-- (Hobby removed from start screen by design) -->
         <div class="panel">
           <div class="panel-head">
-            <h2>Starting Hobby</h2>
-            <p class="muted">A small stat boost + story flavor.</p>
-          </div>
-
-          <div class="hobby-row">
-            <button id="btnPickHobby" class="btn btn-primary" type="button">
-              Choose Starting Hobby
-            </button>
-
-            <div class="pill" id="hobbyPicked">Not selected</div>
+            <h2>Note</h2>
+            <p class="muted">
+              You won’t choose a hobby yet. At age 6, you’ll be asked what you want to get good at.
+            </p>
           </div>
 
           <div class="hint">
-            Tip: your hobby can influence early opportunities.
+            The game is designed so early childhood feels like childhood — you don’t make “adult choices” immediately.
           </div>
         </div>
       </div>
@@ -76,7 +70,7 @@
           Start Life
         </button>
         <div class="muted small" id="startStatus">
-          Select an identity and a starting hobby to begin.
+          Select an identity to begin.
         </div>
       </div>
     </section>
@@ -165,17 +159,17 @@
       <section class="main card">
         <div class="main-head">
           <div>
-            <div class="main-title">Timeline</div>
-            <div class="muted" id="timelineSub">Your life begins now.</div>
+            <div class="main-title">Life</div>
+            <div class="muted" id="timelineSub">—</div>
           </div>
-          <div class="chip" id="yearChip">Year 0</div>
+
+          <!-- keep element but hidden via JS for safety -->
+          <div class="chip" id="yearChip" hidden>Year</div>
         </div>
 
         <div id="eventCard" class="event-card">
-          <div class="event-title" id="eventTitle">Press “Advance Year”.</div>
-          <div class="event-body" id="eventBody">
-            You’ll get a short story moment + choices that affect your stats.
-          </div>
+          <div class="event-title" id="eventTitle">—</div>
+          <div class="event-body" id="eventBody">—</div>
         </div>
 
         <div id="choiceRow" class="choice-row" aria-label="Event choices"></div>
@@ -188,40 +182,6 @@
     </section>
   </main>
 
-  <!-- HOBBY MODAL -->
-  <div id="modalOverlay" class="modal-overlay" hidden></div>
-
-  <section
-    id="hobbyModal"
-    class="modal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="hobbyModalTitle"
-    hidden
-  >
-    <div class="modal-head">
-      <h2 id="hobbyModalTitle">Choose your starting hobby</h2>
-      <button id="btnCloseModal" class="icon-btn" type="button" aria-label="Close">
-        ✕
-      </button>
-    </div>
-
-    <div class="modal-body">
-      <p class="muted">
-        Pick one. You can change hobbies later in life, but this sets your first boosts.
-      </p>
-
-      <div id="hobbyGrid" class="choice-grid" aria-label="Choose starting hobby"></div>
-    </div>
-
-    <div class="modal-foot">
-      <button id="btnConfirmHobby" class="btn btn-primary" type="button" disabled>
-        Confirm Hobby
-      </button>
-      <div class="muted small" id="modalHint">Select a hobby to confirm.</div>
-    </div>
-  </section>
-
-<script type="module" src="js/main.js"></script>
+  <script type="module" src="/js/main.js"></script>
 </body>
 </html>
