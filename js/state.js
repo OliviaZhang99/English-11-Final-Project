@@ -16,8 +16,6 @@ export const educationFromAge = (age) => {
 
 export const defaultState = () => ({
   selectedIdentityId: null,
-  selectedHobbyId: null,
-  pendingHobbyId: null,
   inGame: false,
 
   age: 0,
@@ -26,12 +24,13 @@ export const defaultState = () => ({
   education: "Child",
   money: 0,
   hobby: "—",
+
   health: 50,
   hope: 50,
   trust: 50,
   connections: 15,
 
-  usedEventIds: [] // NEW: track events already seen this life
+  usedEventIds: [],
 });
 
 export const applyDelta = (state, delta) => {
