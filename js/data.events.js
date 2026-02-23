@@ -1,99 +1,117 @@
 export const events = [
-  // Age 1: Family baseline (one-time)
   {
     id: "family_baseline_1",
     minAge: 1,
     maxAge: 1,
     once: true,
-    title: "A quiet pattern forms",
-    body: "Your family’s routines shape you before you can even name them. Some homes feel steady; others feel tense. Either way, you learn what “normal” means.",
+    title: "The first atmosphere",
+    body:
+      "You won’t remember this year clearly — but your nervous system will.\n" +
+      "Tone of voice, routines, silence after conflict.\n" +
+      "This becomes your first definition of “normal.”",
     choices: [
-      { text: "You grow up feeling supported", delta: { hope: +3, trust: +2 }, log: "Warm support becomes your default expectation." },
-      { text: "You grow up feeling pressure", delta: { hope: -1, trust: -1, connections: +1 }, log: "You adapt early — careful, observant, and socially alert." }
+      {
+        text: "Home feels steady most days (predictable routines, gentle voices)",
+        delta: { hope: +2, trust: +4 },
+        log: "Consistency teaches you that safety can be real."
+      },
+      {
+        text: "Home feels unpredictable (mood shifts, tension, sudden conflict)",
+        delta: { hope: -1, trust: -2, connections: +2 },
+        log: "You learn to read rooms early. You adapt fast — but trust takes time."
+      }
     ]
   },
 
-  // Age 5: Hobby becomes real (one-time)
   {
-    id: "hobby_emerges_5",
-    minAge: 5,
-    maxAge: 6,
+    id: "play_style_4",
+    minAge: 4,
+    maxAge: 4,
     once: true,
-    title: "A hobby finds you",
-    body: "At this age, you don’t “build a resume.” You just repeat what feels alive — the thing you keep returning to without being told.",
+    title: "The way you play becomes a clue",
+    body:
+      "Some kids run toward others. Some build worlds alone.\n" +
+      "Neither is wrong — but each shapes how you practice being human.",
     choices: [
-      { text: "Lean into it (practice often)", delta: { hope: +2, health: +1 }, log: "You start forming identity through repetition." },
-      { text: "Keep it casual (no pressure)", delta: { trust: +1, hope: +1 }, log: "You keep joy intact without turning it into stress." }
+      {
+        text: "You play with other kids (sharing, arguing, repairing)",
+        delta: { connections: +3, trust: +1 },
+        log: "You learn that relationships can break and still be repaired."
+      },
+      {
+        text: "You play alone (focused, imaginative, self-contained)",
+        delta: { hope: +2, trust: +1 },
+        log: "You become good at being with yourself."
+      }
     ]
   },
 
-  // Age 8–12: Mentor
   {
-    id: "mentor_notices",
-    minAge: 8,
+    id: "school_first_label_7",
+    minAge: 7,
+    maxAge: 8,
+    once: true,
+    title: "Your first label",
+    body:
+      "School quietly hands you a role: “smart,” “loud,” “shy,” “helper.”\n" +
+      "Sometimes it fits. Sometimes it sticks anyway.",
+    choices: [
+      {
+        text: "You get praised and start tying worth to achievement",
+        delta: { hope: +2, trust: -1, connections: +1 },
+        log: "The praise feels good. The pressure quietly joins it."
+      },
+      {
+        text: "You get overlooked and learn to motivate yourself",
+        delta: { hope: +1, trust: +1, connections: -1 },
+        log: "You stop waiting to be chosen. You begin choosing yourself."
+      }
+    ]
+  },
+
+  {
+    id: "expectations_get_louder",
+    minAge: 12,
     maxAge: 16,
     once: true,
-    title: "A mentor notices you",
-    body: "A teacher pulls you aside after class and offers to introduce you to a community program.",
+    title: "Expectations get louder",
+    body:
+      "At some point, adults stop asking what you like and start asking what you’ll become.\n" +
+      "The future enters the room and sits down at the table.",
     choices: [
-      { text: "Accept and follow through", delta: { connections: +6, hope: +3 }, log: "You built a real connection and gained momentum." },
-      { text: "Say thanks, but avoid commitment", delta: { trust: -2, hope: -1 }, log: "You stayed safe, but missed a door opening." }
+      {
+        text: "You negotiate calmly — boundaries without burning bridges",
+        delta: { trust: +3, hope: +2 },
+        log: "You protect your goals while keeping relationships intact."
+      },
+      {
+        text: "You comply to keep the peace",
+        delta: { hope: -2, trust: +1, connections: +1 },
+        log: "You gain approval, but part of you feels unspoken."
+      }
     ]
   },
 
-  // Age 12–18: Family pressure (teen years)
   {
-    id: "family_pressure_teen",
-    minAge: 12,
+    id: "mentor_notices",
+    minAge: 13,
     maxAge: 18,
     once: true,
-    title: "Expectations get louder",
-    body: "At home, someone expects you to prioritize stability over what you actually want.",
+    title: "Someone takes you seriously",
+    body:
+      "A teacher, coach, or older student notices how hard you work and offers a real door:\n" +
+      "a program, a recommendation, an introduction.",
     choices: [
-      { text: "Communicate calmly and set boundaries", delta: { trust: +4, hope: +2 }, log: "You protected your goals without burning bridges." },
-      { text: "Argue and shut down", delta: { trust: -5, hope: -2 }, log: "You felt heard for a second, then regret hit." }
-    ]
-  },
-
-  // Age 14–30: Health warning
-  {
-    id: "health_warning",
-    minAge: 14,
-    maxAge: 35,
-    once: true,
-    title: "Your body sends a warning",
-    body: "You’ve been pushing too hard. Your sleep is messy, and small pains don’t go away.",
-    choices: [
-      { text: "Rest + recover (skip an opportunity)", delta: { health: +6, money: -200, hope: +1 }, log: "You chose longevity over short-term wins." },
-      { text: "Ignore it and keep going", delta: { health: -7, connections: +2 }, log: "You gained progress, but your body paid the price." }
-    ]
-  },
-
-  // Age 16–40: Side gig
-  {
-    id: "side_gig",
-    minAge: 16,
-    maxAge: 45,
-    once: true,
-    title: "A small paid chance",
-    body: "Someone offers a short paid task. It’s not glamorous, but it’s real money.",
-    choices: [
-      { text: "Take it", delta: { money: +900, hope: +1 }, log: "You stacked small wins into stability." },
-      { text: "Decline to protect time", delta: { hope: +2, connections: -1 }, log: "You kept time for yourself, but drifted a bit socially." }
-    ]
-  },
-
-  // Age 10–60: Trust test
-  {
-    id: "trust_test",
-    minAge: 10,
-    maxAge: 60,
-    once: true,
-    title: "A trust test",
-    body: "A friend shares something private and asks you not to tell anyone.",
-    choices: [
-      { text: "Keep it private", delta: { trust: +6, connections: +1 }, log: "People learn they can rely on you." },
-      { text: "Tell one person anyway", delta: { trust: -8, connections: -2 }, log: "The story spread. The relationship didn’t recover." }
+      {
+        text: "You say yes and show up consistently",
+        delta: { connections: +6, hope: +3 },
+        log: "Momentum compounds. People start expecting good things from you."
+      },
+      {
+        text: "You hesitate and let it pass",
+        delta: { hope: -1, trust: -1 },
+        log: "Nothing collapses — but you wonder later what could’ve happened."
+      }
     ]
   }
 ];
