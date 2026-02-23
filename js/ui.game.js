@@ -29,8 +29,10 @@ export function renderSidebar(state, E) {
   E.statBackground.textContent = state.background;
   E.statEducation.textContent = state.education;
   E.statMoney.textContent = fmtMoney(state.money);
-  E.statHobby.textContent = state.hobby;
-  E.yearChip.textContent = `Year ${state.year}`;
+  E.statHobby.textContent = state.hobby || "—";
+
+  if (E.yearChip) E.yearChip.hidden = true;
+
   setBars(state, E);
 }
 
