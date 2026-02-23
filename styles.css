@@ -159,14 +159,6 @@ body{
   font-size:12px;
 }
 
-.hobby-row{
-  display:flex;
-  gap:12px;
-  align-items:center;
-  margin-top:12px;
-  flex-wrap:wrap;
-}
-
 .hint{
   margin-top:12px;
   padding:10px 12px;
@@ -209,15 +201,6 @@ body{
   background: rgba(255,255,255,.06);
   color: var(--text);
   border:1px solid rgba(255,255,255,.10);
-}
-
-.icon-btn{
-  background: rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.10);
-  color: var(--text);
-  border-radius: 12px;
-  padding: 8px 10px;
-  cursor:pointer;
 }
 
 .sep{
@@ -311,7 +294,7 @@ body{
   border:1px solid rgba(255,255,255,.10);
 }
 .event-title{ font-weight:900; margin-bottom:6px; }
-.event-body{ color:var(--muted); line-height:1.35rem; }
+.event-body{ color:var(--muted); line-height:1.35rem; white-space:pre-wrap; }
 
 .choice-row{
   margin-top:12px;
@@ -333,41 +316,4 @@ body{
   color: var(--text);
   font-size:13px;
   line-height:1.35rem;
-}
-
-.modal-overlay{
-  position:fixed;
-  inset:0;
-  background: rgba(0,0,0,.55);
-  backdrop-filter: blur(6px);
-  z-index:50;
-}
-
-.modal{
-  position:fixed;
-  left:50%;
-  top:50%;
-  transform: translate(-50%,-50%);
-  width: min(720px, calc(100vw - 28px));
-  border-radius: 18px;
-  border:1px solid rgba(255,255,255,.12);
-  background: linear-gradient(180deg, rgba(17,26,51,.98), rgba(13,20,42,.98));
-  box-shadow: 0 25px 70px rgba(0,0,0,.55);
-  z-index:60;
-}
-.modal-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:14px 14px 10px;
-  border-bottom:1px solid var(--line);
-}
-.modal-body{ padding: 12px 14px; }
-.modal-foot{
-  padding: 12px 14px 14px;
-  border-top:1px solid var(--line);
-  display:flex;
-  gap:12px;
-  align-items:center;
-  flex-wrap:wrap;
 }
