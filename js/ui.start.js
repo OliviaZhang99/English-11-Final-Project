@@ -32,8 +32,6 @@ export function renderClassChoices(state, E, updateStartReady) {
 
     btn.onclick = () => {
       state.selectedIdentityId = it.id;
-
-      // rerender so selected styling updates
       renderClassChoices(state, E, updateStartReady);
       updateStartReady();
     };

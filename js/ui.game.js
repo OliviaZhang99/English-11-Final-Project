@@ -6,7 +6,7 @@ export function showScreen(E, which) {
   E.screenGame.classList.toggle("screen-active", !isStart);
 }
 
-export function setBars(state, E) {
+function setBars(state, E) {
   const h = clamp(state.health, 0, 100);
   const ho = clamp(state.hope, 0, 100);
   const t = clamp(state.trust, 0, 100);
@@ -25,17 +25,18 @@ export function setBars(state, E) {
 
 export function renderSidebar(state, E) {
   E.sidebarIdentity.textContent = `${state.background} • ${state.education}`;
-  E.statAge.textContent = String(state.age);
 
+  E.statAge.textContent = String(state.age);
   E.statLocation.textContent = state.locationLabel ?? "—";
   E.statBackground.textContent = state.background;
   E.statEducation.textContent = state.education;
-
   E.statMoney.textContent = fmtMoney(state.money);
   E.statHobby.textContent = state.hobby || "—";
-
   E.statGrade.textContent = String(Math.round(state.grade));
   E.statReputation.textContent = String(Math.round(state.reputation));
+  E.statSchool.textContent = state.schoolType || "—";
+  E.statMajor.textContent = state.major || "—";
+  E.statDegree.textContent = state.degreeLevel || "—";
   E.statRecord.textContent = state.record || "Clean";
 
   const hobby = (state.hobby && state.hobby !== "—") ? ` • ${state.hobby}` : "";

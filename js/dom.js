@@ -29,6 +29,9 @@ export const els = () => ({
   statHobby: $("#statHobby"),
   statGrade: $("#statGrade"),
   statReputation: $("#statReputation"),
+  statSchool: $("#statSchool"),
+  statMajor: $("#statMajor"),
+  statDegree: $("#statDegree"),
   statRecord: $("#statRecord"),
 
   barHealth: $("#barHealth"),

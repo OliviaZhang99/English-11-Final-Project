@@ -42,6 +42,17 @@ export const defaultState = () => ({
   grade: 75,
   reputation: 50,
 
+  // school/career
+  inSchool: false,
+  schoolType: "—",
+  major: "—",
+  degreeLevel: "—",      // — / HS Diploma / Associate / Bachelor / Master / PhD
+  yearsInProgram: 0,
+  programLength: 0,
+
+  // contest strength (for admissions realism)
+  contestStrength: 0, // grows with rankings
+
   record: "Clean",
 
   usedEventIds: [],
