@@ -1,6 +1,5 @@
 :root{
   --bg:#12060a;
-  --card:#1a0b10;
   --text:#f6e9ed;
   --muted:#d3b7bf;
   --line:rgba(255,255,255,.10);
@@ -130,7 +129,6 @@ body{
   border-color: rgba(255,75,95,.75);
   background: rgba(255,75,95,.12);
 }
-
 .choice-title{ font-weight:900; margin-bottom:4px; }
 .choice-desc{ color:var(--muted); font-size:12px; line-height:1.25rem; }
 
@@ -151,7 +149,7 @@ body{
   font-size:12px;
 }
 
-.hero-actions{ margin-top:18px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+.hero-actions{ margin-top:14px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
 
 .btn{
   border:none; border-radius: 14px;
@@ -210,18 +208,8 @@ body{
   background: linear-gradient(135deg, rgba(255,75,95,.18), rgba(176,18,43,.12));
   border:1px solid rgba(255,255,255,.12);
 }
-.avatar-head{
-  width:40px; height:40px;
-  border-radius:999px;
-  background: rgba(255,255,255,.16);
-  margin-top:10px;
-}
-.avatar-body{
-  width:64px; height:42px;
-  border-radius: 18px 18px 14px 14px;
-  background: rgba(255,255,255,.14);
-  margin-top:8px;
-}
+.avatar-head{ width:40px; height:40px; border-radius:999px; background: rgba(255,255,255,.16); margin-top:10px; }
+.avatar-body{ width:64px; height:42px; border-radius: 18px 18px 14px 14px; background: rgba(255,255,255,.14); margin-top:8px; }
 #avatarCaption{ text-align:center; }
 
 .stats{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
@@ -302,7 +290,6 @@ body{
   max-width: min(520px, 92vw);
   text-align: center;
 }
-
 @keyframes popfade{
   0%{ opacity: 0; transform: translateX(-50%) translateY(6px) scale(.98); }
   12%{ opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }

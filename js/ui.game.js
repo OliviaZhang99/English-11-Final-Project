@@ -25,20 +25,18 @@ export function setBars(state, E) {
 
 export function renderSidebar(state, E) {
   E.sidebarIdentity.textContent = `${state.background} • ${state.education}`;
-
   E.statAge.textContent = String(state.age);
+
+  E.statLocation.textContent = state.locationLabel ?? "—";
   E.statBackground.textContent = state.background;
   E.statEducation.textContent = state.education;
-
-  E.statSchool.textContent = state.schoolType ?? "—";
-  E.statMajor.textContent = state.major ?? "—";
-  E.statDegree.textContent = state.degreeLevel ?? "—";
 
   E.statMoney.textContent = fmtMoney(state.money);
   E.statHobby.textContent = state.hobby || "—";
 
   E.statGrade.textContent = String(Math.round(state.grade));
   E.statReputation.textContent = String(Math.round(state.reputation));
+  E.statRecord.textContent = state.record || "Clean";
 
   const hobby = (state.hobby && state.hobby !== "—") ? ` • ${state.hobby}` : "";
   E.avatarCaption.textContent = `${state.name}${hobby}`;
@@ -77,6 +75,5 @@ export function showDeltaPopup(delta) {
   box.className = "delta-popup";
   box.textContent = parts.join("  •  ");
   document.body.appendChild(box);
-
   setTimeout(() => box.remove(), 1350);
 }

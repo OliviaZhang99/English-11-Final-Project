@@ -8,6 +8,8 @@ export const els = () => ({
   identityPicked: $("#identityPicked"),
   inputName: $("#inputName"),
   selectGender: $("#selectGender"),
+  selectLocation: $("#selectLocation"),
+
   btnStartLife: $("#btnStartLife"),
   startStatus: $("#startStatus"),
   btnReset: $("#btnReset"),
@@ -20,15 +22,14 @@ export const els = () => ({
   sidebarIdentity: $("#sidebarIdentity"),
 
   statAge: $("#statAge"),
+  statLocation: $("#statLocation"),
   statBackground: $("#statBackground"),
   statEducation: $("#statEducation"),
-  statSchool: $("#statSchool"),
-  statMajor: $("#statMajor"),
-  statDegree: $("#statDegree"),
   statMoney: $("#statMoney"),
   statHobby: $("#statHobby"),
   statGrade: $("#statGrade"),
   statReputation: $("#statReputation"),
+  statRecord: $("#statRecord"),
 
   barHealth: $("#barHealth"),
   barHope: $("#barHope"),
