@@ -1,27 +1,34 @@
 export const $ = (sel) => document.querySelector(sel);
 
 export const els = () => ({
-  // screens
   screenStart: $("#screenStart"),
   screenGame: $("#screenGame"),
 
-  // start screen
   identityGrid: $("#identityGrid"),
   identityPicked: $("#identityPicked"),
+  inputName: $("#inputName"),
+  selectGender: $("#selectGender"),
   btnStartLife: $("#btnStartLife"),
   startStatus: $("#startStatus"),
   btnReset: $("#btnReset"),
 
-  // game screen
   btnBackToStart: $("#btnBackToStart"),
   btnNextYear: $("#btnNextYear"),
+  lockNote: $("#lockNote"),
 
+  avatarCaption: $("#avatarCaption"),
   sidebarIdentity: $("#sidebarIdentity"),
+
   statAge: $("#statAge"),
   statBackground: $("#statBackground"),
   statEducation: $("#statEducation"),
+  statSchool: $("#statSchool"),
+  statMajor: $("#statMajor"),
+  statDegree: $("#statDegree"),
   statMoney: $("#statMoney"),
   statHobby: $("#statHobby"),
+  statGrade: $("#statGrade"),
+  statReputation: $("#statReputation"),
 
   barHealth: $("#barHealth"),
   barHope: $("#barHope"),
@@ -32,7 +39,6 @@ export const els = () => ({
   barTrustVal: $("#barTrustVal"),
   barConnVal: $("#barConnVal"),
 
-  yearChip: $("#yearChip"),
   timelineSub: $("#timelineSub"),
   eventTitle: $("#eventTitle"),
   eventBody: $("#eventBody"),

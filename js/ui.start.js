@@ -1,6 +1,6 @@
 import { identities } from "./data.identities.js";
 
-export function renderIdentityChoices(state, E, updateStartReady) {
+export function renderClassChoices(state, E, updateStartReady) {
   E.identityGrid.innerHTML = "";
 
   identities.forEach((it) => {
@@ -8,35 +8,35 @@ export function renderIdentityChoices(state, E, updateStartReady) {
     btn.type = "button";
     btn.className = "choice";
     btn.setAttribute("aria-pressed", String(state.selectedIdentityId === it.id));
-
     btn.innerHTML = `
       <div class="choice-title">${it.title}</div>
       <div class="choice-desc">${it.desc}</div>
     `;
-
     btn.addEventListener("click", () => {
       state.selectedIdentityId = it.id;
-      renderIdentityChoices(state, E, updateStartReady);
+      renderClassChoices(state, E, updateStartReady);
       updateStartReady();
     });
-
     E.identityGrid.appendChild(btn);
   });
 
-  if (!state.selectedIdentityId) {
-    E.identityPicked.textContent = "Not selected";
-  } else {
+  if (!state.selectedIdentityId) E.identityPicked.textContent = "Not selected";
+  else {
     const chosen = identities.find(x => x.id === state.selectedIdentityId);
     E.identityPicked.textContent = chosen ? chosen.title : "Selected";
   }
 }
 
 export function updateStartReady(state, E) {
-  // Only identity required now
-  const ok = Boolean(state.selectedIdentityId);
+  const nameOk = state.name.trim().length >= 1;
+  const genderOk = Boolean(state.gender);
+  const classOk = Boolean(state.selectedIdentityId);
+
+  const ok = nameOk && genderOk && classOk;
   E.btnStartLife.disabled = !ok;
 
-  E.startStatus.textContent = ok
-    ? "Ready. Start your life when you’re ready."
-    : "Select an identity to begin.";
+  if (!nameOk) E.startStatus.textContent = "Enter a name.";
+  else if (!genderOk) E.startStatus.textContent = "Select a gender.";
+  else if (!classOk) E.startStatus.textContent = "Select a class.";
+  else E.startStatus.textContent = "Ready. Start your life when you’re ready.";
 }

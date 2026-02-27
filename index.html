@@ -10,7 +10,6 @@
 <body>
   <div class="bg-grid" aria-hidden="true"></div>
 
-  <!-- TOP BAR -->
   <header class="topbar">
     <div class="brand">
       <div class="logo" aria-hidden="true">HC</div>
@@ -19,71 +18,91 @@
         <div class="subtitle">choices • tradeoffs • consequences</div>
       </div>
     </div>
-
     <div class="topbar-actions">
-      <button id="btnReset" class="btn btn-ghost" type="button" title="Reset">
-        Reset
-      </button>
+      <button id="btnReset" class="btn btn-ghost" type="button">Reset</button>
     </div>
   </header>
 
-  <!-- START SCREEN -->
+  <!-- START -->
   <main id="screenStart" class="screen screen-active" role="main">
     <section class="card hero">
-      <h1 class="hero-title">Start a life.</h1>
-      <p class="hero-desc">
-        Choose where you begin. The rest will unfold.
-      </p>
+      <h1 class="hero-title">Begin.</h1>
+      <p class="hero-desc">Pick your starting conditions. The rest is earned.</p>
 
       <div class="setup-grid">
-        <!-- Identity -->
         <div class="panel">
           <div class="panel-head">
             <h2>Identity</h2>
-            <p class="muted">Your starting background + early conditions.</p>
+            <p class="muted">Only class, gender, and name at the start.</p>
           </div>
 
-          <div id="identityGrid" class="choice-grid" aria-label="Choose identity"></div>
+          <div class="form-row">
+            <label class="field">
+              <div class="field-label">Name</div>
+              <input id="inputName" class="input" type="text" placeholder="Enter a name" maxlength="24" />
+            </label>
+
+            <label class="field">
+              <div class="field-label">Gender</div>
+              <select id="selectGender" class="input">
+                <option value="">Select</option>
+                <option value="Girl">Girl</option>
+                <option value="Boy">Boy</option>
+                <option value="Nonbinary">Nonbinary</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="panel-head" style="margin-top:10px;">
+            <h2>Class</h2>
+            <p class="muted">This affects money, pressure, and opportunities.</p>
+          </div>
+
+          <div id="identityGrid" class="choice-grid" aria-label="Choose class"></div>
 
           <div class="panel-foot">
             <div class="pill" id="identityPicked">Not selected</div>
           </div>
         </div>
 
-        <!-- (Hobby removed from start screen by design) -->
         <div class="panel">
           <div class="panel-head">
-            <h2>Note</h2>
+            <h2>How this game works</h2>
             <p class="muted">
-              You won’t choose a hobby yet. At age 6, you’ll be asked what you want to get good at.
+              After each decision, you’ll see what it changed.
+              You must resolve all events in a year before moving on.
             </p>
           </div>
 
           <div class="hint">
-            The game is designed so early childhood feels like childhood — you don’t make “adult choices” immediately.
+            Hobbies are introduced later (age 6). School admissions appear only at the correct ages.
+            Major life milestones never repeat in one life cycle. Some years can include multiple events.
           </div>
         </div>
       </div>
 
       <div class="hero-actions">
-        <button id="btnStartLife" class="btn btn-start" type="button" disabled>
-          Start Life
-        </button>
-        <div class="muted small" id="startStatus">
-          Select an identity to begin.
-        </div>
+        <button id="btnStartLife" class="btn btn-start" type="button" disabled>Start Life</button>
+        <div class="muted small" id="startStatus">Choose name, gender, and class.</div>
       </div>
     </section>
   </main>
 
-  <!-- GAME SCREEN -->
+  <!-- GAME -->
   <main id="screenGame" class="screen" role="main">
     <section class="game-layout">
-      <!-- Sidebar -->
       <aside class="sidebar card">
         <div class="sidebar-head">
           <div class="sidebar-title">Status</div>
           <div class="sidebar-sub" id="sidebarIdentity">—</div>
+        </div>
+
+        <div class="avatar-wrap" aria-label="Avatar">
+          <div class="avatar">
+            <div class="avatar-head"></div>
+            <div class="avatar-body"></div>
+          </div>
+          <div class="muted small" id="avatarCaption">—</div>
         </div>
 
         <div class="stats">
@@ -91,25 +110,43 @@
             <div class="stat-label">Age</div>
             <div class="stat-value" id="statAge">0</div>
           </div>
-
           <div class="stat">
             <div class="stat-label">Background</div>
             <div class="stat-value" id="statBackground">—</div>
           </div>
-
           <div class="stat">
             <div class="stat-label">Education</div>
             <div class="stat-value" id="statEducation">Child</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">School</div>
+            <div class="stat-value" id="statSchool">—</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Major</div>
+            <div class="stat-value" id="statMajor">—</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Degree</div>
+            <div class="stat-value" id="statDegree">—</div>
           </div>
 
           <div class="stat">
             <div class="stat-label">Money</div>
             <div class="stat-value" id="statMoney">$0</div>
           </div>
-
           <div class="stat">
             <div class="stat-label">Hobby</div>
             <div class="stat-value" id="statHobby">—</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">Grade</div>
+            <div class="stat-value" id="statGrade">75</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Reputation</div>
+            <div class="stat-value" id="statReputation">50</div>
           </div>
         </div>
 
@@ -117,34 +154,19 @@
 
         <div class="bars">
           <div class="bar">
-            <div class="bar-top">
-              <span>Health</span>
-              <span id="barHealthVal">50</span>
-            </div>
+            <div class="bar-top"><span>Health</span><span id="barHealthVal">50</span></div>
             <div class="bar-track"><div id="barHealth" class="bar-fill"></div></div>
           </div>
-
           <div class="bar">
-            <div class="bar-top">
-              <span>Hope</span>
-              <span id="barHopeVal">50</span>
-            </div>
+            <div class="bar-top"><span>Hope</span><span id="barHopeVal">50</span></div>
             <div class="bar-track"><div id="barHope" class="bar-fill"></div></div>
           </div>
-
           <div class="bar">
-            <div class="bar-top">
-              <span>Trust</span>
-              <span id="barTrustVal">50</span>
-            </div>
+            <div class="bar-top"><span>Trust</span><span id="barTrustVal">50</span></div>
             <div class="bar-track"><div id="barTrust" class="bar-fill"></div></div>
           </div>
-
           <div class="bar">
-            <div class="bar-top">
-              <span>Connections</span>
-              <span id="barConnVal">15</span>
-            </div>
+            <div class="bar-top"><span>Connections</span><span id="barConnVal">15</span></div>
             <div class="bar-track"><div id="barConn" class="bar-fill"></div></div>
           </div>
         </div>
@@ -153,21 +175,21 @@
           <button id="btnNextYear" class="btn btn-primary" type="button">Advance Year</button>
           <button id="btnBackToStart" class="btn btn-ghost" type="button">Back to Start</button>
         </div>
+
+        <div class="muted small lock-note" id="lockNote" hidden>
+          Choose an option to continue.
+        </div>
       </aside>
 
-      <!-- Main Story -->
       <section class="main card">
         <div class="main-head">
           <div>
             <div class="main-title">Life</div>
             <div class="muted" id="timelineSub">—</div>
           </div>
-
-          <!-- keep element but hidden via JS for safety -->
-          <div class="chip" id="yearChip" hidden>Year</div>
         </div>
 
-        <div id="eventCard" class="event-card">
+        <div class="event-card">
           <div class="event-title" id="eventTitle">—</div>
           <div class="event-body" id="eventBody">—</div>
         </div>

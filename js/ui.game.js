@@ -25,13 +25,23 @@ export function setBars(state, E) {
 
 export function renderSidebar(state, E) {
   E.sidebarIdentity.textContent = `${state.background} • ${state.education}`;
+
   E.statAge.textContent = String(state.age);
   E.statBackground.textContent = state.background;
   E.statEducation.textContent = state.education;
+
+  E.statSchool.textContent = state.schoolType ?? "—";
+  E.statMajor.textContent = state.major ?? "—";
+  E.statDegree.textContent = state.degreeLevel ?? "—";
+
   E.statMoney.textContent = fmtMoney(state.money);
   E.statHobby.textContent = state.hobby || "—";
 
-  if (E.yearChip) E.yearChip.hidden = true;
+  E.statGrade.textContent = String(Math.round(state.grade));
+  E.statReputation.textContent = String(Math.round(state.reputation));
+
+  const hobby = (state.hobby && state.hobby !== "—") ? ` • ${state.hobby}` : "";
+  E.avatarCaption.textContent = `${state.name}${hobby}`;
 
   setBars(state, E);
 }
@@ -41,4 +51,32 @@ export function logLine(E, text) {
   const p = document.createElement("div");
   p.textContent = `[${time}] ${text}`;
   E.lifeLog.prepend(p);
+}
+
+export function showDeltaPopup(delta) {
+  const keys = Object.keys(delta || {}).filter(k => typeof delta[k] === "number" && delta[k] !== 0);
+  if (keys.length === 0) return;
+
+  const nice = (k) => ({
+    money: "Money",
+    health: "Health",
+    hope: "Hope",
+    trust: "Trust",
+    connections: "Connections",
+    grade: "Grade",
+    reputation: "Reputation"
+  }[k] || k);
+
+  const parts = keys.map(k => {
+    const v = delta[k];
+    const sign = v > 0 ? "+" : "";
+    return `${sign}${Math.round(v)} ${nice(k)}`;
+  });
+
+  const box = document.createElement("div");
+  box.className = "delta-popup";
+  box.textContent = parts.join("  •  ");
+  document.body.appendChild(box);
+
+  setTimeout(() => box.remove(), 1350);
 }
