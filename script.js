@@ -1,14 +1,5 @@
 "use strict";
 
-/*
-  LIFE.SIM — Website Game Version (HUD + Dialogue + Choices)
-  - Start/Continue overlay
-  - Save/Load/Restart
-  - Guaranteed event every year (no empty childhood)
-  - Typewriter dialogue
-  - Impact reply after each choice (stat + money deltas)
-  - Death with cause + end summary
-*/
 
 /* ----------------------------
    Save + Constants
