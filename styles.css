@@ -25,18 +25,12 @@ body{
   color:var(--text);
 }
 
-.hidden{ display:none !important; }
-
 .screen{
-  display:none;
-  min-height:100vh;
-  padding:28px;
+  display:none !important;
 }
 
-.screen-active{
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.screen.screen-active{
+  display:block !important;
 }
 
 .start-header{ text-align:center; margin-bottom:18px; }
@@ -262,4 +256,12 @@ body{
 @media (max-width: 980px){
   .layout{ grid-template-columns: 1fr; }
   .terminal{ min-height: 520px; }
+}
+.event-body::after{
+  content:"▌";
+  animation: blink 1s infinite;
+}
+
+@keyframes blink{
+  50%{ opacity:0; }
 }
