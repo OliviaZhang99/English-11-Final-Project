@@ -1,18 +1,13 @@
 :root{
   --bg:#12060a;
-  --bg2:#1a0b11;
   --panel:#1d0e14;
-  --panel2:#14080d;
   --text:#f6e9ed;
   --muted:#cfb7be;
   --line:rgba(255,255,255,.10);
-
   --accent:#ff5a72;
   --accent2:#c91f43;
-
   --shadow:0 18px 48px rgba(0,0,0,.45);
   --r:20px;
-  --r2:14px;
 }
 
 *{ box-sizing:border-box; }
@@ -28,7 +23,7 @@ body{
   background:
     radial-gradient(1200px 700px at 18% 10%, rgba(255,90,114,.16), transparent 60%),
     radial-gradient(1000px 650px at 82% 15%, rgba(201,31,67,.14), transparent 58%),
-    linear-gradient(180deg, var(--bg), #0e0508 100%);
+    linear-gradient(180deg, #12060a, #0e0508 100%);
 }
 
 .bg-grid{
@@ -42,11 +37,8 @@ body{
   opacity:.25;
 }
 
-.hidden{
-  display:none !important;
-}
+.hidden{ display:none !important; }
 
-/* this is the important part for the two-screen bug */
 #screenStart,
 #screenGame{
   display:none;
