@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Weight of Becoming</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">HC</div>
+      <div>
+        <div class="title">The Weight of Becoming</div>
+        <div class="subtitle">choices • tradeoffs • consequences</div>
+      </div>
+    </div>
+    <button id="btnReset" class="btn ghost" type="button">Reset</button>
+  </header>
+
+  <main id="screenStart" class="screen active">
+    <section class="card hero">
+      <h1>Begin.</h1>
+      <p class="muted">No manual. No guarantees. Just time and what you do with it.</p>
+
+      <div class="panel">
+        <div class="grid2">
+          <label>
+            <span>Name</span>
+            <input id="inputName" type="text" maxlength="24" placeholder="Enter a name" />
+          </label>
+
+          <label>
+            <span>Gender</span>
+            <select id="selectGender">
+              <option value="">Select</option>
+              <option value="Girl">Girl</option>
+              <option value="Boy">Boy</option>
+              <option value="Nonbinary">Nonbinary</option>
+              <option value="Transgender">Transgender</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="fullrow">
+          <span>City / Country</span>
+          <select id="selectLocation">
+            <option value="">Select</option>
+          </select>
+        </label>
+
+        <div class="section-head">
+          <h2>Class</h2>
+          <p class="muted">Money helps. Pressure does too, just differently.</p>
+        </div>
+
+        <div id="identityGrid" class="choice-grid"></div>
+
+        <div class="actions">
+          <div id="identityPicked" class="pill">Not selected</div>
+          <button id="btnStartLife" class="btn primary" type="button" disabled>Start Life</button>
+        </div>
+
+        <div id="startStatus" class="muted small">Fill everything above.</div>
+      </div>
+    </section>
+  </main>
+
+  <main id="screenGame" class="screen">
+    <section class="game-layout">
+      <aside class="card sidebar">
+        <div class="sidebar-title">Status</div>
+        <div id="sidebarIdentity" class="muted small">—</div>
+
+        <div class="avatar-wrap">
+          <div class="avatar">
+            <div class="avatar-head"></div>
+            <div class="avatar-body"></div>
+          </div>
+          <div id="avatarCaption" class="muted small">—</div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><span>Age</span><strong id="statAge">0</strong></div>
+          <div class="stat"><span>Location</span><strong id="statLocation">—</strong></div>
+          <div class="stat"><span>Background</span><strong id="statBackground">—</strong></div>
+          <div class="stat"><span>Education</span><strong id="statEducation">Child</strong></div>
+          <div class="stat"><span>Money</span><strong id="statMoney">$0</strong></div>
+          <div class="stat"><span>Hobby</span><strong id="statHobby">—</strong></div>
+          <div class="stat"><span>Grade</span><strong id="statGrade">75</strong></div>
+          <div class="stat"><span>Reputation</span><strong id="statReputation">50</strong></div>
+          <div class="stat full"><span>School</span><strong id="statSchool">—</strong></div>
+          <div class="stat full"><span>Major</span><strong id="statMajor">—</strong></div>
+          <div class="stat full"><span>Degree</span><strong id="statDegree">—</strong></div>
+          <div class="stat full"><span>Record</span><strong id="statRecord">Clean</strong></div>
+        </div>
+
+        <div class="bars">
+          <div>
+            <div class="bar-top"><span>Health</span><span id="barHealthVal">50</span></div>
+            <div class="bar-track"><div id="barHealth" class="bar-fill"></div></div>
+          </div>
+          <div>
+            <div class="bar-top"><span>Hope</span><span id="barHopeVal">50</span></div>
+            <div class="bar-track"><div id="barHope" class="bar-fill"></div></div>
+          </div>
+          <div>
+            <div class="bar-top"><span>Trust</span><span id="barTrustVal">50</span></div>
+            <div class="bar-track"><div id="barTrust" class="bar-fill"></div></div>
+          </div>
+          <div>
+            <div class="bar-top"><span>Connections</span><span id="barConnVal">15</span></div>
+            <div class="bar-track"><div id="barConn" class="bar-fill"></div></div>
+          </div>
+        </div>
+
+        <div class="sidebar-actions">
+          <button id="btnNextYear" class="btn primary" type="button">Advance Year</button>
+          <button id="btnBackToStart" class="btn ghost" type="button">Back to Start</button>
+        </div>
+
+        <div id="lockNote" class="muted small" hidden>Choose an option to continue.</div>
+      </aside>
+
+      <section class="card main">
+        <div class="main-title">Life</div>
+        <div id="timelineSub" class="muted">—</div>
+
+        <div class="event-card">
+          <div id="eventTitle" class="event-title">—</div>
+          <div id="eventBody" class="event-body">—</div>
+        </div>
+
+        <div id="choiceRow" class="choice-row"></div>
+
+        <div class="log-wrap">
+          <div class="log-title">Life Log</div>
+          <div id="lifeLog" class="log"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
