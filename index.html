@@ -14,6 +14,7 @@
         <p class="subtitle">Olivia Zhang • English 11 Final Project</p>
       </div>
       <div class="top-actions">
+        <button id="accountBtn" class="ghost">Sign up / Log in</button>
         <button id="homeBtn" class="ghost hidden">Main Menu</button>
       </div>
     </header>
@@ -27,7 +28,7 @@
               <h2>The Weight of Becoming</h2>
               <p class="menu-intro">
                 A life moves forward one year at a time. Some choices open doors. Some choices close them.
-                Some things arrive before you are ready. Start a new life and see what kind of person that life becomes.
+                Some things arrive before you are ready. Start a new life, or return to one you have already built.
               </p>
             </div>
           </div>
@@ -57,22 +58,17 @@
                 <button id="randomizeBtn">Randomize Setup</button>
                 <button id="startBtn" class="primary">Start New Life</button>
               </div>
-              <p class="small-note">Every run can unlock different endings and badges. No login needed.</p>
+              <p class="small-note">Use the button in the top right only if you want to save a life or load one later.</p>
             </div>
 
             <div class="card menu-side-card">
               <h3>Before You Start</h3>
-              <p class="menu-side-copy">Choose a name, background, identity, and talent. Then start. Crimes, jail time, careers, illnesses, and relationships can all change your ending.</p>
+              <p class="menu-side-copy">Choose a name, background, identity, and talent. Then start. You can play as a guest, or sign up later if you want badges and progress to save.</p>
 
               <div class="saved-badges-block">
-                <h4>Possible endings</h4>
-                <div class="badge-shelf">
-                  <span class="badge">High Achiever</span>
-                  <span class="badge">Rebuilder</span>
-                  <span class="badge">Burnt Out</span>
-                  <span class="badge">Loving Legacy</span>
-                  <span class="badge">System Marked</span>
-                </div>
+                <h4>Saved badge shelf</h4>
+                <div id="badgeShelf" class="badge-shelf empty">No badge shelf loaded.</div>
+                <button id="viewBadgeShelfBtn" class="ghost small-btn">View Badge Shelf</button>
               </div>
             </div>
           </div>
@@ -117,6 +113,41 @@
         </div>
       </aside>
     </main>
+  </div>
+
+  <div id="accountModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-box account-box">
+      <button id="closeAccountModalBtn" class="modal-close">×</button>
+      <div class="account-grid">
+        <div>
+          <h3>Save a New Life</h3>
+          <label>
+            <span>Username</span>
+            <input id="usernameInput" type="text" placeholder="Create a username" />
+          </label>
+          <label>
+            <span>Password</span>
+            <input id="passwordInput" type="password" placeholder="Create a password" />
+          </label>
+          <p class="small-note dark-note">Leave both blank if you want to keep playing as a guest.</p>
+        </div>
+        <div>
+          <h3>Load a Saved Life</h3>
+          <label>
+            <span>Username</span>
+            <input id="loadUsernameInput" type="text" placeholder="Username" />
+          </label>
+          <label>
+            <span>Password</span>
+            <input id="loadPasswordInput" type="password" placeholder="Password" />
+          </label>
+          <div class="button-row wrap">
+            <button id="createAccountBtn">Save / Link Account</button>
+            <button id="loadBtn" class="primary">Load Life</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div id="modal" class="modal hidden" aria-hidden="true">
