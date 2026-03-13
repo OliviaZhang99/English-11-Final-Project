@@ -1,1200 +1,2261 @@
-const identities = [
-  {
-    id: "upper",
-    title: "Upper Class",
-    desc: "More money and connections. Reputation is a currency.",
-    background: "Upper",
-    start: { money: 42000, health: 55, hope: 55, trust: 45, connections: 30, grade: 78, reputation: 55 }
-  },
-  {
-    id: "middle",
-    title: "Middle Class",
-    desc: "Balanced start. Consistency matters.",
-    background: "Middle",
-    start: { money: 12000, health: 55, hope: 50, trust: 50, connections: 15, grade: 75, reputation: 50 }
-  },
-  {
-    id: "working",
-    title: "Working Class",
-    desc: "Low money, higher pressure. Progress compounds if you survive it.",
-    background: "Working",
-    start: { money: 2500, health: 50, hope: 45, trust: 55, connections: 10, grade: 72, reputation: 48 }
+const DATA = {
+  backgrounds: [
+    { name: "Working Class", note: "Money feels fragile. Practical choices matter early.", money: 10, discipline: 6, hope: 5, trust: 5 },
+    { name: "Middle Class", note: "There is some stability, but expectations can weigh on you.", money: 18, discipline: 6, hope: 6, trust: 6 },
+    { name: "Upper Class", note: "Resources open doors, but pressure and image can become its own burden.", money: 32, discipline: 5, hope: 6, trust: 5 }
+  ],
+  identities: [
+    { name: "Woman", note: "Your life may involve navigating gendered expectations and underestimation." },
+    { name: "Man", note: "Your life may involve pressure around status, control, and emotional restraint." },
+    { name: "Non-binary", note: "Your life may ask for self-definition and the search for people who understand you." },
+    { name: "Transgender", note: "Your life may ask for courage, self-definition, support, and persistence in different ways." }
+  ],
+  talents: [
+    { name: "Sports", note: "Your body picks up movement and competition easily.", performance: 2, discipline: 1 },
+    { name: "Arts", note: "You are drawn to expression, imagination, and creative detail.", hope: 1, purpose: 1 },
+    { name: "Academics", note: "Learning and abstraction come naturally to you.", discipline: 2, grades: 4 },
+    { name: "Leadership", note: "People often notice your presence and initiative.", trust: 1, performance: 1 },
+    { name: "Technology", note: "You like solving systems and understanding how things work.", grades: 2, purpose: 1 }
+  ],
+  childhoodActivities: ["Story Time", "Drawing", "Soccer", "Dance", "Music", "Swimming"],
+  teenActivities: ["Dance Team", "Basketball", "Coding Club", "Debate", "Band", "Drama", "Volunteering", "Part-time Job", "Art Club", "Student Council", "Gym"],
+  adultActivities: ["Gym", "Creative Projects", "Volunteering", "Networking", "Family Time", "Reading", "Side Hustle", "Travel", "Therapy", "Community Work"],
+  majors: ["Computer Science", "Business", "Engineering", "Arts", "Education", "Medicine", "Social Sciences", "Skilled Trades"],
+  worldEvents: [
+    { title: "A respiratory virus spreads again", body: "Hospitals fill quickly. Medical systems need more people, and stress rises almost everywhere.", effects: { health: -1 }, field: { Medicine: 1.18 } },
+    { title: "A recession tightens the economy", body: "Hiring slows, promotions become harder, and households begin to cut back.", effects: { money: -4, stress: 1 }, firing: 0.1, raises: -0.15 },
+    { title: "A technology boom accelerates", body: "Companies rush to hire technical workers, and digital skills are rewarded more aggressively.", field: { "Computer Science": 1.18, Engineering: 1.08, Business: 1.04 } },
+    { title: "Infrastructure spending expands", body: "Governments push large public projects. Skilled trades and engineering benefit.", field: { "Skilled Trades": 1.16, Engineering: 1.12 } },
+    { title: "Arts funding is reduced", body: "Cultural organizations become more unstable. Creative work gets harder to sustain financially.", field: { Arts: 0.88 } },
+    { title: "Teacher shortages grow", body: "Schools urgently need workers. Education becomes more stable than usual.", field: { Education: 1.12 } },
+    { title: "Housing costs rise sharply", body: "Rent and mortgages become harder to carry. Even stable people feel squeezed.", effects: { money: -5, stress: 1 } },
+    { title: "A public mental-health push expands support", body: "Counselling access improves. Some people finally get help earlier.", effects: { hope: 1, stress: -1 } }
+  ],
+  companies: [
+    { name: "Northline Systems", culture: "fast and demanding", raise: 0.05, stability: 0.85 },
+    { name: "Cedar Public Services", culture: "steady and structured", raise: 0.04, stability: 0.92 },
+    { name: "Harbour Creative Group", culture: "expressive but unstable", raise: 0.045, stability: 0.78 },
+    { name: "Maple Health Network", culture: "mission-driven and intense", raise: 0.055, stability: 0.88 },
+    { name: "Prairie BuildWorks", culture: "practical and blunt", raise: 0.05, stability: 0.89 }
+  ],
+  houseOptions: [
+    { label: "Small condo", cost: 280, upkeep: 8 },
+    { label: "Townhouse", cost: 430, upkeep: 12 },
+    { label: "Detached home", cost: 710, upkeep: 18 }
+  ],
+  carOptions: [
+    { label: "Used car", cost: 22, upkeep: 2 },
+    { label: "Reliable sedan", cost: 38, upkeep: 3 },
+    { label: "New SUV", cost: 62, upkeep: 5 }
+  ],
+  jobBoard: {
+    "Computer Science": [
+      { title: "IT Support Assistant", minEducation: "High School Graduate", salary: 46, description: "Entry technical support and troubleshooting for a small company." },
+      { title: "Junior Web Developer", minEducation: "College / Trades", salary: 64, description: "Build and maintain front-end pages, small features, and internal tools." },
+      { title: "Software Developer I", minEducation: "University", salary: 79, description: "Write production code, fix bugs, and work with a development team." }
+    ],
+    "Business": [
+      { title: "Sales Associate", minEducation: "High School Graduate", salary: 41, description: "Customer-facing sales and service work with growth potential." },
+      { title: "Operations Coordinator", minEducation: "College / Trades", salary: 55, description: "Support scheduling, logistics, reporting, and office operations." },
+      { title: "Business Analyst", minEducation: "University", salary: 72, description: "Analyze processes, data, and performance for strategic decisions." }
+    ],
+    "Engineering": [
+      { title: "Drafting Technician", minEducation: "College / Trades", salary: 58, description: "Support design and technical drawings for projects." },
+      { title: "Project Engineer", minEducation: "University", salary: 82, description: "Work on engineering planning, testing, and project delivery." },
+      { title: "Research Engineer", minEducation: "Graduate School", salary: 95, description: "Handle advanced technical design and specialized development." }
+    ],
+    "Arts": [
+      { title: "Production Assistant", minEducation: "High School Graduate", salary: 38, description: "Help deliver projects, events, shoots, and creative production tasks." },
+      { title: "Graphic Designer", minEducation: "College / Trades", salary: 52, description: "Create visual assets for brands, campaigns, and digital products." },
+      { title: "Creative Strategist", minEducation: "University", salary: 61, description: "Blend concept development, communication, and campaign planning." }
+    ],
+    "Education": [
+      { title: "After-school Program Worker", minEducation: "High School Graduate", salary: 39, description: "Support children and youth through structured programs." },
+      { title: "Education Assistant", minEducation: "College / Trades", salary: 48, description: "Assist students in classrooms and learning support settings." },
+      { title: "Teacher", minEducation: "University", salary: 68, description: "Teach, assess, plan, and support students in a formal school setting." }
+    ],
+    "Medicine": [
+      { title: "Clinic Receptionist", minEducation: "High School Graduate", salary: 42, description: "Administrative support in a medical office or clinic." },
+      { title: "Licensed Practical Nurse", minEducation: "College / Trades", salary: 66, description: "Direct patient care in hospitals, clinics, or long-term care." },
+      { title: "Physician", minEducation: "Professional School", salary: 145, description: "Diagnosis, treatment, and long-term medical responsibility." }
+    ],
+    "Social Sciences": [
+      { title: "Community Support Worker", minEducation: "High School Graduate", salary: 41, description: "Front-line support work in community and outreach settings." },
+      { title: "Case Coordinator", minEducation: "College / Trades", salary: 53, description: "Coordinate resources, referrals, and client support plans." },
+      { title: "Policy Analyst", minEducation: "University", salary: 71, description: "Research social systems and build policy recommendations." }
+    ],
+    "Skilled Trades": [
+      { title: "Apprentice", minEducation: "High School Graduate", salary: 48, description: "Train on the job while building practical trade skills." },
+      { title: "Journeyperson", minEducation: "College / Trades", salary: 74, description: "Independent skilled trade work with recognized training." },
+      { title: "Site Supervisor", minEducation: "College / Trades", salary: 88, description: "Lead crews, timelines, and safety on larger projects." }
+    ],
+    "General": [
+      { title: "Retail Associate", minEducation: "High School Graduate", salary: 39, description: "Entry customer service work with flexible hours." },
+      { title: "Administrative Assistant", minEducation: "College / Trades", salary: 49, description: "Office support, scheduling, communication, and coordination." },
+      { title: "Program Coordinator", minEducation: "University", salary: 61, description: "Coordinate projects, stakeholders, and reporting requirements." }
+    ]
   }
-];
-
-const locations = [
-  { id: "vancouver_ca", city: "Vancouver", country: "Canada", moneyMult: 1.00, lawStrictness: 55 },
-  { id: "toronto_ca", city: "Toronto", country: "Canada", moneyMult: 1.05, lawStrictness: 60 },
-  { id: "newyork_us", city: "New York", country: "United States", moneyMult: 1.20, lawStrictness: 62 },
-  { id: "losangeles_us", city: "Los Angeles", country: "United States", moneyMult: 1.12, lawStrictness: 58 },
-  { id: "london_uk", city: "London", country: "United Kingdom", moneyMult: 1.10, lawStrictness: 60 },
-  { id: "tokyo_jp", city: "Tokyo", country: "Japan", moneyMult: 1.12, lawStrictness: 70 },
-  { id: "seoul_kr", city: "Seoul", country: "South Korea", moneyMult: 1.08, lawStrictness: 72 },
-  { id: "singapore_sg", city: "Singapore", country: "Singapore", moneyMult: 1.15, lawStrictness: 82 }
-];
-
-const hobbies = [
-  { id: "music", title: "Music", boost: { hope: +7, connections: +4 } },
-  { id: "sports", title: "Sports", boost: { health: +7, trust: +4 } },
-  { id: "art", title: "Art", boost: { hope: +5, trust: +5 } },
-  { id: "coding", title: "Coding", boost: { connections: +5, money: +800 } },
-  { id: "debate", title: "Debate", boost: { trust: +6, connections: +4 } },
-  { id: "volunteer", title: "Volunteer Work", boost: { trust: +7, hope: +3 } },
-  { id: "writing", title: "Writing", boost: { hope: +4, trust: +3 } },
-  { id: "dance", title: "Dance", boost: { health: +4, hope: +4 } },
-  { id: "photography", title: "Photography", boost: { hope: +3, connections: +3 } },
-  { id: "gaming", title: "Gaming", boost: { hope: +3, connections: +2 } }
-];
-
-const majors = [
-  { id: "cs", title: "Computer Science", salary: 76000 },
-  { id: "business", title: "Business", salary: 62000 },
-  { id: "engineering", title: "Engineering", salary: 82000 },
-  { id: "psych", title: "Psychology", salary: 54000 },
-  { id: "bio", title: "Biology", salary: 56000 },
-  { id: "arts", title: "Arts", salary: 47000 },
-  { id: "nursing", title: "Nursing", salary: 78000 },
-  { id: "law", title: "Pre-Law", salary: 69000 },
-  { id: "econ", title: "Economics", salary: 68000 },
-  { id: "education", title: "Education", salary: 53000 }
-];
-
-const $ = (sel) => document.querySelector(sel);
-
-const E = {
-  screenStart: $("#screenStart"),
-  screenGame: $("#screenGame"),
-  identityGrid: $("#identityGrid"),
-  identityPicked: $("#identityPicked"),
-  inputName: $("#inputName"),
-  selectGender: $("#selectGender"),
-  selectLocation: $("#selectLocation"),
-  btnStartLife: $("#btnStartLife"),
-  startStatus: $("#startStatus"),
-  btnReset: $("#btnReset"),
-  btnBackToStart: $("#btnBackToStart"),
-  btnNextYear: $("#btnNextYear"),
-  lockNote: $("#lockNote"),
-  avatarCaption: $("#avatarCaption"),
-  sidebarIdentity: $("#sidebarIdentity"),
-  statAge: $("#statAge"),
-  statLocation: $("#statLocation"),
-  statBackground: $("#statBackground"),
-  statEducation: $("#statEducation"),
-  statMoney: $("#statMoney"),
-  statHobby: $("#statHobby"),
-  statGrade: $("#statGrade"),
-  statReputation: $("#statReputation"),
-  statSchool: $("#statSchool"),
-  statMajor: $("#statMajor"),
-  statDegree: $("#statDegree"),
-  statRecord: $("#statRecord"),
-  barHealth: $("#barHealth"),
-  barHope: $("#barHope"),
-  barTrust: $("#barTrust"),
-  barConn: $("#barConn"),
-  barHealthVal: $("#barHealthVal"),
-  barHopeVal: $("#barHopeVal"),
-  barTrustVal: $("#barTrustVal"),
-  barConnVal: $("#barConnVal"),
-  timelineSub: $("#timelineSub"),
-  eventTitle: $("#eventTitle"),
-  eventBody: $("#eventBody"),
-  choiceRow: $("#choiceRow"),
-  lifeLog: $("#lifeLog")
 };
 
-function defaultState() {
+const app = {
+  state: null,
+  currentScenario: null,
+  worldEventTimer: 2,
+  rankNames: ["Low", "Fair", "Good", "Very Good", "Excellent"],
+  modalActions: {},
+  badgeDefs: [
+    ["High Achiever", s => s.average >= 92 && s.age >= 24],
+    ["Late Bloom", s => s.age >= 35 && s.average >= 84],
+    ["Survivor", s => s.health <= 5 && s.age >= 40],
+    ["Loving Legacy", s => s.relationships >= 8 && s.age >= 55],
+    ["Homeowner", s => !!s.house],
+    ["Entrepreneur", s => s.businessOwner],
+    ["Rebuilder", s => s.criminalRecord && s.job && s.performance >= 6],
+    ["Graduate Scholar", s => s.educationStage === "Graduate School" || s.educationStage === "Professional School"],
+    ["Retired", s => s.retired],
+    ["Worldly", s => s.moves >= 2]
+  ]
+};
+
+const $ = id => document.getElementById(id);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+const rand = arr => arr[Math.floor(Math.random() * arr.length)];
+const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+const chance = p => Math.random() < p;
+const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+function init() {
+  populateSetupOptions();
+  bindUI();
+  showScreen("menuScreen");
+  updateBadgeShelfPreview();
+}
+
+function populateSetupOptions() {
+  fillSelect($("backgroundSelect"), DATA.backgrounds.map(x => x.name));
+  fillSelect($("identitySelect"), DATA.identities.map(x => x.name));
+  fillSelect($("talentSelect"), DATA.talents.map(x => x.name));
+  randomizeSetup();
+}
+
+function fillSelect(select, items) {
+  select.innerHTML = items.map(v => `<option value="${v}">${v}</option>`).join("");
+}
+
+function bindUI() {
+  $("randomizeBtn").onclick = randomizeSetup;
+  $("startBtn").onclick = startGame;
+  $("loadBtn").onclick = loadGame;
+  $("createAccountBtn").onclick = createOrLinkAccount;
+  $("viewBadgeShelfBtn").onclick = updateBadgeShelfPreview;
+  $("closeModalBtn").onclick = closeModal;
+  $("accountBtn").onclick = openAccountModal;
+  $("closeAccountModalBtn").onclick = closeAccountModal;
+  $("modal").addEventListener("click", e => {
+    if (e.target.id === "modal") closeModal();
+  });
+  $("accountModal").addEventListener("click", e => { if (e.target.id === "accountModal") closeAccountModal(); });
+  $("homeBtn").onclick = goHome;
+}
+
+function randomizeSetup() {
+  const names = ["Avery", "Lena", "Jordan", "Mia", "Noah", "Sage", "Olive", "Kai", "Mason", "Emma", "Riley", "Aria"];
+  $("nameInput").value = rand(names);
+  $("backgroundSelect").value = rand(DATA.backgrounds).name;
+  $("identitySelect").value = rand(DATA.identities).name;
+  $("talentSelect").value = rand(DATA.talents).name;
+}
+
+function defaultState(setup) {
+  const bg = DATA.backgrounds.find(b => b.name === setup.background);
+  const talent = DATA.talents.find(t => t.name === setup.talent);
   return {
-    selectedIdentityId: null,
-    selectedLocationId: null,
-    name: "",
-    gender: "",
+    name: setup.name,
+    username: setup.username || "",
+    password: setup.password || "",
     age: 0,
-    year: 0,
-    locationLabel: "—",
-    country: "—",
-    background: "—",
-    education: "Child",
-    moneyMult: 1,
-    lawStrictness: 50,
+    alive: true,
+    background: setup.background,
+    identity: setup.identity,
+    talent: setup.talent,
+    backgroundNote: bg.note,
+    identityNote: DATA.identities.find(x => x.name === setup.identity).note,
+    talentNote: talent.note,
     money: 0,
-    hobby: "—",
-    health: 50,
-    hope: 50,
-    trust: 50,
-    connections: 15,
-    grade: 75,
-    reputation: 50,
-    schoolType: "—",
-    major: "—",
-    degreeLevel: "—",
-    record: "Clean",
-    career: "—",
+    debt: 0,
     salary: 0,
-    company: "None",
-    companyValue: 0,
-    relationship: "Single",
-    kids: 0,
-    illness: "None",
-    awaitingChoice: false,
-    usedEvents: new Set(),
-    typeToken: 0
+    rent: 0,
+    health: 8,
+    hope: bg.hope + (talent.hope || 0),
+    trust: bg.trust + (talent.trust || 0),
+    stress: 1,
+    discipline: bg.discipline + (talent.discipline || 0),
+    performance: 5 + (talent.performance || 0),
+    purpose: 5 + (talent.purpose || 0),
+    relationships: 5,
+    average: 72 + (talent.grades || 0),
+    schoolStage: "Early Childhood",
+    educationStage: "None",
+    major: "Undeclared",
+    gradTrack: "",
+    currentActivity: rand(DATA.childhoodActivities),
+    badges: [],
+    log: [],
+    eventSeen: {},
+    pendingSchoolApps: null,
+    graduationLetterShown: false,
+    company: null,
+    workCulture: "",
+    performanceTrend: 0,
+    job: null,
+    field: null,
+    jobLevel: 0,
+    businessOwner: false,
+    retired: false,
+    retirementIncome: 0,
+    house: null,
+    car: null,
+    houseUpkeep: 0,
+    carUpkeep: 0,
+    inSchool: true,
+    relationshipStatus: "Single",
+    children: 0,
+    criminalRecord: false,
+    underCharges: false,
+    jailYears: 0,
+    illness: "",
+    healthFlags: [],
+    postSecondaryStatus: "",
+    workPerformanceLabel: "developing",
+    moves: 0,
+    loanHistory: [],
+    worldModifier: 1,
+    currentWorld: null,
+    justGraduated: false,
+    yearsWorked: 0,
+    yearsInPostSecondary: 0,
+    certifications: [],
+    applicationsThisYear: 0,
+    pension: 0,
+    healthInsurance: false,
+    carInsurance: false,
+    homeInsurance: false,
+    pendingOffer: null,
+    lastInterviewAge: -1,
+    city: "Vancouver",
+    rentedHome: "",
+    bankruptcyUsed: false,
+    spouseSupport: 0,
+    emergencyFund: 0,
+    cachedAge: null,
+    cachedScenario: null
   };
 }
 
-let state = defaultState();
-
-function clamp(n, a, b) {
-  return Math.max(a, Math.min(b, n));
-}
-
-function fmtMoney(n) {
-  const sign = n < 0 ? "-" : "";
-  return `${sign}$${Math.abs(Math.round(n)).toLocaleString("en-CA")}`;
-}
-
-function educationFromAge(age) {
-  if (age <= 5) return "Child";
-  if (age <= 12) return "Elementary";
-  if (age <= 17) return "High School";
-  if (age <= 22) return "Post-Secondary";
-  return "Adult";
-}
-
-function randInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function pick(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function sampleUnused(pool, count = 1) {
-  const unused = pool.filter(ev => !state.usedEvents.has(ev.id));
-  if (unused.length === 0) return [];
-  const copy = [...unused];
-  const chosen = [];
-  while (copy.length && chosen.length < count) {
-    const i = randInt(0, copy.length - 1);
-    chosen.push(copy.splice(i, 1)[0]);
-  }
-  return chosen;
-}
-
-function showScreen(which) {
-  E.screenStart.classList.remove("active");
-  E.screenGame.classList.remove("active");
-  if (which === "start") E.screenStart.classList.add("active");
-  else E.screenGame.classList.add("active");
-}
-
-function applyDelta(delta = {}) {
-  for (const key in delta) {
-    if (typeof delta[key] === "number") {
-      state[key] = (state[key] || 0) + delta[key];
-    }
-  }
-  state.health = clamp(state.health, 0, 100);
-  state.hope = clamp(state.hope, 0, 100);
-  state.trust = clamp(state.trust, 0, 100);
-  state.connections = clamp(state.connections, 0, 100);
-  state.grade = clamp(state.grade, 0, 100);
-  state.reputation = clamp(state.reputation, 0, 100);
-}
-
-function renderSidebar() {
-  state.education = educationFromAge(state.age);
-
-  E.sidebarIdentity.textContent = `${state.background} • ${state.education}`;
-  E.statAge.textContent = state.age;
-  E.statLocation.textContent = state.locationLabel;
-  E.statBackground.textContent = state.background;
-  E.statEducation.textContent = state.education;
-  E.statMoney.textContent = fmtMoney(state.money);
-  E.statHobby.textContent = state.hobby;
-  E.statGrade.textContent = Math.round(state.grade);
-  E.statReputation.textContent = Math.round(state.reputation);
-  E.statSchool.textContent = state.schoolType;
-  E.statMajor.textContent = state.major;
-  E.statDegree.textContent = state.degreeLevel;
-  E.statRecord.textContent = state.record;
-
-  let caption = state.name || "—";
-  if (state.hobby !== "—") caption += ` • ${state.hobby}`;
-  if (state.illness !== "None") caption += ` • ${state.illness}`;
-  E.avatarCaption.textContent = caption;
-
-  E.barHealth.style.width = `${state.health}%`;
-  E.barHope.style.width = `${state.hope}%`;
-  E.barTrust.style.width = `${state.trust}%`;
-  E.barConn.style.width = `${state.connections}%`;
-
-  E.barHealthVal.textContent = state.health;
-  E.barHopeVal.textContent = state.hope;
-  E.barTrustVal.textContent = state.trust;
-  E.barConnVal.textContent = state.connections;
-}
-
-function logLine(text) {
-  const row = document.createElement("div");
-  row.textContent = text;
-  E.lifeLog.prepend(row);
-}
-
-function typeText(text) {
-  state.typeToken += 1;
-  const token = state.typeToken;
-  E.eventBody.textContent = "";
-  let i = 0;
-
-  function tick() {
-    if (token !== state.typeToken) return;
-    if (i < text.length) {
-      E.eventBody.textContent += text[i];
-      i++;
-      setTimeout(tick, 10);
-    }
-  }
-
-  tick();
-}
-
-function updateStartReady() {
-  const ok = state.name.trim() && state.gender && state.selectedIdentityId && state.selectedLocationId;
-  E.btnStartLife.disabled = !ok;
-
-  if (!state.name.trim()) E.startStatus.textContent = "Enter a name.";
-  else if (!state.gender) E.startStatus.textContent = "Select a gender.";
-  else if (!state.selectedLocationId) E.startStatus.textContent = "Select a city and country.";
-  else if (!state.selectedIdentityId) E.startStatus.textContent = "Select a class.";
-  else E.startStatus.textContent = "Ready.";
-}
-
-function renderLocationChoices() {
-  E.selectLocation.innerHTML = `<option value="">Select</option>`;
-  locations.forEach((loc) => {
-    const opt = document.createElement("option");
-    opt.value = loc.id;
-    opt.textContent = `${loc.city}, ${loc.country}`;
-    E.selectLocation.appendChild(opt);
-  });
-}
-
-function renderClassChoices() {
-  E.identityGrid.innerHTML = "";
-  identities.forEach((it) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "choice" + (state.selectedIdentityId === it.id ? " active" : "");
-    btn.innerHTML = `
-      <div><strong>${it.title}</strong></div>
-      <div class="muted small">${it.desc}</div>
-    `;
-    btn.addEventListener("click", () => {
-      state.selectedIdentityId = it.id;
-      renderClassChoices();
-      updateStartReady();
-    });
-    E.identityGrid.appendChild(btn);
-  });
-
-  const chosen = identities.find(i => i.id === state.selectedIdentityId);
-  E.identityPicked.textContent = chosen ? chosen.title : "Not selected";
-}
-
-function setAwaitingChoice(on) {
-  state.awaitingChoice = on;
-  E.btnNextYear.disabled = on;
-  E.lockNote.hidden = !on;
-}
-
-function checkDeath() {
-  if (state.hope <= 0) {
-    endLife("Hope ran out.");
-    return true;
-  }
-  if (state.health <= 0) {
-    endLife("Your health failed.");
-    return true;
-  }
-  return false;
-}
-
-function endLife(reason) {
-  E.eventTitle.textContent = `Age ${state.age} — The end`;
-  E.eventBody.textContent =
-    `${reason}\n\nFinal summary:\n` +
-    `Money: ${fmtMoney(state.money)}\n` +
-    `Reputation: ${Math.round(state.reputation)}\n` +
-    `Trust: ${Math.round(state.trust)}\n` +
-    `Connections: ${Math.round(state.connections)}\n` +
-    `School: ${state.schoolType}\n` +
-    `Major: ${state.major}\n` +
-    `Degree: ${state.degreeLevel}\n` +
-    `Career: ${state.career}\n` +
-    `Relationship: ${state.relationship}\n` +
-    `Record: ${state.record}`;
-  E.choiceRow.innerHTML = "";
-  setAwaitingChoice(true);
-  E.btnNextYear.disabled = true;
-  logLine(`Life ended. Reason: ${reason}`);
-}
-
-function renderEvent(ev) {
-  if (!ev) return;
-
-  state.usedEvents.add(ev.id);
-
-  E.eventTitle.textContent = `Age ${state.age} — ${ev.title}`;
-  typeText(ev.body);
-  E.choiceRow.innerHTML = "";
-  setAwaitingChoice(true);
-
-  ev.choices.forEach((choice) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "btn ghost";
-    btn.textContent = choice.text;
-
-    btn.addEventListener("click", () => {
-      if (choice.apply) choice.apply();
-      applyDelta(choice.delta || {});
-      if (choice.log) logLine(choice.log);
-      renderSidebar();
-
-      if (!checkDeath()) {
-        E.choiceRow.innerHTML = "";
-        setAwaitingChoice(false);
-      }
-    });
-
-    E.choiceRow.appendChild(btn);
-  });
-}
-
-function chooseMajorEvent() {
-  return {
-    id: `major_pick_${state.age}`,
-    title: "Choose a major",
-    body: "You pick a direction. It will shape your opportunities, your salary, and how people imagine your future.",
-    choices: majors.map((m) => ({
-      text: m.title,
-      apply() {
-        state.major = m.title;
-        state.salary = m.salary;
-        logLine(`You choose ${m.title}.`);
-      },
-      delta: { hope: +1 }
-    }))
+function startGame() {
+  const setup = {
+    name: $("nameInput").value.trim() || "Avery",
+    username: $("usernameInput").value.trim(),
+    password: $("passwordInput").value,
+    background: $("backgroundSelect").value,
+    identity: $("identitySelect").value,
+    talent: $("talentSelect").value
   };
-}
 
-function buildStageEvent(id, title, body, choices) {
-  return { id, title, body, choices };
-}
-
-const childEvents = [
-  buildStageEvent("child_1", "A new kid", "A new kid sits alone at lunch. You notice before anyone else does.", [
-    { text: "Sit with them", delta: { connections: +3, trust: +2 }, log: "You make space for them." },
-    { text: "Wave but stay with your group", delta: { connections: +1 }, log: "You try, halfway." },
-    { text: "Ignore it", delta: { hope: -1 }, log: "You tell yourself it is not your job." }
-  ]),
-  buildStageEvent("child_2", "Something breaks", "You knock something over. It shatters. Footsteps are coming.", [
-    { text: "Tell the truth", delta: { trust: +3, reputation: +1 }, log: "You own it." },
-    { text: "Hide it", delta: { trust: -1, hope: +1 }, log: "You learn damage control." },
-    { text: "Blame someone else", delta: { trust: -3, reputation: -2 }, log: "You protect yourself. It costs." }
-  ]),
-  buildStageEvent("child_3", "A school prize", "Your teacher says your work is the best in class. Other kids notice too.", [
-    { text: "Feel proud", delta: { hope: +2, reputation: +2 }, log: "Recognition feels good." },
-    { text: "Stay humble", delta: { trust: +2, reputation: +1 }, log: "You do not gloat." },
-    { text: "Downplay it", delta: { hope: -1 }, log: "You shrink to keep peace." }
-  ]),
-  buildStageEvent("child_4", "Group project", "One person in your group does almost nothing. The deadline is tomorrow.", [
-    { text: "Do extra and save it", delta: { grade: +2, hope: -1 }, log: "You carry the weight." },
-    { text: "Tell the teacher", delta: { trust: +1, reputation: +1 }, log: "You ask for fairness." },
-    { text: "Let it fail", delta: { grade: -2, hope: +1 }, log: "You stop rescuing everyone." }
-  ]),
-  buildStageEvent("child_5", "Field trip money", "A trip is coming up. Not everyone can go easily.", [
-    { text: "Go if you can", delta: { hope: +2, connections: +2 }, log: "You make a memory." },
-    { text: "Stay back quietly", delta: { hope: -1, trust: +1 }, log: "You tell yourself it is fine." },
-    { text: "Ask for help", delta: { trust: +2, hope: +1 }, log: "You let someone support you." }
-  ]),
-  buildStageEvent("child_6", "A rumor", "You hear something embarrassing about another kid. It spreads fast.", [
-    { text: "Stop it", delta: { trust: +3, connections: -1 }, log: "You refuse easy cruelty." },
-    { text: "Repeat it", delta: { reputation: -2, connections: +1 }, log: "It buys attention. Briefly." },
-    { text: "Say nothing", delta: { hope: -1 }, log: "Silence still has a shape." }
-  ]),
-  buildStageEvent("child_7", "Practice vs play", "You could practice and get better, or play and feel free.", [
-    { text: "Practice", delta: { grade: +2, hope: -1 }, log: "Discipline starts early." },
-    { text: "Play", delta: { hope: +2 }, log: "Joy matters too." },
-    { text: "Do a little of both", delta: { hope: +1, grade: +1 }, log: "Balance is imperfect but real." }
-  ]),
-  buildStageEvent("child_8", "Lunch trade", "Someone wants your lunch because theirs is not enough.", [
-    { text: "Share it", delta: { trust: +3, hope: +1 }, log: "Care becomes practical." },
-    { text: "Say no kindly", delta: { trust: +1 }, log: "You set a boundary." },
-    { text: "Mock them", delta: { trust: -4, reputation: -2 }, log: "It lands badly." }
-  ]),
-  buildStageEvent("child_9", "The library corner", "A teacher notices what you keep choosing to read.", [
-    { text: "Lean into it", delta: { grade: +2, hope: +1 }, log: "A quiet talent starts to show." },
-    { text: "Pretend you do not care", delta: { hope: -1 }, log: "You hide what you love." },
-    { text: "Ask for more books", delta: { trust: +2, grade: +1 }, log: "Curiosity gets fed." }
-  ]),
-  buildStageEvent("child_10", "A little lie", "A small lie would make things easier right now.", [
-    { text: "Tell it", delta: { trust: -2, hope: +1 }, log: "It works. For now." },
-    { text: "Tell the truth", delta: { trust: +2, reputation: +1 }, log: "It costs less in the long run." },
-    { text: "Say nothing", delta: { trust: -1 }, log: "Avoidance becomes a habit." }
-  ]),
-  buildStageEvent("child_11", "A birthday party", "You were not invited. You only find out because everyone else is talking about it.", [
-    { text: "Act like it does not matter", delta: { hope: -1, trust: -1 }, log: "It matters anyway." },
-    { text: "Ask about it", delta: { trust: +1 }, log: "You choose directness." },
-    { text: "Make other plans", delta: { hope: +2 }, log: "You keep moving." }
-  ]),
-  buildStageEvent("child_12", "A teacher checks in", "Someone older notices you are quieter than usual.", [
-    { text: "Open up", delta: { trust: +3, hope: +2 }, log: "Being seen helps." },
-    { text: "Say you are fine", delta: { hope: -1 }, log: "You hold it alone." },
-    { text: "Change the subject", delta: { trust: -1 }, log: "Distance protects you." }
-  ]),
-  buildStageEvent("child_13", "Sports tryout", "A spot opens on a team. It scares you exactly enough to matter.", [
-    { text: "Try out", delta: { health: +2, hope: +2, trust: +1 }, log: "You risk being seen." },
-    { text: "Skip it", delta: { hope: -1 }, log: "The chance closes quietly." },
-    { text: "Practice first, then decide", delta: { health: +1, hope: +1 }, log: "You prepare before leaping." }
-  ]),
-  buildStageEvent("child_14", "A lost item", "You find something that clearly belongs to someone else.", [
-    { text: "Return it", delta: { trust: +3, reputation: +1 }, log: "You do the right thing." },
-    { text: "Keep it", delta: { trust: -3, hope: +1 }, log: "It feels smaller later." },
-    { text: "Leave it there", delta: { trust: -1 }, log: "You decide it is not your problem." }
-  ]),
-  buildStageEvent("child_15", "Rainy day inside", "The room feels loud and restless. Everyone wants something different.", [
-    { text: "Organize a game", delta: { connections: +2, reputation: +1 }, log: "You create order." },
-    { text: "Stay by yourself", delta: { hope: +1 }, log: "Solitude becomes familiar." },
-    { text: "Go along with the loudest group", delta: { connections: +1, trust: -1 }, log: "You blend in." }
-  ]),
-  buildStageEvent("child_16", "Homework forgotten", "You forgot something important and class is about to start.", [
-    { text: "Admit it", delta: { trust: +2, grade: -1 }, log: "Honesty softens the hit." },
-    { text: "Make an excuse", delta: { trust: -2, hope: +1 }, log: "You buy time." },
-    { text: "Copy quickly", delta: { grade: +1, trust: -3 }, log: "You save the moment, not the habit." }
-  ]),
-  buildStageEvent("child_17", "A class pet", "The class needs someone responsible this week.", [
-    { text: "Volunteer", delta: { trust: +3, reputation: +1 }, log: "You become dependable." },
-    { text: "Avoid it", delta: { hope: +1 }, log: "You keep your week lighter." },
-    { text: "Volunteer with a friend", delta: { trust: +1, connections: +2 }, log: "Responsibility feels easier together." }
-  ]),
-  buildStageEvent("child_18", "The art wall", "Your work gets pinned up where everyone can see it.", [
-    { text: "Enjoy it", delta: { hope: +2, reputation: +1 }, log: "You let yourself shine." },
-    { text: "Pretend not to care", delta: { hope: -1 }, log: "You hide your pride." },
-    { text: "Encourage someone else too", delta: { trust: +2, connections: +1 }, log: "You widen the spotlight." }
-  ]),
-  buildStageEvent("child_19", "A teammate cries", "Someone on your team makes a mistake and starts crying.", [
-    { text: "Comfort them", delta: { trust: +3, connections: +1 }, log: "Kindness changes the room." },
-    { text: "Tell them to toughen up", delta: { trust: -3, reputation: -1 }, log: "The room gets colder." },
-    { text: "Look away", delta: { hope: -1 }, log: "You make yourself small." }
-  ]),
-  buildStageEvent("child_20", "The long walk home", "You have too much time to think after a hard day.", [
-    { text: "Talk to someone", delta: { trust: +2, hope: +2 }, log: "You let the day leave your body." },
-    { text: "Hold it in", delta: { hope: -1 }, log: "It stays longer than it should." },
-    { text: "Write or draw it out", delta: { hope: +2 }, log: "You turn feeling into shape." }
-  ])
-];
-
-const teenEvents = [
-  buildStageEvent("teen_1", "A harder class", "You signed up for something difficult. Now it is asking if you meant it.", [
-    { text: "Push through", delta: { grade: +3, hope: -2, reputation: +1 }, log: "You choose growth over comfort." },
-    { text: "Drop it", delta: { hope: +1, reputation: -1 }, log: "Relief comes first." },
-    { text: "Ask for help", delta: { grade: +2, trust: +2 }, log: "Support changes outcomes." }
-  ]),
-  buildStageEvent("teen_2", "A friend drifts", "You realize a friendship has been thinning for months.", [
-    { text: "Reach out", delta: { trust: +2, connections: +1 }, log: "You try to repair it." },
-    { text: "Let it fade", delta: { hope: -1 }, log: "Not every ending is loud." },
-    { text: "Start fresh elsewhere", delta: { connections: +2, hope: +1 }, log: "You move toward new people." }
-  ]),
-  buildStageEvent("teen_3", "Cheating opportunity", "The answers are suddenly easy to get. No one may ever know.", [
-    { text: "Take them", delta: { grade: +2, trust: -4, reputation: -2 }, log: "You win the moment and lose something else." },
-    { text: "Refuse", delta: { trust: +3, reputation: +2 }, log: "You keep your name clean." },
-    { text: "Warn the others", delta: { trust: +2, connections: -1 }, log: "You choose the rule over the crowd." }
-  ]),
-  buildStageEvent("teen_4", "A teacher notices", "Someone older says you could become excellent if you keep going.", [
-    { text: "Take it seriously", delta: { grade: +2, hope: +2, reputation: +1 }, log: "Potential turns into pressure and fuel." },
-    { text: "Smile and move on", delta: { hope: +1 }, log: "You leave the door half open." },
-    { text: "Reject the pressure", delta: { hope: -1, trust: -1 }, log: "Praise can feel like weight too." }
-  ]),
-  buildStageEvent("teen_5", "A late-night call", "Someone you know is not okay and wants you right now.", [
-    { text: "Show up", delta: { trust: +3, hope: -1 }, log: "You become someone they can count on." },
-    { text: "Text instead", delta: { trust: +1 }, log: "You help, but from a distance." },
-    { text: "Ignore it", delta: { trust: -4, hope: -1 }, log: "You carry the silence later." }
-  ]),
-  buildStageEvent("teen_6", "A leadership role", "There is a spot open, and people think you should take it.", [
-    { text: "Take it", delta: { reputation: +3, connections: +2, hope: -1 }, log: "Responsibility changes how you are seen." },
-    { text: "Stay in the background", delta: { hope: +1 }, log: "Less pressure, less visibility." },
-    { text: "Share the role", delta: { trust: +2, connections: +2 }, log: "You build with someone else." }
-  ]),
-  buildStageEvent("teen_7", "A terrible grade", "The result is worse than you expected and harder to explain.", [
-    { text: "Recover fast", delta: { grade: +2, hope: -1 }, log: "You let shame become fuel." },
-    { text: "Spiral for a while", delta: { hope: -3 }, log: "The number gets inside your head." },
-    { text: "Ask what went wrong", delta: { grade: +1, trust: +2 }, log: "Feedback hurts less than guessing." }
-  ]),
-  buildStageEvent("teen_8", "Your first paycheck", "It is not a lot, but it is yours.", [
-    { text: "Save it", delta: { money: +900, trust: +1 }, log: "You like what stability feels like." },
-    { text: "Spend some, save some", delta: { money: +500, hope: +1 }, log: "You balance future and now." },
-    { text: "Spend it fast", delta: { money: +100, hope: +2 }, log: "The thrill fades quickly." }
-  ]),
-  buildStageEvent("teen_9", "A risky crowd", "The people around you keep treating recklessness like confidence.", [
-    { text: "Leave", delta: { trust: +2, hope: +1 }, log: "Distance is a skill." },
-    { text: "Stay close", delta: { connections: +2, reputation: -2 }, log: "Belonging can be expensive." },
-    { text: "Try to influence them", delta: { trust: +1, hope: -1 }, log: "You learn not everyone wants saving." }
-  ]),
-  buildStageEvent("teen_10", "A competition", "There is a real chance to prove yourself in public.", [
-    { text: "Enter it", delta: { reputation: +3, hope: +2, connections: +1 }, log: "You let yourself be measured." },
-    { text: "Skip it", delta: { hope: -1 }, log: "You stay comfortable and unseen." },
-    { text: "Prepare first", delta: { grade: +1, hope: +1 }, log: "Patience becomes part of the plan." }
-  ]),
-  buildStageEvent("teen_11", "Family finances", "You overhear enough to know things are tighter than usual.", [
-    { text: "Help where you can", delta: { trust: +3, hope: -1 }, log: "You grow up a little faster." },
-    { text: "Pretend not to notice", delta: { hope: -1 }, log: "Avoidance is not peace." },
-    { text: "Ask directly", delta: { trust: +2, hope: +1 }, log: "Truth feels steadier than guessing." }
-  ]),
-  buildStageEvent("teen_12", "A date", "Someone asks if you want to go out, and your heart answers before your brain does.", [
-    { text: "Say yes", delta: { hope: +3, trust: +1 }, apply() { state.relationship = "Dating"; }, log: "You let life get interesting." },
-    { text: "Say no kindly", delta: { trust: +1 }, log: "You keep the door gentle, not cruel." },
-    { text: "Avoid answering", delta: { trust: -2 }, log: "Ambiguity hurts too." }
-  ]),
-  buildStageEvent("teen_13", "Volunteer requirement", "You need hours, but the experience could become more than a checkbox.", [
-    { text: "Commit seriously", delta: { trust: +3, reputation: +2, hope: +1 }, log: "Purpose sneaks up on you." },
-    { text: "Do the minimum", delta: { reputation: -1 }, log: "You clear the requirement, not much more." },
-    { text: "Skip it and panic later", delta: { hope: -2, reputation: -2 }, log: "Future-you hates this." }
-  ]),
-  buildStageEvent("teen_14", "A public mistake", "You say something wrong in front of people whose opinions matter to you.", [
-    { text: "Own it immediately", delta: { trust: +2, reputation: +1 }, log: "Humility saves more than pride." },
-    { text: "Double down", delta: { trust: -3, reputation: -3 }, log: "Ego makes it bigger." },
-    { text: "Disappear for a while", delta: { hope: -1 }, log: "Embarrassment becomes isolation." }
-  ]),
-  buildStageEvent("teen_15", "A scholarship tip", "Someone quietly tells you there is money out there if you actually apply.", [
-    { text: "Apply", delta: { reputation: +2, hope: +2, money: +1500 }, log: "You ask the future for help." },
-    { text: "Put it off", delta: { hope: -1 }, log: "The deadline does not care." },
-    { text: "Ask someone to review it", delta: { trust: +2, reputation: +1 }, log: "Support sharpens your chances." }
-  ]),
-  buildStageEvent("teen_16", "Practice or sleep", "There are not enough hours for all the versions of you.", [
-    { text: "Practice more", delta: { grade: +2, health: -2, hope: -1 }, log: "Output rises. So does the cost." },
-    { text: "Sleep", delta: { health: +2, hope: +1 }, log: "Your body gets a vote too." },
-    { text: "Split the difference", delta: { grade: +1, health: +1 }, log: "Not perfect. Still wise." }
-  ]),
-  buildStageEvent("teen_17", "Peer pressure online", "A post is blowing up and people want you to join in.", [
-    { text: "Pile on", delta: { connections: +1, trust: -3, reputation: -2 }, log: "Cruelty scales fast online." },
-    { text: "Stay out of it", delta: { trust: +1 }, log: "You do not feed the fire." },
-    { text: "Defend the target", delta: { trust: +3, connections: -1, hope: +1 }, log: "Courage is rarely convenient." }
-  ]),
-  buildStageEvent("teen_18", "A summer program", "An opportunity appears that could change how you see yourself.", [
-    { text: "Apply", delta: { hope: +2, reputation: +2, connections: +1 }, log: "You step toward the bigger room." },
-    { text: "Talk yourself out of it", delta: { hope: -2 }, log: "Fear sounds rational when it wants to win." },
-    { text: "Ask someone to push you", delta: { trust: +2, hope: +1 }, log: "Borrowed confidence still counts." }
-  ]),
-  buildStageEvent("teen_19", "Burnout signs", "Nothing feels dramatic enough to explain why you feel empty.", [
-    { text: "Rest", delta: { health: +4, hope: +2, grade: -1 }, log: "Stopping early saves more than crashing later." },
-    { text: "Power through", delta: { grade: +1, health: -4, hope: -3 }, log: "You keep moving. Not for free." },
-    { text: "Tell someone", delta: { trust: +3, hope: +2 }, log: "Naming it changes it." }
-  ]),
-  buildStageEvent("teen_20", "A friendship line", "You realize someone wants more from your friendship than friendship.", [
-    { text: "Be honest", delta: { trust: +2, hope: +1 }, log: "Clarity hurts less than confusion." },
-    { text: "Lead them on", delta: { trust: -4, connections: +1 }, log: "Attention is not affection." },
-    { text: "Back away quietly", delta: { trust: -1 }, log: "Avoidance writes its own message." }
-  ]),
-  buildStageEvent("teen_21", "A part-time job conflict", "Work wants your time. School already owns most of it.", [
-    { text: "Keep the job", delta: { money: +1200, grade: -2, hope: -1 }, log: "You trade time for security." },
-    { text: "Quit and focus", delta: { grade: +2, money: -400 }, log: "You buy back attention." },
-    { text: "Reduce hours", delta: { money: +500, grade: +1 }, log: "You renegotiate your life." }
-  ]),
-  buildStageEvent("teen_22", "A secret", "A friend tells you something they are not ready for others to know.", [
-    { text: "Keep it", delta: { trust: +3, connections: +1 }, log: "People learn you are safe." },
-    { text: "Tell one person", delta: { trust: -5, reputation: -2 }, log: "The story moves faster than you thought." },
-    { text: "Encourage them to get help", delta: { trust: +2, hope: +1 }, log: "Care does not always mean silence." }
-  ]),
-  buildStageEvent("teen_23", "A school election", "You could actually win. That is part of what makes it scary.", [
-    { text: "Run", delta: { reputation: +3, connections: +2, hope: +1 }, log: "Visibility changes things." },
-    { text: "Support someone else", delta: { trust: +2, connections: +1 }, log: "Influence does not always need your name on it." },
-    { text: "Avoid the whole thing", delta: { hope: -1 }, log: "Safety can look like invisibility." }
-  ]),
-  buildStageEvent("teen_24", "A hard boundary", "Someone keeps crossing a line because they think you will keep taking it.", [
-    { text: "Set the boundary clearly", delta: { trust: +3, hope: +2 }, log: "Your voice gets steadier." },
-    { text: "Explode", delta: { trust: -2, hope: -1 }, log: "Truth arrives badly when delayed too long." },
-    { text: "Say nothing", delta: { hope: -2, trust: -1 }, log: "Silence becomes permission." }
-  ])
-];
-
-const youngAdultEvents = [
-  buildStageEvent("young_1", "Dorm conflict", "Living near people is not the same as living well with them.", [
-    { text: "Talk it through", delta: { trust: +2, hope: +1 }, log: "Directness saves resentment." },
-    { text: "Move if you can", delta: { money: -700, hope: +1 }, log: "Peace costs money sometimes." },
-    { text: "Bottle it up", delta: { hope: -2 }, log: "Small irritation turns structural." }
-  ]),
-  buildStageEvent("young_2", "Internship opening", "A real opening appears. It could launch you or reject you clearly.", [
-    { text: "Apply seriously", delta: { reputation: +3, connections: +2, hope: +1 }, log: "You put yourself in the arena." },
-    { text: "Skip it", delta: { hope: -1 }, log: "Comfort protects and limits you." },
-    { text: "Ask for a referral", delta: { trust: +1, connections: +3 }, log: "People matter more than brochures admit." }
-  ]),
-  buildStageEvent("young_3", "Tuition pressure", "The bill arrives with no interest in your stress level.", [
-    { text: "Work more", delta: { money: +2200, health: -2, grade: -1 }, log: "You trade energy for staying enrolled." },
-    { text: "Borrow more", delta: { money: +3500, hope: -1 }, log: "Future-you takes the hit." },
-    { text: "Ask for aid", delta: { money: +1500, trust: +2 }, log: "Help exists if you ask at the right time." }
-  ]),
-  buildStageEvent("young_4", "A professor's offer", "Someone serious offers to mentor you if you show up properly.", [
-    { text: "Commit", delta: { reputation: +3, connections: +3, hope: +2 }, log: "A door opens because you walk toward it." },
-    { text: "Keep it casual", delta: { connections: +1 }, log: "You leave the door half-open." },
-    { text: "Avoid the pressure", delta: { hope: -1 }, log: "Potential can feel like surveillance." }
-  ]),
-  buildStageEvent("young_5", "Change your major?", "The path you chose no longer feels simple.", [
-    { text: "Stay", delta: { trust: +1, hope: -1 }, log: "You commit to the original bet." },
-    { text: "Switch", delta: { hope: +1, reputation: -1 }, apply() { renderEvent(chooseMajorEvent()); }, log: "You change direction." },
-    { text: "Delay deciding", delta: { hope: -1 }, log: "Indecision has a cost too." }
-  ]),
-  buildStageEvent("young_6", "A cheap apartment", "It is cheap for a reason, but rent is rent.", [
-    { text: "Take it", delta: { money: +500, health: -1 }, log: "You buy breathing room with comfort." },
-    { text: "Keep searching", delta: { money: -300, hope: +1 }, log: "You gamble on something better." },
-    { text: "Get roommates", delta: { money: +800, connections: +1, trust: -1 }, log: "Cost drops. Friction rises." }
-  ]),
-  buildStageEvent("young_7", "A serious relationship", "This is no longer casual. Someone is asking where this is going.", [
-    { text: "Commit", delta: { hope: +3, trust: +2 }, apply() { state.relationship = "Committed"; }, log: "You let the future include someone else." },
-    { text: "Keep it undefined", delta: { trust: -3, hope: +1 }, log: "Ambiguity protects you and hurts them." },
-    { text: "End it", delta: { hope: -1 }, apply() { state.relationship = "Single"; }, log: "Clarity can still hurt." }
-  ]),
-  buildStageEvent("young_8", "An unpaid opportunity", "They say it will be good for exposure. Exposure does not pay rent.", [
-    { text: "Do it anyway", delta: { reputation: +3, money: -700, hope: +1 }, log: "You bet on long-term upside." },
-    { text: "Refuse unpaid labor", delta: { trust: +2, hope: +1 }, log: "You name your value." },
-    { text: "Negotiate something", delta: { money: +300, trust: +1 }, log: "You refuse the first version of the offer." }
-  ]),
-  buildStageEvent("young_9", "Night classes", "You could add more school, more debt, more leverage.", [
-    { text: "Do it", delta: { money: -1500, reputation: +2, hope: -1 }, log: "You keep building." },
-    { text: "Not now", delta: { hope: +1 }, log: "You protect capacity." },
-    { text: "Only if funded", delta: { trust: +1 }, log: "You wait for a better structure." }
-  ]),
-  buildStageEvent("young_10", "Your first real rejection", "This one matters enough to echo.", [
-    { text: "Recover quickly", delta: { hope: +1, reputation: +1 }, log: "You keep moving." },
-    { text: "Take it personally", delta: { hope: -3 }, log: "It gets into your self-story." },
-    { text: "Ask what to improve", delta: { trust: +1, reputation: +2 }, log: "You turn pain into data." }
-  ]),
-  buildStageEvent("young_11", "A side hustle idea", "You keep seeing a problem that might actually be money.", [
-    { text: "Build it", delta: { money: -2000, hope: +3, connections: +2 }, apply() { state.company = "Started"; state.companyValue = randInt(6000, 22000); state.career = "Founder"; }, log: "You start before you feel ready." },
-    { text: "Research first", delta: { reputation: +1, hope: +1 }, log: "You move carefully." },
-    { text: "Ignore it", delta: { hope: -1 }, log: "The idea fades." }
-  ]),
-  buildStageEvent("young_12", "A friend's success", "Someone near you gets what you wanted first.", [
-    { text: "Celebrate them sincerely", delta: { trust: +2, connections: +1 }, log: "Generosity protects your character." },
-    { text: "Compare yourself all week", delta: { hope: -2 }, log: "Their win turns into your wound." },
-    { text: "Use it as fuel", delta: { reputation: +1, hope: +1 }, log: "Envy gets redirected into motion." }
-  ]),
-  buildStageEvent("young_13", "A lonely city", "You moved for the opportunity, not for belonging. It shows.", [
-    { text: "Build community slowly", delta: { connections: +3, hope: +2 }, log: "Belonging is made, not found whole." },
-    { text: "Focus only on work", delta: { reputation: +2, hope: -2 }, log: "You become efficient and hollow." },
-    { text: "Go back home more often", delta: { trust: +2, money: -300 }, log: "Roots still matter." }
-  ]),
-  buildStageEvent("young_14", "Burnout again", "Achievement keeps arriving attached to exhaustion.", [
-    { text: "Rest on purpose", delta: { health: +5, hope: +2, reputation: -1 }, log: "You choose survival over constant output." },
-    { text: "Keep grinding", delta: { reputation: +2, health: -5, hope: -3 }, log: "Momentum keeps moving, but so does damage." },
-    { text: "Tell someone", delta: { trust: +2, hope: +2 }, log: "Support interrupts isolation." }
-  ]),
-  buildStageEvent("young_15", "A roommate emergency", "Someone else’s mess becomes your problem at the worst possible time.", [
-    { text: "Help them", delta: { trust: +2, hope: -1 }, log: "Care takes time." },
-    { text: "Refuse the responsibility", delta: { trust: -1, hope: +1 }, log: "Boundaries matter too." },
-    { text: "Help once, set limits later", delta: { trust: +1 }, log: "You protect both compassion and yourself." }
-  ]),
-  buildStageEvent("young_16", "An almost-job", "You get close enough to taste it, then lose it.", [
-    { text: "Keep applying", delta: { hope: +1, reputation: +1 }, log: "Resilience looks boring from the outside." },
-    { text: "Lower your standards", delta: { money: +700, hope: -1 }, log: "Security wins this round." },
-    { text: "Pivot completely", delta: { hope: +2, reputation: -1 }, log: "Sometimes reinvention is the shortest route." }
-  ]),
-  buildStageEvent("young_17", "Networking event", "The room feels artificial. The opportunities do not.", [
-    { text: "Work the room", delta: { connections: +4, reputation: +1 }, log: "You make visibility a skill." },
-    { text: "Stay by one safe person", delta: { connections: +1 }, log: "You survive it, mostly." },
-    { text: "Leave early", delta: { hope: +1, connections: -1 }, log: "Peace over optics." }
-  ]),
-  buildStageEvent("young_18", "An old friend returns", "Someone from your past reaches out like time did not happen.", [
-    { text: "Reconnect", delta: { trust: +2, connections: +2 }, log: "History softens into possibility." },
-    { text: "Leave it there", delta: { hope: +1 }, log: "Not everything needs reopening." },
-    { text: "Reconnect carefully", delta: { trust: +1 }, log: "You open the door, not the whole house." }
-  ]),
-  buildStageEvent("young_19", "A bad month", "Expenses stack at the exact moment your energy is weakest.", [
-    { text: "Cut hard", delta: { money: +600, hope: -2 }, log: "You survive by narrowing your life." },
-    { text: "Borrow", delta: { money: +1500, hope: -1 }, log: "Future pressure becomes present relief." },
-    { text: "Ask for help", delta: { trust: +2, money: +800 }, log: "Pride is expensive too." }
-  ]),
-  buildStageEvent("young_20", "A city you could leave", "Nothing is forcing you to stay except momentum and narrative.", [
-    { text: "Stay and fight for it", delta: { reputation: +2, hope: +1 }, log: "You decide place is part of identity." },
-    { text: "Move somewhere cheaper", delta: { money: +1200, hope: +1 }, apply() { state.locationLabel = "A cheaper city"; }, log: "Practicality wins." },
-    { text: "Go home", delta: { trust: +2, hope: +2 }, apply() { state.locationLabel = "Back home"; }, log: "Roots become strategy." }
-  ])
-];
-
-const adultEvents = [
-  buildStageEvent("adult_1", "Promotion window", "Someone senior notices your output. This year could move you up or keep you exactly where you are.", [
-    { text: "Push for it", delta: { reputation: +3, money: +2500, hope: -1 }, log: "You argue for your value." },
-    { text: "Wait patiently", delta: { trust: +1, hope: +1 }, log: "You let timing decide." },
-    { text: "Look elsewhere", delta: { connections: +2, money: -300, hope: +1 }, log: "Loyalty is not the only strategy." }
-  ]),
-  buildStageEvent("adult_2", "Budget cuts", "The company starts cutting people. Your team is not exempt.", [
-    { text: "Fight to stay", delta: { trust: -1, connections: +2, hope: -1 }, log: "You protect your position." },
-    { text: "Start looking now", delta: { reputation: +1, hope: +1 }, log: "You move before the floor shifts." },
-    { text: "Wait it out", delta: { hope: -2 }, log: "Uncertainty becomes the whole atmosphere." }
-  ]),
-  buildStageEvent("adult_3", "A health warning", "Your body starts sending messages you cannot keep treating as background noise.", [
-    { text: "Rest and recover", delta: { health: +8, money: -500, hope: +1 }, apply() { state.illness = "Recovering"; }, log: "You choose longevity over short-term wins." },
-    { text: "Ignore it", delta: { health: -10, money: +300, hope: -1 }, apply() { if (state.health < 40) state.illness = "Chronic Stress"; }, log: "Your body keeps score." },
-    { text: "Get checked early", delta: { health: +4, money: -800, trust: +1 }, apply() { state.illness = "Managed"; }, log: "Prevention is unglamorous and powerful." }
-  ]),
-  buildStageEvent("adult_4", "Serious relationship strain", "Love is no longer asking to be felt. It is asking to be maintained.", [
-    { text: "Do the hard conversation", delta: { trust: +3, hope: +1 }, apply() { state.relationship = "Committed"; }, log: "Honesty saves what performance cannot." },
-    { text: "Avoid it", delta: { trust: -3, hope: -1 }, log: "Distance writes its own ending." },
-    { text: "End it cleanly", delta: { hope: -1 }, apply() { state.relationship = "Single"; }, log: "Clarity can still hurt." }
-  ]),
-  buildStageEvent("adult_5", "The company is fragile", "Users like the idea. Revenue is less certain.", [
-    { text: "Raise money", delta: { connections: +4, reputation: +2, money: +12000, trust: -1 }, apply() { if (state.company === "Started") state.companyValue += randInt(25000, 90000); }, log: "You buy time with someone else's belief." },
-    { text: "Stay lean", delta: { hope: -1, trust: +1, money: +3000 }, apply() { if (state.company === "Started") state.companyValue += randInt(5000, 25000); }, log: "Slow growth is still growth." },
-    { text: "Shut it down", delta: { hope: -2, money: +2000 }, apply() { state.company = "Closed"; state.companyValue = 0; }, log: "Not every ending is failure. It still feels like one." }
-  ]),
-  buildStageEvent("adult_6", "A parenting question", "Someone small starts depending on your answer before they understand the question.", [
-    { text: "Say yes to parenthood", delta: { hope: +2, money: -2000, trust: +2 }, apply() { state.kids += 1; }, log: "Your life becomes less singular." },
-    { text: "Not now", delta: { hope: +1, trust: +1 }, log: "Timing matters." },
-    { text: "Avoid deciding", delta: { trust: -2 }, log: "Unmade choices still affect people." }
-  ]),
-  buildStageEvent("adult_7", "Debt catches up", "Bills, interest, and bad timing start moving together.", [
-    { text: "Cut hard", delta: { money: +1000, hope: -2 }, log: "You narrow your life to stabilize it." },
-    { text: "Borrow again", delta: { money: +3000, hope: -2 }, log: "The present gets easier. The future does not." },
-    { text: "Sell something important", delta: { money: +2500, hope: -3 }, log: "Survival sometimes sounds like loss." }
-  ]),
-  buildStageEvent("adult_8", "An old dream returns", "Something you buried for practicality keeps resurfacing.", [
-    { text: "Try it anyway", delta: { hope: +4, money: -1500 }, log: "Desire refuses burial." },
-    { text: "Keep it a hobby", delta: { hope: +2, trust: +1 }, log: "Not everything needs to become income." },
-    { text: "Dismiss it again", delta: { hope: -2 }, log: "You become efficient and slightly emptier." }
-  ]),
-  buildStageEvent("adult_9", "A legal scare", "One shortcut, one bad crowd, one impulsive choice. Now your name is attached to risk.", [
-    { text: "Deal with it properly", delta: { money: -3000, reputation: -3 }, apply() { if (state.record === "Clean") state.record = "Minor Record"; }, log: "You minimize the damage." },
-    { text: "Run from it", delta: { reputation: -6, trust: -4, hope: -3 }, apply() { state.record = "Criminal Record"; }, log: "Avoidance makes it worse." },
-    { text: "Ask for help immediately", delta: { trust: +1, money: -2000, hope: +1 }, apply() { if (state.record === "Clean") state.record = "Minor Record"; }, log: "Panic is smaller when shared early." }
-  ]),
-  buildStageEvent("adult_10", "A move for work", "A better offer comes with a harder city and fewer guarantees.", [
-    { text: "Take it", delta: { money: +2500, reputation: +2, hope: +1 }, apply() { state.locationLabel = "A new city"; }, log: "Reinvention arrives with boxes." },
-    { text: "Stay where you are", delta: { trust: +1, hope: +1 }, log: "Stability is a decision too." },
-    { text: "Negotiate remote", delta: { connections: +1, money: +1200 }, log: "You try to change the shape of the offer." }
-  ]),
-  buildStageEvent("adult_11", "Caregiving", "Someone older in your life starts needing more than occasional help.", [
-    { text: "Show up consistently", delta: { trust: +3, money: -800, hope: -1 }, log: "Love becomes logistics." },
-    { text: "Share the burden", delta: { trust: +2 }, log: "You ask others to carry some of it." },
-    { text: "Distance yourself", delta: { hope: -1, trust: -3 }, log: "Relief and guilt arrive together." }
-  ]),
-  buildStageEvent("adult_12", "A quiet success", "No one claps, but you realize your life is more stable than it used to be.", [
-    { text: "Let yourself feel proud", delta: { hope: +3 }, log: "You stop moving the goalposts for a minute." },
-    { text: "Immediately want more", delta: { reputation: +1, hope: -1 }, log: "Ambition rarely rests." },
-    { text: "Use it to help someone else", delta: { trust: +2, connections: +1 }, log: "Security becomes generosity." }
-  ]),
-  buildStageEvent("adult_13", "Your child needs you", "A younger person in your care asks a question that deserves your full attention.", [
-    { text: "Put everything down and listen", delta: { trust: +3, hope: +2 }, log: "Presence becomes memory." },
-    { text: "Answer while distracted", delta: { trust: -1 }, log: "Half-attention leaves a mark." },
-    { text: "Say later and mean it", delta: { trust: +1 }, log: "Delay is not neglect when it is honest." }
-  ]),
-  buildStageEvent("adult_14", "A former boss calls", "An old contact has an offer that could reset your trajectory.", [
-    { text: "Take the meeting", delta: { connections: +3, reputation: +2 }, log: "History turns into leverage." },
-    { text: "Ignore it", delta: { hope: -1 }, log: "Not every door should stay closed, but this one does." },
-    { text: "Ask what they really want", delta: { trust: +1 }, log: "Curiosity protects you." }
-  ]),
-  buildStageEvent("adult_15", "A bad year for markets", "Even stable people can become fragile in the wrong economy.", [
-    { text: "Pull back", delta: { money: -2000, hope: -1 }, log: "You lose less by moving early." },
-    { text: "Hold steady", delta: { money: -4000, trust: +1 }, log: "You choose conviction over panic." },
-    { text: "Take a risky bet", delta: { money: randInt(-8000, 9000), hope: +1 }, log: "Risk changes shape fast." }
-  ]),
-  buildStageEvent("adult_16", "Resentment at work", "You are doing more than someone paid more than you.", [
-    { text: "Confront it", delta: { reputation: +2, trust: -1, money: +1200 }, log: "You name the imbalance." },
-    { text: "Say nothing", delta: { hope: -2 }, log: "Silence becomes corrosion." },
-    { text: "Use it to leave", delta: { connections: +2, hope: +1 }, log: "You turn frustration into motion." }
-  ]),
-  buildStageEvent("adult_17", "A medical bill", "The number is insulting to the body it belongs to.", [
-    { text: "Pay it and recover", delta: { money: -2500, health: +2 }, log: "The damage becomes financial instead of physical." },
-    { text: "Delay it", delta: { money: +500, hope: -2 }, log: "Delay is rarely free." },
-    { text: "Fight the charge", delta: { trust: +1, money: -600, hope: +1 }, log: "Bureaucracy becomes the second illness." }
-  ]),
-  buildStageEvent("adult_18", "A friend's divorce", "Someone close is falling apart in front of you.", [
-    { text: "Show up fully", delta: { trust: +3, hope: -1 }, log: "You become a safe place." },
-    { text: "Offer practical help", delta: { trust: +2 }, log: "Care becomes tasks." },
-    { text: "Keep your distance", delta: { trust: -2 }, log: "Other people's pain scares you." }
-  ]),
-  buildStageEvent("adult_19", "A tempting affair", "Attention arrives exactly where your life feels thinnest.", [
-    { text: "Walk away", delta: { trust: +3, hope: -1 }, log: "Discipline protects more than reputation." },
-    { text: "Cross the line", delta: { trust: -6, hope: +1, reputation: -3 }, log: "Desire takes the wheel. Consequences wait." },
-    { text: "Fix what is broken first", delta: { trust: +2, hope: +1 }, log: "You address the real fracture." }
-  ]),
-  buildStageEvent("adult_20", "The company almost works", "For one moment it looks like the gamble might justify itself.", [
-    { text: "Scale fast", delta: { money: -6000, hope: +3 }, apply() { if (state.company === "Started") state.companyValue += randInt(30000, 120000); }, log: "Growth becomes its own risk." },
-    { text: "Grow carefully", delta: { money: +2000, trust: +1 }, apply() { if (state.company === "Started") state.companyValue += randInt(8000, 35000); }, log: "You stay alive on purpose." },
-    { text: "Sell it", delta: { money: +randInt(12000, 60000), hope: +1 }, apply() { state.company = "Sold"; state.companyValue = 0; }, log: "You exit before the story turns." }
-  ]),
-  buildStageEvent("adult_21", "A midlife question", "You realize you have become efficient at a life you did not fully choose.", [
-    { text: "Rebuild it", delta: { hope: +4, money: -1200 }, log: "Change becomes worth the mess." },
-    { text: "Keep going", delta: { reputation: +1, hope: -2 }, log: "Momentum impersonates meaning." },
-    { text: "Talk to someone honest", delta: { trust: +2, hope: +2 }, log: "Reflection becomes a tool." }
-  ]),
-  buildStageEvent("adult_22", "A public accusation", "Someone misreads your actions or wants a villain. Either way, your name is involved.", [
-    { text: "Respond clearly", delta: { trust: +1, reputation: -1 }, log: "Calm protects what panic cannot." },
-    { text: "Fight publicly", delta: { reputation: -3, hope: -2 }, log: "Truth gets lost in heat." },
-    { text: "Handle it privately", delta: { trust: +1 }, log: "Quiet repair is slower and often better." }
-  ]),
-  buildStageEvent("adult_23", "A child leaves home", "The house changes shape before you are ready for it.", [
-    { text: "Support them fully", delta: { trust: +3, hope: -1 }, log: "Love learns distance." },
-    { text: "Hold on too tightly", delta: { trust: -2, hope: -1 }, log: "Care turns controlling when afraid." },
-    { text: "Rediscover yourself too", delta: { hope: +3 }, log: "Loss becomes space." }
-  ]),
-  buildStageEvent("adult_24", "A long friendship fades", "Nothing dramatic happened. That can hurt in its own way.", [
-    { text: "Reach out one more time", delta: { trust: +1, hope: +1 }, log: "You honor what it was." },
-    { text: "Let it go", delta: { hope: -1 }, log: "Some endings deserve gentleness, not rescue." },
-    { text: "Replace the connection quickly", delta: { connections: +1, trust: -1 }, log: "Speed does not always equal healing." }
-  ])
-];
-
-function getStagePool() {
-  if (state.age <= 12) return childEvents;
-  if (state.age <= 20) return teenEvents;
-  if (state.age <= 30) return youngAdultEvents;
-  return adultEvents;
-}
-
-function getSpecialEvent() {
-  if (state.age === 1 && !state.usedEvents.has("special_age1")) {
-    return {
-      id: "special_age1",
-      title: "Three toys",
-      body: "A red car. A tiny piano. A box of blocks. Which one do you reach for?",
-      choices: [
-        { text: "The red car", delta: { connections: +2, trust: +1 }, log: "You like motion." },
-        { text: "The piano", delta: { hope: +3, connections: +1 }, log: "You like expression." },
-        { text: "The blocks", delta: { grade: +2, hope: +1 }, log: "You like building." }
-      ]
-    };
+  if (setup.username && !setup.password) {
+    alert("Add a password if you want a saved account, or leave both username and password blank to play as a guest.");
+    return;
   }
 
-  if (state.age === 6 && state.hobby === "—" && !state.usedEvents.has("special_hobby")) {
-    return {
-      id: "special_hobby",
-      title: "After-school sign-up day",
-      body: "A brochure lands on the table. Pick something. You might become it before you realize it.",
-      choices: hobbies.map((h) => ({
-        text: h.title,
-        delta: h.boost,
-        apply() { state.hobby = h.title; },
-        log: `You start ${h.title.toLowerCase()}.`
-      }))
-    };
-  }
-
-  if (state.age === 17 && state.degreeLevel === "—" && !state.usedEvents.has("special_apps")) {
-    return {
-      id: "special_apps",
-      title: "Applications season",
-      body: "You pick where to apply. Grades matter. Reputation matters. Trust and connections matter more than people admit.",
-      choices: [
-        {
-          text: "Apply to university",
-          delta: { hope: +1, reputation: +2 },
-          apply() {
-            state.schoolType = "University";
-            state.degreeLevel = "Bachelor";
-            setTimeout(() => renderEvent(chooseMajorEvent()), 80);
-          },
-          log: "You take the leap."
-        },
-        {
-          text: "Choose community college",
-          delta: { hope: +1 },
-          apply() {
-            state.schoolType = "Community College";
-            state.degreeLevel = "Associate";
-            setTimeout(() => renderEvent(chooseMajorEvent()), 80);
-          },
-          log: "You choose the practical route."
-        },
-        {
-          text: "Work first",
-          delta: { money: +1200, hope: +1 },
-          apply() {
-            state.schoolType = "—";
-            state.degreeLevel = "—";
-            state.career = "Entry-Level Work";
-            state.salary = 32000;
-          },
-          log: "You buy time and breathing room."
-        }
-      ]
-    };
-  }
-
-  if (state.age >= 23 && state.career === "—" && state.degreeLevel !== "—" && !state.usedEvents.has("special_first_job")) {
-    return {
-      id: "special_first_job",
-      title: "First real job",
-      body: "The degree becomes a question: can it turn into a life?",
-      choices: [
-        {
-          text: "Take the best offer",
-          delta: { money: 3000, reputation: +2, hope: +2 },
-          apply() {
-            state.career = `${state.major || "General"} Professional`;
-            if (!state.salary) {
-              const found = majors.find(m => m.title === state.major);
-              state.salary = found ? found.salary : 48000;
-            }
-          },
-          log: "You step into working life."
-        },
-        {
-          text: "Keep searching",
-          delta: { money: -800, hope: -1, trust: +1 },
-          apply() {
-            state.career = "Searching";
-          },
-          log: "You refuse the wrong fit."
-        }
-      ]
-    };
-  }
-
-  return null;
-}
-
-function maybeRandomSystemEvent() {
-  const extra = [];
-
-  if (state.age >= 18 && state.age <= 45 && Math.random() < 0.12 && !state.usedEvents.has(`illness_${state.age}`)) {
-    extra.push({
-      id: `illness_${state.age}`,
-      title: "A health warning",
-      body: "Your body starts sending messages you cannot keep treating as background noise.",
-      choices: [
-        { text: "Rest and recover", delta: { health: +8, money: -500, hope: +1 }, apply() { state.illness = "Recovering"; }, log: "You choose longevity over short-term wins." },
-        { text: "Ignore it", delta: { health: -10, money: +300, hope: -1 }, apply() { if (state.health < 40) state.illness = "Chronic Stress"; }, log: "Your body keeps score." },
-        { text: "Get checked early", delta: { health: +4, money: -800, trust: +1 }, apply() { state.illness = "Managed"; }, log: "Prevention matters." }
-      ]
-    });
-  }
-
-  if (state.age >= 16 && state.age <= 40 && Math.random() < 0.12 && !state.usedEvents.has(`love_${state.age}`)) {
-    extra.push({
-      id: `love_${state.age}`,
-      title: "A relationship crossroads",
-      body: "Someone makes your life feel larger. The timing is awkward. That rarely stops anything.",
-      choices: [
-        { text: "Try", delta: { hope: +3, trust: +2 }, apply() { state.relationship = "Dating"; }, log: "You let someone in." },
-        { text: "Stay focused", delta: { reputation: +1, hope: -1 }, log: "You choose momentum over intimacy." },
-        { text: "Be honest about your limits", delta: { trust: +2, hope: +1 }, log: "Clarity is kinder than confusion." }
-      ]
-    });
-  }
-
-  if (state.age >= 24 && state.company === "None" && state.money >= 8000 && Math.random() < 0.10 && !state.usedEvents.has(`startup_${state.age}`)) {
-    extra.push({
-      id: `startup_${state.age}`,
-      title: "A startup idea",
-      body: "Something you keep noticing might actually be a business. It is risky. That is part of why it matters.",
-      choices: [
-        {
-          text: "Build it",
-          delta: { money: -5000, hope: +4, connections: +3, reputation: +2 },
-          apply() {
-            state.company = "Started";
-            state.companyValue = randInt(8000, 30000);
-            state.career = "Founder";
-          },
-          log: "You start anyway."
-        },
-        { text: "Research first", delta: { reputation: +1, hope: +1 }, log: "You move carefully." },
-        { text: "Leave it alone", delta: { hope: -1 }, log: "The idea stays in your head." }
-      ]
-    });
-  }
-
-  if (state.money < -2000 && Math.random() < 0.28 && !state.usedEvents.has(`debt_${state.age}`)) {
-    extra.push({
-      id: `debt_${state.age}`,
-      title: "Debt catches up",
-      body: "Bills, interest, and bad timing start moving together.",
-      choices: [
-        { text: "Cut hard", delta: { money: +1000, hope: -2 }, log: "You narrow your life to stabilize it." },
-        { text: "Borrow again", delta: { money: +3000, hope: -2 }, log: "The present gets easier. The future does not." },
-        { text: "Sell something important", delta: { money: +2500, hope: -3 }, log: "Survival sometimes sounds like loss." }
-      ]
-    });
-  }
-
-  if (state.age >= 18 && Math.random() < 0.05 && state.record === "Clean" && !state.usedEvents.has(`legal_${state.age}`)) {
-    extra.push({
-      id: `legal_${state.age}`,
-      title: "A legal scare",
-      body: "One shortcut, one bad crowd, one impulsive choice. Now your name is attached to risk.",
-      choices: [
-        {
-          text: "Deal with it properly",
-          delta: { money: -3000, reputation: -3 },
-          apply() { state.record = "Minor Record"; },
-          log: "You minimize the damage."
-        },
-        {
-          text: "Run from it",
-          delta: { reputation: -6, trust: -4, hope: -3 },
-          apply() { state.record = "Criminal Record"; },
-          log: "Avoidance makes it worse."
-        },
-        {
-          text: "Ask for help immediately",
-          delta: { trust: +1, money: -2000, hope: +1 },
-          apply() { state.record = "Minor Record"; },
-          log: "Panic is smaller when shared early."
-        }
-      ]
-    });
-  }
-
-  return extra.length ? pick(extra) : null;
-}
-
-function applyYearlyEconomy() {
-  if (state.age >= 18) {
-    if (state.salary > 0) {
-      state.money += Math.round((state.salary / 12) * 1.8 * state.moneyMult);
-    } else {
-      state.money += Math.round(600 * state.moneyMult);
-    }
-
-    if (state.relationship === "Committed") state.money -= 500;
-    if (state.kids > 0) state.money -= 1200 * state.kids;
-
-    if (state.company === "Started") {
-      state.money += Math.round(state.companyValue * 0.015);
-      state.companyValue += randInt(-4000, 12000);
-      state.companyValue = Math.max(0, state.companyValue);
-    }
-
-    if (state.age > 40 && Math.random() < 0.15) {
-      state.health -= randInt(1, 4);
-    }
-
-    if (state.age > 55 && Math.random() < 0.20) {
-      state.hope -= randInt(1, 3);
+  if (setup.username) {
+    const existing = readAccount(setup.username);
+    if (existing && existing.password !== setup.password) {
+      alert("That username already exists with a different password.");
+      return;
     }
   }
+
+  closeAccountModal();
+  app.state = defaultState(setup);
+  addLog("A new life begins.");
+  showScreen("gameScreen");
+  $("homeBtn").classList.remove("hidden");
+  render();
+  setScenario(introScenario());
+  autosave();
 }
 
-function nextLifeEvent() {
-  const special = getSpecialEvent();
-  if (special) return special;
+function loadGame() {
+  const username = $("loadUsernameInput").value.trim();
+  const password = $("loadPasswordInput").value;
+  if (!username || !password) {
+    alert("Enter both username and password to load a saved life.");
+    return;
+  }
+  const account = readAccount(username);
+  if (!account || account.password !== password || !account.save) {
+    alert("No saved life matched that login.");
+    return;
+  }
+  closeAccountModal();
+  app.state = account.save;
+  showScreen("gameScreen");
+  $("homeBtn").classList.remove("hidden");
+  render();
+  setScenario(generateYearScenario());
+}
 
-  const randomSystem = maybeRandomSystemEvent();
-  if (randomSystem) return randomSystem;
+function createOrLinkAccount() {
+  const username = $("usernameInput").value.trim();
+  const password = $("passwordInput").value;
+  if (!username || !password) {
+    alert("Enter both a username and password.");
+    return;
+  }
+  const existing = readAccount(username);
+  if (existing && existing.password !== password) {
+    alert("That username already exists with a different password.");
+    return;
+  }
 
-  const pool = getStagePool();
-  const chosen = sampleUnused(pool, 1);
-  if (chosen.length) return chosen[0];
+  const saveState = app.state ? { ...app.state, username, password } : null;
+  localStorage.setItem(accountKey(username), JSON.stringify({
+    password,
+    save: saveState,
+    badges: Array.from(new Set([...(existing?.badges || []), ...(app.state?.badges || [])]))
+  }));
 
+  if (app.state) {
+    app.state.username = username;
+    app.state.password = password;
+    autosave();
+  }
+
+  updateBadgeShelfPreview();
+  closeAccountModal();
+  alert(app.state ? "Account linked. This life can now save and load." : "Account created. Start a life and it will save under this username.");
+}
+
+function goHome() {
+  if (confirm("Return to the main menu? Unsaved guest progress will be lost.")) {
+    app.state = null;
+    app.currentScenario = null;
+    showScreen("menuScreen");
+    $("homeBtn").classList.add("hidden");
+    updateBadgeShelfPreview();
+  }
+}
+
+function showScreen(id) {
+  ["menuScreen", "gameScreen"].forEach(screenId => {
+    $(screenId).classList.toggle("active", screenId === id);
+  });
+}
+
+function openAccountModal() {
+  $("accountModal").classList.remove("hidden");
+}
+
+function closeAccountModal() {
+  $("accountModal").classList.add("hidden");
+}
+
+function introScenario() {
+  const s = app.state;
   return {
-    id: `fallback_${state.age}_${randInt(1, 999999)}`,
-    title: "Another year",
-    body: "Time passes. Small choices still shape you.",
+    age: s.age,
+    title: "Age 0",
+    body: "Begin this life?",
     choices: [
-      { text: "Keep going", delta: { hope: +1 }, log: "The year folds into the next one." }
+      { text: "Begin.", fn: () => advanceYear({ hope: 1, trust: 1 }) }
     ]
   };
 }
 
-function advanceYear() {
-  if (state.awaitingChoice) return;
-
-  state.age += 1;
-  state.year += 1;
-
-  applyYearlyEconomy();
-  renderSidebar();
-  E.timelineSub.textContent = `Age ${state.age}.`;
-
-  if (checkDeath()) return;
-
-  const ev = nextLifeEvent();
-  renderEvent(ev);
+function setScenario(scenario) {
+  app.currentScenario = scenario;
+  renderScenario();
 }
 
-function startLife() {
-  const ident = identities.find(i => i.id === state.selectedIdentityId);
-  const loc = locations.find(l => l.id === state.selectedLocationId);
-  if (!ident || !loc) return;
+function render() {
+  if (!app.state) return;
+  normalizeFinances();
+  renderSummary();
+  renderBadges();
+  renderLog();
+  renderActions();
+}
 
-  const savedName = state.name.trim();
-  const savedGender = state.gender;
+function renderScenario() {
+  const s = app.state;
+  const scene = app.currentScenario;
+  $("ageLabel").textContent = `Age ${s.age}`;
+  $("sceneTitle").textContent = scene.title;
+  $("narrative").textContent = scene.body;
+  const pills = [
+    pill(`Health ${healthLabel(s.health)}`),
+    pill(`Hope ${statWord(s.hope)}`),
+    pill(`Stress ${statWord(11 - s.stress)}`)
+  ];
+  if (s.money > 0 || s.salary > 0 || s.debt > 0 || s.age >= 15) pills.push(pill(`Money $${Math.round(s.money)}k`));
+  $("statusPills").innerHTML = pills.join("");
+  $("choiceArea").innerHTML = "";
+  scene.choices.forEach(choice => {
+    const btn = document.createElement("button");
+    btn.textContent = choice.text;
+    btn.onclick = choice.fn;
+    $("choiceArea").appendChild(btn);
+  });
+}
 
-  state = {
-    ...defaultState(),
-    selectedIdentityId: ident.id,
-    selectedLocationId: loc.id,
-    name: savedName,
-    gender: savedGender,
-    background: ident.background,
-    locationLabel: `${loc.city}, ${loc.country}`,
-    country: loc.country,
-    moneyMult: loc.moneyMult,
-    lawStrictness: loc.lawStrictness,
-    money: Math.round(ident.start.money * loc.moneyMult),
-    health: ident.start.health,
-    hope: ident.start.hope,
-    trust: ident.start.trust,
-    connections: ident.start.connections,
-    grade: ident.start.grade,
-    reputation: ident.start.reputation
+function renderSummary() {
+  const s = app.state;
+  const showAcademics = s.inSchool || ["High School", "Middle School", "Elementary School", "Early Childhood"].includes(s.schoolStage);
+  const rows = [
+    ["Name", s.name],
+    ["Age", s.age],
+    ["Background", s.background],
+    ["Identity", s.identity],
+    ["Talent", s.talent],
+    ["City", s.city],
+    [showAcademics ? "School Stage" : "Life Stage", s.schoolStage],
+    ["Education", s.educationStage],
+    ["Main Focus", s.currentActivity || "—"]
+  ];
+
+  if (showAcademics) {
+    rows.push(["Average Score", `${Math.round(s.average)}%`]);
+    if (["University", "College / Trades", "Graduate School", "Professional School"].includes(s.schoolStage)) {
+      rows.push(["Major", s.major]);
+    }
+  }
+
+  if (s.field) rows.push(["Current Field", s.field]);
+  if (s.job || s.retired) rows.push(["Job", s.job || "Retired"]);
+  if (s.company) rows.push(["Company", s.company]);
+  if (s.salary || s.retired) rows.push(["Salary", s.retired ? `$${Math.round(s.retirementIncome)}k pension` : `$${Math.round(s.salary)}k`]);
+
+  rows.push(
+    ["Money", `$${Math.round(s.money)}k`],
+    ["Debt", `$${Math.round(s.debt)}k`],
+    ["Housing", s.house || s.rentedHome || (s.rent ? "Renting" : "—")],
+    ["Car", s.car || "—"],
+    ["Insurance", [s.healthInsurance ? "Health" : "", s.carInsurance ? "Car" : "", s.homeInsurance ? "Home" : ""].filter(Boolean).join(", ") || "None"],
+    ["Relationship", s.relationshipStatus],
+    ["Children", s.children],
+    ["Health", healthLabel(s.health)]
+  );
+
+  if (s.illness) rows.push(["Illness", s.illness]);
+  if (s.job) rows.push(["Work Performance", workLabel(s.performance)]);
+
+  rows.push(["Legal Status", legalLabel(s)]);
+  if (s.age >= 55 || s.retired) rows.push(["Retirement", s.retired ? "Retired" : "Not retired"]);
+
+  $("summaryArea").innerHTML = rows.map(([k,v]) => `<div class="summary-row"><span>${k}</span><strong>${v}</strong></div>`).join("");
+}
+
+function legalLabel(s) {
+  if (s.jailYears > 0) return `In custody (${s.jailYears} year${s.jailYears === 1 ? "" : "s"} left)`;
+  if (s.underCharges) return "Facing charges";
+  if (s.criminalRecord) return "Criminal record";
+  return "Clear";
+}
+
+function renderBadges() {
+  const unlocked = new Set(app.state.badges);
+  $("badgesArea").innerHTML = app.badgeDefs.map(([name]) => {
+    const cls = unlocked.has(name) ? "badge" : "badge locked";
+    return `<span class="${cls}">${name}</span>`;
+  }).join("");
+}
+
+function renderLog() {
+  $("logArea").innerHTML = app.state.log.slice(-12).reverse().map(item => `<div class="log-item">${item}</div>`).join("");
+}
+
+function schoolActionLabel(s) {
+  if (s.justGraduated || s.schoolStage === "After High School" || s.educationStage === "High School Graduate") return "Apply to schools";
+  if (s.inSchool) {
+    if (["University", "College / Trades", "Graduate School", "Professional School"].includes(s.schoolStage)) return "School portal";
+    if (s.schoolStage === "High School" && s.age >= 18) return "Apply to schools";
+    return "Student options";
+  }
+  if (["University", "College / Trades"].includes(s.educationStage)) return "Grad / school options";
+  if (s.schoolStage === "Gap Year") return "Apply to schools";
+  return "Go back to school";
+}
+
+function renderActions() {
+  const s = app.state;
+  const container = $("actionButtons");
+  container.innerHTML = "";
+  if (!s.alive) return;
+
+  const actions = [];
+  if (s.age >= 12 && s.age <= 26) actions.push(["Change activity", chooseActivityAction]);
+  if (s.age >= 18 && !s.retired) actions.push([schoolActionLabel(s), goBackToSchoolAction]);
+  if (s.age >= 16) actions.push(["Take out a loan", takeLoanAction]);
+  if (s.age >= 18 && !s.house) actions.push([s.rent ? "Move / rent" : "Start renting", rentHousingAction]);
+  if (s.age >= 18 && !s.house && s.money >= 20) actions.push(["Buy house", buyHouseAction]);
+  if (s.house) actions.push(["Manage housing", manageHousingAction]);
+  if (s.age >= 16 && !s.car) actions.push(["Buy car", buyCarAction]);
+  if (s.car) actions.push(["Manage car", manageCarAction]);
+  if (s.illness) actions.push(["Handle illness", showIllnessPopup]);
+  if (s.age >= 18) actions.push(["Insurance", insuranceAction]);
+  if (s.debt > 0) actions.push(["Pay debt", payDebtAction]);
+  if (s.debt >= 140 && !s.bankruptcyUsed) actions.push(["Consider bankruptcy", bankruptcyAction]);
+  if (s.age >= 18 && s.job && !s.retired) actions.push(["Ask for a raise", askRaiseAction]);
+  if (s.age >= 21 && s.job && !s.retired) actions.push(["Ask for promotion", askPromotionAction]);
+  if (s.age >= 18 && s.job && !s.retired) actions.push(["Quit job", quitJobAction]);
+  if (s.age >= 18 && !s.job && !s.retired && !s.inSchool && s.jailYears === 0) actions.push(["Apply for jobs", applyJobsAction]);
+  if (s.age >= 18 && !s.job && !s.retired && s.schoolStage === "Gap Year") actions.push(["Apply for jobs", applyJobsAction]);
+  if (s.age >= 18 && !s.businessOwner && !s.retired && s.money >= 50) actions.push(["Start a business", startBusinessAction]);
+  if (s.age >= 16 && !s.retired) actions.push(["Commit crime", crimeAction]);
+  if (s.age >= 55 && !s.retired) actions.push(["Consider retirement", retireAction]);
+
+  actions.forEach(([label, fn]) => {
+    const btn = document.createElement("button");
+    btn.textContent = label;
+    btn.onclick = fn;
+    if (label === "Apply to schools" || label === "Apply for jobs") btn.classList.add("primary-action");
+    btn.onclick = fn;
+    container.appendChild(btn);
+  });
+}
+
+function pill(text) { return `<span class="pill">${text}</span>`; }
+function rank(v) { return app.rankNames[clamp(Math.ceil(v / 2) - 1, 0, 4)]; }
+function healthLabel(v) { return ["critical", "very poor", "poor", "fragile", "fair", "steady", "good", "very good", "strong", "excellent", "excellent"][clamp(Math.round(v), 0, 10)]; }
+function workLabel(v) { return ["failing", "poor", "weak", "unsteady", "fair", "steady", "good", "very good", "excellent", "excellent", "excellent"][clamp(Math.round(v), 0, 10)]; }
+function statWord(v) { return ["critical", "very low", "low", "shaky", "mixed", "okay", "good", "high", "very high", "excellent", "excellent"][clamp(Math.round(v), 0, 10)]; }
+
+function addLog(text) {
+  app.state.log.push(text);
+  if (app.state.log.length > 40) app.state.log.shift();
+}
+
+function normalizeFinances() {
+  const s = app.state;
+  if (!s) return;
+  if (s.money < 0) {
+    s.debt += Math.abs(s.money);
+    s.money = 0;
+  }
+  if (s.debt < 0) s.debt = 0;
+}
+
+function advanceYear(delta = {}) {
+  const s = app.state;
+  s.cachedAge = null;
+  s.cachedScenario = null;
+  Object.entries(delta).forEach(([k, v]) => {
+    if (typeof s[k] === "number") s[k] += v;
+  });
+  ageUp();
+  setScenario(generateYearScenario());
+}
+
+function ageUp() {
+  const s = app.state;
+  s.age += 1;
+  yearlyCosts();
+  normalizeFinances();
+  applyWorldEventMaybe();
+  updateEducationProgress();
+  updateCareerProgress();
+  updateRelationshipProgress();
+  updateHealthProgress();
+  updateLegalProgress();
+  updateBadges();
+  clampCoreStats();
+  normalizeFinances();
+  autosave();
+  render();
+}
+
+function yearlyCosts() {
+  const s = app.state;
+  let costs = s.houseUpkeep + s.carUpkeep + s.rent + s.spouseSupport;
+  if (s.healthInsurance) costs += 2;
+  if (s.carInsurance && s.car) costs += 1.5;
+  if (s.homeInsurance && s.house) costs += 1.8;
+  if (s.debt > 0) {
+    const interest = +(s.debt * 0.055).toFixed(1);
+    s.debt += interest;
+    costs += Math.min(16, Math.max(4, s.debt * 0.07));
+  }
+  if (s.retired) s.money += s.retirementIncome;
+  if (s.salary) {
+    s.money += s.salary * 0.58;
+    s.pension += s.salary * 0.04;
+  }
+  if (s.businessOwner && chance(0.3)) {
+    const swing = Math.round((Math.random() * 18) - 6);
+    s.money += swing;
+    addLog(`${s.name}'s business ${swing >= 0 ? 'earns' : 'loses'} ${Math.abs(swing)}k this year.`);
+  }
+  s.money -= costs;
+  if (s.money < -25) {
+    s.stress += 2;
+    s.hope -= 1;
+  }
+  if (s.house && !s.homeInsurance && chance(0.05)) {
+    s.money -= 12;
+    addLog(`An uninsured home repair hits ${s.name}'s finances.`);
+  }
+  if (s.car && !s.carInsurance && chance(0.06)) {
+    s.money -= 7;
+    s.stress += 1;
+    addLog(`${s.name} absorbs a car-related expense without insurance.`);
+  }
+}
+
+function applyWorldEventMaybe() {
+  app.worldEventTimer--;
+  if (app.worldEventTimer > 0) return;
+  app.worldEventTimer = 2 + Math.floor(Math.random() * 3);
+  if (chance(0.55)) {
+    const e = rand(DATA.worldEvents);
+    app.state.currentWorld = e;
+    if (e.effects) Object.entries(e.effects).forEach(([k,v]) => app.state[k] += v);
+    addLog(`World event: ${e.title}.`);
+    if (chance(0.16)) {
+      showLetter({
+        type: "Public Update",
+        title: e.title,
+        body: e.body,
+        meta: worldMetaText(e)
+      });
+    }
+  } else {
+    app.state.currentWorld = null;
+  }
+}
+
+function worldMetaText(e) {
+  const lines = [];
+  if (e.field) lines.push(`Fields affected: ${Object.entries(e.field).map(([k,v]) => `${k} ${v > 1 ? "up" : "down"}`).join(", ")}`);
+  if (e.raises) lines.push(`Raise climate: ${e.raises > 0 ? "easier" : "harder"}`);
+  if (e.firing) lines.push(`Job stability: reduced`);
+  return lines.join(" • ") || "This shifts the climate around work, money, and stress.";
+}
+
+function updateEducationProgress() {
+  const s = app.state;
+  const wasHighSchool = s.schoolStage === "High School" || s.educationStage === "High School";
+
+  if (s.age <= 10) {
+    s.schoolStage = "Elementary School";
+    s.educationStage = "Elementary School";
+    s.inSchool = true;
+  } else if (s.age <= 13) {
+    s.schoolStage = "Middle School";
+    s.educationStage = "Middle School";
+    s.inSchool = true;
+  } else if (s.age <= 17) {
+    s.schoolStage = "High School";
+    s.educationStage = "High School";
+    s.inSchool = true;
+  } else if (wasHighSchool && s.age === 18) {
+    s.justGraduated = true;
+    s.schoolStage = "After High School";
+    s.educationStage = "High School Graduate";
+    s.inSchool = false;
+    s.graduationLetterShown = false;
+  } else if (s.inSchool && ["University", "College / Trades", "Graduate School", "Professional School"].includes(s.schoolStage)) {
+    s.educationStage = s.schoolStage;
+  } else if (s.schoolStage === "Gap Year") {
+    s.inSchool = false;
+    if (!["University", "College / Trades", "Graduate School", "Professional School"].includes(s.educationStage)) {
+      s.educationStage = "High School Graduate";
+    }
+  } else if (!s.retired) {
+    s.schoolStage = "Working Years";
+    if (!["University", "College / Trades", "Graduate School", "Professional School"].includes(s.educationStage) && s.age >= 18) {
+      s.educationStage = "High School Graduate";
+    }
+  }
+
+  const allowedActivities = s.age <= 10 ? DATA.childhoodActivities : (s.age <= 17 ? DATA.teenActivities : DATA.adultActivities);
+  if (!allowedActivities.includes(s.currentActivity)) {
+    s.currentActivity = rand(allowedActivities);
+  }
+
+  if (s.age >= 5 && s.inSchool) {
+    const base = (s.discipline * 1.8) + (s.hope * 1.3) - (s.stress * 1.5);
+    const activityBonus = schoolActivityBonus(s.currentActivity, s.talent);
+    const randomShift = Math.floor(Math.random() * 7) - 3;
+    s.average = clamp(Math.round(s.average + base / 10 + activityBonus + randomShift), 50, 100);
+  }
+
+  if (["University", "College / Trades", "Graduate School", "Professional School"].includes(s.schoolStage)) {
+    s.yearsInPostSecondary += 1;
+    if ((s.schoolStage === "University" && s.yearsInPostSecondary >= 4) ||
+        (s.schoolStage === "College / Trades" && s.yearsInPostSecondary >= 2) ||
+        (s.schoolStage === "Graduate School" && s.yearsInPostSecondary >= 2) ||
+        (s.schoolStage === "Professional School" && s.yearsInPostSecondary >= 3)) {
+      addLog(`${s.name} completes ${s.schoolStage.toLowerCase()}.`);
+      s.educationStage = s.schoolStage;
+      s.schoolStage = "Working Years";
+      s.inSchool = false;
+      s.postSecondaryStatus = "Completed";
+      if (!s.field && s.major !== "Undeclared") s.field = fieldFromMajor(s.major);
+      s.yearsInPostSecondary = 0;
+    }
+  }
+}
+
+function schoolActivityBonus(activity, talent) {
+  const map = {
+    "Coding Club": 1.5,
+    "Debate": 1.2,
+    "Volunteering": 0.8,
+    "Dance Team": 0.7,
+    "Part-time Job": -0.6,
+    "Gym": 0.3,
+    "Therapy": 0.5,
+    "Story Time": 0.4,
+    "Reading": 0.9
   };
-
-  showScreen("game");
-  renderSidebar();
-  E.timelineSub.textContent = `Age 0.`;
-  E.eventTitle.textContent = `Age 0 — A first breath`;
-  typeText(`${state.name} opens their eyes in ${state.locationLabel}.\n\nNo manual. No guarantees.\nJust time and what you do with it.`);
-  E.lifeLog.innerHTML = "";
-  E.choiceRow.innerHTML = "";
-  logLine(`Name: ${state.name}. Gender: ${state.gender}.`);
-  logLine(`Location: ${state.locationLabel}.`);
-  logLine(`Class: ${ident.title}.`);
-  setAwaitingChoice(false);
+  let bonus = map[activity] || 0;
+  if (talent === "Academics") bonus += 0.8;
+  if (talent === "Technology" && activity === "Coding Club") bonus += 1;
+  return bonus;
 }
 
-function resetAll() {
-  state = defaultState();
-  E.inputName.value = "";
-  E.selectGender.value = "";
-  E.selectLocation.value = "";
-  E.lifeLog.innerHTML = "";
-  E.choiceRow.innerHTML = "";
-  E.eventTitle.textContent = "—";
-  E.eventBody.textContent = "—";
-  renderLocationChoices();
-  renderClassChoices();
-  updateStartReady();
-  showScreen("start");
+function fieldFromMajor(major) {
+  if (["Computer Science", "Engineering", "Business", "Arts", "Education", "Medicine", "Social Sciences", "Skilled Trades"].includes(major)) return major;
+  return "General";
 }
 
-function init() {
-  renderLocationChoices();
-  renderClassChoices();
-  updateStartReady();
-  showScreen("start");
+function updateCareerProgress() {
+  const s = app.state;
+  if (s.jailYears > 0 || s.retired) return;
 
-  E.inputName.addEventListener("input", () => {
-    state.name = E.inputName.value;
-    updateStartReady();
-  });
+  if (s.job) {
+    s.yearsWorked += 1;
+    const worldFactor = getFieldModifier(s.field);
+    const perfChange = Math.round((s.discipline + s.hope - s.stress - healthPenalty()) / 6) + (chance(0.35) ? 1 : 0) - (chance(0.3) ? 1 : 0);
+    s.performance = clamp(s.performance + perfChange, 1, 10);
+    s.salary = Math.max(18, +(s.salary * (1 + (companyRaiseRate() * worldFactor))).toFixed(1));
 
-  E.selectGender.addEventListener("change", () => {
-    state.gender = E.selectGender.value;
-    updateStartReady();
-  });
+    if (chance(0.10 + Math.max(0, s.performance - 6) * 0.03) && s.jobLevel < 5) {
+      s.jobLevel += 1;
+      s.salary += 6 + s.jobLevel * 2;
+      s.job = jobTitleForState();
+      addLog(`${s.name} earns a promotion and becomes ${s.job}.`);
+      if (chance(0.65)) showLetter({ type: "Career Update", title: "Promotion Notice", body: `Your performance, consistency, and timing aligned. ${s.company} is moving you into a new role.
 
-  E.selectLocation.addEventListener("change", () => {
-    state.selectedLocationId = E.selectLocation.value || null;
-    updateStartReady();
-  });
+New role: ${s.job}
+New salary: $${Math.round(s.salary)}k`, meta: `Company culture: ${s.workCulture}` });
+    }
 
-  E.btnStartLife.addEventListener("click", startLife);
-  E.btnNextYear.addEventListener("click", advanceYear);
-  E.btnBackToStart.addEventListener("click", () => showScreen("start"));
-  E.btnReset.addEventListener("click", resetAll);
+    const firingRisk = 0.015 + Math.max(0, 5 - s.performance) * 0.035 + (app.state.currentWorld?.firing || 0) + (s.criminalRecord ? 0.01 : 0);
+    if (chance(firingRisk)) {
+      addLog(`${s.name} loses a job at ${s.company}.`);
+      if (chance(0.7)) showLetter({ type: "Employment Notice", title: "Termination Letter", body: `The role is ending. Performance, changing conditions, or company pressure all played a part.
+
+Former role: ${s.job}
+Final salary: $${Math.round(s.salary)}k`, meta: `This does not end a life. It changes the next decision.` });
+      s.job = null; s.salary = 0; s.company = null; s.workCulture = ""; s.jobLevel = 0; s.stress += 2; s.hope -= 1;
+    }
+  }
+
+  if (!s.job && !s.pendingOffer && !s.inSchool && s.age >= 18 && chance(0.12)) {
+    autoOfferJobMaybe();
+  }
 }
 
-init();
+function healthPenalty() {
+  return app.state.health < 5 ? 2 : 0;
+}
+
+function companyRaiseRate() {
+  const c = DATA.companies.find(x => x.name === app.state.company);
+  return c ? c.raise : 0.04;
+}
+
+function getFieldModifier(field) {
+  const e = app.state.currentWorld;
+  if (!field || !e || !e.field) return 1;
+  return e.field[field] || 1;
+}
+
+function jobTitleForState() {
+  const field = app.state.field || "General";
+  const levels = [
+    `Entry-level ${field} role`,
+    `Junior ${field} professional`,
+    `${field} professional`,
+    `Senior ${field} professional`,
+    `${field} manager`,
+    `${field} director`
+  ];
+  return levels[clamp(app.state.jobLevel, 0, levels.length - 1)];
+}
+
+function autoOfferJobMaybe() {
+  const s = app.state;
+  const role = s.targetRole;
+  const baseField = (role && (s.field || fieldFromMajor(s.major) || "General")) || s.field || fieldFromMajor(s.major);
+  s.field = baseField === "General" || !baseField ? rand(["Business", "Arts", "Education", "Skilled Trades"]) : baseField;
+  const company = rand(DATA.companies.filter(c => {
+    if (s.field === "Medicine") return /Health|Public/.test(c.name) || true;
+    return true;
+  }));
+  const baseSalary = role ? role.salary : ({
+    "Computer Science": 76, Engineering: 74, Business: 60, Arts: 42,
+    Education: 58, Medicine: 88, "Social Sciences": 51, "Skilled Trades": 63, General: 48
+  }[s.field] || 48);
+  const title = role ? role.title : `Entry-level ${s.field} role`;
+  const level = role && ["High School Graduate","College / Trades","University","Graduate School","Professional School"].includes(role.minEducation)
+    ? Math.max(0, educationRank(role.minEducation) - 1)
+    : 0;
+  s.pendingOffer = {
+    company: company.name,
+    culture: company.culture,
+    field: s.field,
+    level,
+    title,
+    salary: Math.round(baseSalary * getFieldModifier(s.field)),
+    description: role ? role.description : `A starting role in ${s.field}.`
+  };
+  s.targetRole = null;
+  addLog(`${s.name} receives interest from ${company.name}.`);
+  if (chance(0.55)) showLetter({
+    type: "Offer Letter",
+    title: "Professional Opportunity",
+    body: `${company.name} is prepared to hire you.
+
+Position: ${s.pendingOffer.title}
+Starting salary: $${Math.round(s.pendingOffer.salary)}k
+Work culture: ${company.culture}`,
+    meta: `${s.pendingOffer.description}`
+  });
+}
+
+function updateRelationshipProgress() {
+  const s = app.state;
+  if (s.age >= 16 && chance(0.16)) {
+    const outcomes = [
+      () => { if (s.relationshipStatus === "Single") { s.relationshipStatus = "Dating"; s.relationships += 1; addLog(`${s.name} starts seeing someone.`); } },
+      () => { if (s.relationshipStatus === "Dating") { s.relationshipStatus = "Long-term relationship"; s.relationships += 1; addLog(`${s.name}'s relationship becomes more serious.`); } },
+      () => { if (["Long-term relationship", "Married"].includes(s.relationshipStatus) && chance(0.5)) { s.children += 1; s.stress += 1; s.relationships += 1; addLog(`${s.name}'s family grows.`); } },
+      () => { if (s.relationshipStatus === "Married" && chance(0.18 + Math.max(0, s.stress - 6) * 0.03)) { s.relationshipStatus = "Separated"; s.relationships -= 2; s.stress += 2; s.spouseSupport = s.children ? 4 : 2; addLog(`${s.name}'s marriage hits a serious rupture.`); } },
+      () => { if (["Dating", "Long-term relationship", "Separated"].includes(s.relationshipStatus) && chance(0.22)) { s.relationshipStatus = "Single"; s.relationships -= 2; s.stress += 2; if (s.children) s.spouseSupport = 3; addLog(`${s.name} goes through a breakup or split.`); } }
+    ];
+    rand(outcomes)();
+  }
+  if (s.age >= 24 && s.relationshipStatus === "Long-term relationship" && chance(0.12)) {
+    s.relationshipStatus = "Married";
+    s.relationships += 1;
+    addLog(`${s.name} gets married.`);
+  }
+  if (s.relationshipStatus === "Separated" && chance(0.35)) {
+    s.relationshipStatus = chance(0.4) ? "Married" : "Divorced";
+    if (s.relationshipStatus === "Divorced") addLog(`${s.name} finalizes a divorce.`);
+    else addLog(`${s.name} and their partner decide to try again.`);
+  }
+}
+
+function updateHealthProgress() {
+  const s = app.state;
+  const ageRisk = s.age < 18 ? 0.006 : s.age < 35 ? 0.016 : s.age < 50 ? 0.032 : 0.055;
+  const stressRisk = Math.max(0, s.stress - 6) * 0.015;
+  const activityBoost = s.currentActivity === "Gym" ? 0.8 : s.currentActivity === "Therapy" ? 0.5 : 0;
+  s.health = clamp(s.health - (chance(0.10) ? 1 : 0) + activityBoost, 1, 10);
+
+  if (!s.illness && chance(ageRisk + stressRisk)) {
+    const conditions = [];
+    if (s.age < 18) conditions.push("a bad flu", "a sprain", "an infection");
+    if (s.age >= 18) conditions.push("burnout", "anxiety", "a back injury", "chronic pain");
+    if (s.age >= 38) conditions.push("an autoimmune condition", "a heart warning");
+    if (s.age >= 48) conditions.push("cancer", "heart disease");
+    s.illness = rand(conditions);
+    s.health -= /cancer|heart disease/.test(s.illness) ? 2 : 1;
+    s.stress += 1;
+    addLog(`${s.name} is dealing with ${s.illness}.`);
+  }
+
+  if (s.health <= 0) {
+    s.alive = false;
+    setScenario(endScenario("A body can only carry so much. The story closes here."));
+  }
+}
+
+function updateLegalProgress() {
+  const s = app.state;
+  if (s.jailYears > 0) {
+    s.jailYears -= 1;
+    s.hope -= 1;
+    s.money -= 4;
+    if (chance(0.35)) {
+      addLog(`${s.name} joins a program while in custody.`);
+      s.discipline += 1;
+    }
+    if (s.jailYears <= 0) {
+      addLog(`${s.name} is released from custody.`);
+      s.criminalRecord = true;
+      s.underCharges = false;
+    }
+  }
+}
+
+function updateBadges() {
+  const s = app.state;
+  app.badgeDefs.forEach(([name, rule]) => {
+    if (!s.badges.includes(name) && rule(s)) {
+      s.badges.push(name);
+      addLog(`Badge unlocked: ${name}.`);
+    }
+  });
+}
+
+function clampCoreStats() {
+  const s = app.state;
+  ["health","hope","trust","stress","discipline","performance","purpose","relationships"].forEach(k => s[k] = clamp(s[k], 0, 10));
+  s.average = clamp(s.average, 50, 100);
+}
+
+function uniqueScenario(bucket, factoryList) {
+  const s = app.state;
+  if (!s.eventSeen[bucket]) s.eventSeen[bucket] = [];
+  let remaining = factoryList.map((_, i) => i).filter(i => !s.eventSeen[bucket].includes(i));
+  if (!remaining.length) {
+    s.eventSeen[bucket] = [];
+    remaining = factoryList.map((_, i) => i);
+  }
+  const pick = rand(remaining);
+  s.eventSeen[bucket].push(pick);
+  return factoryList[pick]();
+}
+
+
+function generateYearScenario() {
+  const s = app.state;
+  if (!s.alive) return endScenario("This life has ended.");
+  if (s.age >= 85 || (s.age >= 68 && chance(0.14 + Math.max(0, 4 - s.health) * 0.03))) {
+    s.alive = false;
+    return endScenario(finalReflection());
+  }
+
+  if (s.pendingOffer) return pendingOfferScenario();
+  if (s.schoolStage === "Gap Year") return gapYearScenario();
+  if (s.justGraduated) {
+    if (!s.graduationLetterShown) {
+      s.graduationLetterShown = true;
+      showLetter({
+        type: "Final Report Card",
+        title: "High School Complete",
+        body: `${s.name}\n\nFinal average: ${Math.round(s.average)}%`,
+        meta: "Now choose university, college or trades, a gap year, or work."
+      });
+    }
+    s.justGraduated = false;
+    return postHighSchoolScenario();
+  }
+
+  if (s.underCharges || s.jailYears > 0) return legalScenario();
+  if (s.age >= 55 && !s.retired && chance(0.18)) return retirementPromptScenario();
+  if (s.age >= 18 && s.inSchool && ["University", "College / Trades", "Graduate School", "Professional School"].includes(s.schoolStage) && chance(0.24)) return postSecondaryScenario();
+  if (s.age >= 18 && s.job && chance(0.28)) return workScenario();
+  if (s.age >= 18 && !s.job && !s.inSchool && chance(0.2)) return adultLifeScenario();
+
+  if (s.cachedAge === s.age && s.cachedScenario) return s.cachedScenario;
+
+  let scene;
+  if (s.age <= 4) scene = childScenario();
+  else if (s.age <= 10) scene = schoolChildScenario();
+  else if (s.age <= 13) scene = middleScenario();
+  else if (s.age <= 17) scene = teenScenario();
+  else scene = adultLifeScenario();
+  s.cachedAge = s.age;
+  s.cachedScenario = scene;
+  return scene;
+}
+
+function gapYearScenario() {
+  const s = app.state;
+  return scenarioFromPairs(`Age ${s.age}`, "What do you do with your gap year?", [
+    ["Work and save money.", { money: 8, purpose: 1 }],
+    ["Travel or explore your interests.", { hope: 2, money: -3, purpose: 1 }],
+    ["Volunteer and build experience.", { purpose: 1, relationships: 1, money: 1 }],
+    ["Use the year to prepare stronger applications.", { average: 2, discipline: 1, hope: 1 }]
+  ]);
+}
+
+
+function childScenario() {
+  const s = app.state;
+  const factories = [
+    () => scenarioFromPairs(`Age ${s.age}`, "What do you reach for first?", [
+      ["Stay near someone familiar.", { trust: 1, hope: 1 }],
+      ["Move toward something interesting.", { purpose: 1, hope: 1 }],
+      ["Play with whatever is nearby.", { relationships: 1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "What do you do when you find something new?", [
+      ["Touch it right away.", { purpose: 1, stress: 1 }],
+      ["Watch first.", { discipline: 1 }],
+      ["Wait for someone else.", { trust: 1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "Another child has a toy you want. What do you do?", [
+      ["Try to take it.", { stress: 1, trust: -1 }],
+      ["Try to play together.", { relationships: 1, trust: 1 }],
+      ["Find something else.", { discipline: 1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "You see a new place to crawl or run toward. What do you do?", [
+      ["Go straight toward it.", { purpose: 1, stress: 1 }],
+      ["Stop and look first.", { discipline: 1 }],
+      ["Stay where you already feel safe.", { trust: 1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "Someone hands you crayons and paper. What do you do?", [
+      ["Draw carefully.", { discipline: 1, purpose: 1 }],
+      ["Cover the whole page fast.", { hope: 1 }],
+      ["Stop after a minute.", { stress: -1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "A game has simple rules. What do you do?", [
+      ["Try to follow them.", { discipline: 1 }],
+      ["Change the game halfway through.", { purpose: 1 }],
+      ["Copy what another child does.", { trust: 1 }]
+    ])
+  ];
+  return uniqueScenario('child_all', factories);
+}
+
+
+function schoolChildScenario() {
+  const s = app.state;
+  const factories = [
+    () => scenarioFromPairs(`Age ${s.age}`, "What do you focus on most at school this year?", [
+      ["Following directions.", { discipline: 1, average: 2 }],
+      ["Making friends.", { relationships: 1, trust: 1 }],
+      [`Getting better at ${s.currentActivity}.`, { purpose: 1, average: 1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "Something at school feels hard. What do you do?", [
+      ["Ask for help.", { average: 2, trust: 1 }],
+      ["Keep practicing.", { discipline: 1, average: 2 }],
+      ["Avoid it for now.", { stress: 1, average: -1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "How do you spend most of your time after school?", [
+      ["Homework first.", { average: 3, discipline: 1 }],
+      ["Play with friends.", { relationships: 2 }],
+      [`Put more time into ${s.currentActivity}.`, { purpose: 1, hope: 1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "A class activity needs helpers. What do you do?", [
+      ["Volunteer first.", { trust: 1, relationships: 1 }],
+      ["Help if someone asks.", { discipline: 1 }],
+      ["Stay out of it.", { stress: -1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "You get free time in class. What do you choose?", [
+      ["Read or learn something.", { average: 2, purpose: 1 }],
+      ["Talk to classmates.", { relationships: 1 }],
+      ["Draw or make something.", { hope: 1, purpose: 1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "You make a mistake in front of other kids. What do you do?", [
+      ["Laugh it off.", { hope: 1 }],
+      ["Try again right away.", { discipline: 1, average: 1 }],
+      ["Get quiet and pull back.", { stress: 1, trust: -1 }]
+    ])
+  ];
+  return uniqueScenario('school_all', factories);
+}
+
+
+function middleScenario() {
+  const s = app.state;
+  const factories = [
+    () => scenarioFromPairs(`Age ${s.age}`, "What do you care about most this year?", [
+      ["Schoolwork.", { average: 3, discipline: 1, stress: 1 }],
+      ["Friends.", { relationships: 2, average: -1 }],
+      ["Your main activity.", { purpose: 1, average: 1, hope: 1 }],
+      ["Having more space to yourself.", { stress: -1, trust: -1, discipline: 1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "A group project gets awkward. What do you do?", [
+      ["Take charge.", { trust: 1, discipline: 1 }],
+      ["Do your part and keep it simple.", { average: 2 }],
+      ["Let others handle it.", { stress: -1, average: -1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "You have to choose one thing to build up this year. What is it?", [
+      ["Grades.", { average: 3, discipline: 1 }],
+      ["Confidence.", { hope: 2 }],
+      ["Friendships.", { relationships: 2 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "Someone pushes your boundaries. What do you do?", [
+      ["Speak up.", { trust: 1, stress: 1 }],
+      ["Walk away.", { stress: -1, discipline: 1 }],
+      ["Stay quiet.", { trust: -1, stress: 1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "Your schedule feels full. What do you cut back on?", [
+      ["Free time.", { average: 2, stress: 1 }],
+      ["An activity.", { stress: -1, purpose: -1 }],
+      ["Sleep and rest.", { average: 1, health: -1, stress: 1 }]
+    ])
+  ];
+  return uniqueScenario('middle_all', factories);
+}
+
+
+function teenScenario() {
+  const s = app.state;
+  const factories = [
+    () => scenarioFromPairs(`Age ${s.age}`, "How do you spend most of your time after school?", [
+      ["Studying.", { average: 4, discipline: 1, stress: 1 }],
+      ["With friends.", { relationships: 2, average: -1 }],
+      [`On ${s.currentActivity}.`, { purpose: 1, average: 1, hope: 1 }],
+      ["Working a small job.", { money: 4, average: -1, stress: 1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "A friendship gets complicated. What do you do?", [
+      ["Say what you really think.", { trust: 1, relationships: 1 }],
+      ["Keep quiet to avoid drama.", { stress: 1, trust: -1 }],
+      ["Step back and focus on yourself.", { average: 2, purpose: 1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "An adult offers you a way to earn money. What do you do?", [
+      ["Take the work.", { money: 5, stress: 1 }],
+      ["Only do it if it fits school.", { money: 3, average: 1 }],
+      ["Say no and protect your time.", { hope: 1, stress: -1 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "What are you trying hardest to build right now?", [
+      ["Strong grades.", { average: 3, discipline: 1 }],
+      ["A stronger social life.", { relationships: 2 }],
+      ["A real skill outside class.", { purpose: 2 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "You can only say yes to one extra thing this year. What is it?", [
+      ["A club or team.", { purpose: 1, relationships: 1 }],
+      ["More shifts at work.", { money: 6, stress: 1, average: -1 }],
+      ["Tutoring or extra study.", { average: 3 }]
+    ]),
+    () => scenarioFromPairs(`Age ${s.age}`, "A teacher thinks you could push further. What do you do?", [
+      ["Take the challenge.", { average: 3, stress: 1 }],
+      ["Keep your current pace.", { average: 1, stress: -1 }],
+      ["Put that energy somewhere else.", { purpose: 1, hope: 1 }]
+    ])
+  ];
+  return uniqueScenario('teen_all', factories);
+}
+
+
+
+function showGraduationDecisionModal() {
+  const s = app.state;
+  showChoiceModal({
+    header: "Graduation certificate",
+    title: "High School Complete",
+    body: `${s.name}\n\nFinal average: ${Math.round(s.average)}%\n\nWhat do you want to do next?`,
+    choices: [
+      { text: "Apply to top-tier or highly competitive universities", fn: () => choosePostSecondaryType("University", "high") },
+      { text: "Apply to balanced public universities", fn: () => choosePostSecondaryType("University", "mid") },
+      { text: "Apply to local or lower-cost universities", fn: () => choosePostSecondaryType("University", "safe") },
+      { text: "Apply to college, community college, or trades", fn: () => choosePostSecondaryType("College / Trades", "mid") },
+      { text: "Take a gap year", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.educationStage = "High School Graduate"; s.postSecondaryStatus = "Gap year"; render(); setScenario(gapYearScenario()); } },
+      { text: "Start working", fn: () => { s.schoolStage = "Working Years"; s.inSchool = false; s.educationStage = "High School Graduate"; s.field = s.field || "General"; s.postSecondaryStatus = "Working"; render(); setScenario(generateYearScenario()); } }
+    ],
+    footer: "You can also use the school button in Life actions if you want to apply afterward."
+  });
+}
+
+function postHighSchoolScenario() {
+  const s = app.state;
+  const average = Math.round(s.average);
+  return {
+    title: "High school is over",
+    body: `${s.name}'s final average is ${average}%.
+
+Where do you want to apply?`,
+    choices: [
+      { text: "Open the school portal.", fn: () => showPostHighSchoolPortal() },
+      { text: "Take a gap year.", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.educationStage = "High School Graduate"; s.postSecondaryStatus = "Gap year"; advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
+      { text: "Start working right away.", fn: () => { s.schoolStage = "Working Years"; s.inSchool = false; s.educationStage = "High School Graduate"; s.field = "General"; advanceYear({ hope: 1, money: 2 }); } }
+    ]
+  };
+}
+
+
+function showPostHighSchoolPortal() {
+  const s = app.state;
+  showChoiceModal({
+    header: "School portal",
+    title: "After high school",
+    body: "Choose where you want to apply next.",
+    choices: [
+      { text: "Top-tier or highly competitive universities", fn: () => choosePostSecondaryType("University", "high") },
+      { text: "Balanced public universities", fn: () => choosePostSecondaryType("University", "mid") },
+      { text: "Local or lower-cost universities", fn: () => choosePostSecondaryType("University", "safe") },
+      { text: "College, community college, or trades", fn: () => choosePostSecondaryType("College / Trades", "mid") },
+      { text: "Take a gap year", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.educationStage = "High School Graduate"; s.postSecondaryStatus = "Gap year"; advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
+      { text: "Start working", fn: () => { s.schoolStage = "Working Years"; s.inSchool = false; s.educationStage = "High School Graduate"; s.field = s.field || "General"; s.postSecondaryStatus = "Working"; advanceYear({ hope: 1, money: 2 }); } },
+      { text: "Go back", fn: () => setScenario(generateYearScenario()) }
+    ],
+    footer: `Final average: ${Math.round(s.average)}%`
+  });
+}
+
+function choosePostSecondaryType(stage, forcedTier = null) {
+  const backFn = () => {
+    if (app.state.justGraduated || app.state.educationStage === "High School Graduate" || app.state.schoolStage === "Gap Year") {
+      showPostHighSchoolPortal();
+    } else {
+      goBackToSchoolAction();
+    }
+  };
+  if (forcedTier) {
+    chooseMajor(stage, forcedTier);
+    return;
+  }
+  setScenario({
+    title: stage === "University" ? "University applications" : "College and trades applications",
+    body: stage === "University"
+      ? "Choose the kind of university path you want to apply for."
+      : "Choose the kind of college, community college, or trades path you want to apply for.",
+    choices: (stage === "University"
+      ? [
+          { text: "Top-tier / highly competitive universities", fn: () => chooseMajor(stage, "high") },
+          { text: "Balanced public universities", fn: () => chooseMajor(stage, "mid") },
+          { text: "Local and lower-cost universities", fn: () => chooseMajor(stage, "safe") }
+        ]
+      : [
+          { text: "Top applied institutes or selective trades programs", fn: () => chooseMajor(stage, "high") },
+          { text: "Strong colleges or practical trades programs", fn: () => chooseMajor(stage, "mid") },
+          { text: "Community college or accessible trades path", fn: () => chooseMajor(stage, "safe") }
+        ]).concat([{ text: "Go back.", fn: backFn }])
+  });
+}
+
+
+function chooseMajor(stage = "University", tier = "mid") {
+  setScenario({
+    title: stage === "University" ? "Choose a major" : "Choose a program",
+    body: stage === "University" ? "What major do you want to pursue?" : "What field or program do you want to pursue?",
+    choices: DATA.majors.map(m => ({
+      text: m,
+      fn: () => chooseSchoolOffer(stage, m, tier)
+    })).concat([{ text: "Go back.", fn: () => choosePostSecondaryType(stage) }])
+  });
+}
+
+
+function postSecondaryScenario() {
+  const s = app.state;
+  if ((s.schoolStage === "University" && s.yearsInPostSecondary >= 3) || (s.schoolStage === "College / Trades" && s.yearsInPostSecondary >= 1)) {
+    return {
+      title: `Age ${s.age}`,
+      body: "What do you focus on most with school this year?",
+      choices: [
+        { text: "Keep going and finish strong.", fn: () => advanceYear({ average: 3, discipline: 1, stress: 1 }) },
+        { text: "Work part-time too.", fn: () => advanceYear({ money: 6, average: -1, stress: 1 }) },
+        { text: "Apply for graduate school.", fn: () => applyGraduateSchoolAction("Graduate School") },
+        { text: "Apply for professional school.", fn: () => applyGraduateSchoolAction("Professional School") }
+      ]
+    };
+  }
+  const pools = [
+    ["What do you focus on most this term?", [
+      ["Studying harder.", { average: 4, discipline: 1, stress: 1 }],
+      ["Working part-time too.", { money: 6, average: -1, stress: 1 }],
+      ["Protecting your health.", { health: 1, stress: -1, average: 1 }],
+      ["Applying for labs, placements, or internships.", { performance: 2, purpose: 1, average: 1 }]
+    ]],
+    ["A course becomes harder than expected. What do you do?", [
+      ["Go to office hours and get help.", { average: 3, trust: 1 }],
+      ["Study with other students.", { average: 2, relationships: 1 }],
+      ["Drop it and protect your average.", { stress: -1, average: 1, money: -1 }]
+    ]],
+    ["A professor or instructor notices your work. What do you do?", [
+      ["Ask about research, placements, or references.", { purpose: 1, performance: 2 }],
+      ["Thank them and keep going.", { average: 2 }],
+      ["Stay quiet and just do the work.", { discipline: 1 }]
+    ]],
+    ["Your term feels crowded. What do you cut back on?", [
+      ["Social plans.", { average: 2, stress: 1 }],
+      ["Work shifts.", { money: -3, stress: -1, average: 1 }],
+      ["Sleep.", { average: 1, health: -1, stress: 1 }]
+    ]]
+  ];
+  const picked = rand(pools);
+  return scenarioFromPairs(`Age ${s.age}`, picked[0], picked[1]);
+}
+
+
+function workScenario() {
+  const s = app.state;
+  return scenarioFromPairs(`Age ${s.age}`, "What do you do at work this year?", [
+    ["Work harder and stay visible.", { performance: 1, stress: 1, salary: 2 }],
+    ["Set boundaries and protect your health.", { stress: -2, health: 1 }],
+    ["Invest time in a side path.", { purpose: 1, money: 3, performance: -1 }],
+    ["Handle conflict directly.", { trust: 1, performance: 1, stress: 1 }],
+    ["Document your work and plan your next move.", { performance: 1, purpose: 1, hope: 1 }]
+  ]);
+}
+
+
+function adultLifeScenario() {
+  const s = app.state;
+  const options = [
+    [`Age ${s.age}`, "What do you focus on most this year?", [
+      ["Stability.", { money: 4, stress: -1 }],
+      ["Taking a bigger risk.", { purpose: 2, stress: 1, money: chance(0.5) ? 5 : -5 }],
+      ["People you care about.", { relationships: 2, hope: 1 }],
+      ["Your own health.", { health: 1, stress: -1, trust: -1 }]
+    ]],
+    [`Age ${s.age}`, "Someone close to you tests your patience. What do you do?", [
+      ["Communicate directly.", { relationships: 1, trust: 1 }],
+      ["Bottle it up.", { stress: 2, relationships: -1 }],
+      ["Leave when you reasonably can.", { money: -3, hope: 1, moves: 1 }]
+    ]],
+    [`Age ${s.age}`, "What do you do with your money this year?", [
+      ["Pay down what you owe.", { money: -4, stress: -1, hope: 1 }],
+      ["Keep cash available.", { money: 2, stress: -1 }],
+      ["Push for something bigger.", { purpose: 1, stress: 1, money: chance(0.5) ? 6 : -4 }]
+    ]]
+  ];
+  return scenarioFromPairs(...rand(options));
+}
+
+
+function illnessScenario() {
+  const s = app.state;
+  const options = medicalOptionsFor(s.illness, s.healthInsurance);
+  return {
+    title: `Age ${s.age}`,
+    body: `How do you handle ${s.illness}?`,
+    choices: options.map(opt => ({
+      text: `${opt.label} — $${opt.display}`,
+      fn: () => {
+        s.money -= opt.cost;
+        s.health = clamp(s.health + opt.health, 0, 10);
+        s.stress = clamp(s.stress + opt.stress, 0, 10);
+        s.hope = clamp(s.hope + opt.hope, 0, 10);
+        addLog(`${s.name} chooses ${opt.shortLabel} for ${s.illness}.`);
+        if (opt.clear || chance(opt.recoverChance)) s.illness = "";
+        advanceYear({});
+      }
+    })).concat([
+      { text: "Wait and see.", fn: () => advanceYear({ health: -1, stress: 1, hope: -1 }) }
+    ])
+  };
+}
+
+
+
+function medicalOptionsFor(illness, insured) {
+  const covered = insured ? 0.35 : 1;
+  const options = {
+    "a bad flu": [
+      { label: "Buy cold medicine and rest", shortLabel: "cold medicine", cost: 0.03 * covered, display: Math.round(30 * covered), health: 1, stress: -1, hope: 0, recoverChance: 0.8 },
+      { label: "See a walk-in clinic", shortLabel: "a clinic visit", cost: 0.06 * covered, display: Math.round(60 * covered), health: 1, stress: -1, hope: 1, recoverChance: 0.9 }
+    ],
+    "an infection": [
+      { label: "Pay for antibiotics", shortLabel: "antibiotics", cost: 0.025 * covered, display: Math.round(25 * covered), health: 1, stress: -1, hope: 0, recoverChance: 0.88 },
+      { label: "Pay for a clinic visit and prescription", shortLabel: "a clinic visit", cost: 0.08 * covered, display: Math.round(80 * covered), health: 2, stress: -1, hope: 0, recoverChance: 0.95 }
+    ],
+    "a sprain": [
+      { label: "Buy a brace and pain medicine", shortLabel: "a brace", cost: 0.045 * covered, display: Math.round(45 * covered), health: 1, stress: 0, hope: 0, recoverChance: 0.72 },
+      { label: "Pay for physiotherapy", shortLabel: "physiotherapy", cost: 0.18 * covered, display: Math.round(180 * covered), health: 2, stress: -1, hope: 0, recoverChance: 0.9 }
+    ],
+    "burnout": [
+      { label: "Pay for counselling", shortLabel: "counselling", cost: 0.16 * covered, display: Math.round(160 * covered), health: 1, stress: -2, hope: 1, recoverChance: 0.55 },
+      { label: "Take unpaid rest time", shortLabel: "rest", cost: 0.4, display: 400, health: 1, stress: -2, hope: 0, recoverChance: 0.48 }
+    ],
+    "anxiety": [
+      { label: "Pay for therapy", shortLabel: "therapy", cost: 0.18 * covered, display: Math.round(180 * covered), health: 1, stress: -2, hope: 1, recoverChance: 0.52 },
+      { label: "Pay for a doctor visit and medication", shortLabel: "medication", cost: 0.09 * covered, display: Math.round(90 * covered), health: 1, stress: -1, hope: 0, recoverChance: 0.45 }
+    ],
+    "a back injury": [
+      { label: "Pay for physiotherapy", shortLabel: "physiotherapy", cost: 0.22 * covered, display: Math.round(220 * covered), health: 2, stress: -1, hope: 0, recoverChance: 0.7 },
+      { label: "Pay for imaging and rehab", shortLabel: "rehab", cost: 0.45 * covered, display: Math.round(450 * covered), health: 2, stress: -1, hope: 1, recoverChance: 0.82 }
+    ],
+    "chronic pain": [
+      { label: "Pay for medication", shortLabel: "pain medication", cost: 0.12 * covered, display: Math.round(120 * covered), health: 1, stress: -1, hope: 0, recoverChance: 0.28 },
+      { label: "Pay for physio and follow-up care", shortLabel: "follow-up care", cost: 0.32 * covered, display: Math.round(320 * covered), health: 2, stress: -1, hope: 0, recoverChance: 0.4 }
+    ],
+    "an autoimmune condition": [
+      { label: "Pay for specialist visits", shortLabel: "specialist care", cost: 0.4 * covered, display: Math.round(400 * covered), health: 1, stress: -1, hope: 0, recoverChance: 0.2 },
+      { label: "Pay for long-term medication", shortLabel: "long-term medication", cost: 0.55 * covered, display: Math.round(550 * covered), health: 1, stress: -1, hope: 0, recoverChance: 0.24 }
+    ],
+    "a heart warning": [
+      { label: "Pay for tests and medication", shortLabel: "tests and medication", cost: 0.38 * covered, display: Math.round(380 * covered), health: 1, stress: -1, hope: 0, recoverChance: 0.35 },
+      { label: "Pay for specialist monitoring", shortLabel: "specialist monitoring", cost: 0.6 * covered, display: Math.round(600 * covered), health: 2, stress: -1, hope: 0, recoverChance: 0.45 }
+    ],
+    "cancer": [
+      { label: "Begin treatment right away", shortLabel: "treatment", cost: 0.9 * covered, display: Math.round(900 * covered), health: 2, stress: 1, hope: 1, recoverChance: 0.42 },
+      { label: "Pay for more testing first", shortLabel: "more testing", cost: 0.35 * covered, display: Math.round(350 * covered), health: 1, stress: 1, hope: 0, recoverChance: 0.18 }
+    ],
+    "heart disease": [
+      { label: "Begin medication and follow-up care", shortLabel: "follow-up care", cost: 0.42 * covered, display: Math.round(420 * covered), health: 1, stress: 0, hope: 0, recoverChance: 0.26 },
+      { label: "Pay for hospital treatment", shortLabel: "hospital treatment", cost: 0.75 * covered, display: Math.round(750 * covered), health: 2, stress: 1, hope: 0, recoverChance: 0.38 }
+    ]
+  };
+  return options[illness] || [
+    { label: "Pay for treatment", shortLabel: "treatment", cost: 0.15 * covered, display: Math.round(150 * covered), health: 1, stress: -1, hope: 0, recoverChance: 0.5 }
+  ];
+}
+
+function legalScenario() {
+  const s = app.state;
+  if (s.jailYears > 0) {
+    return scenarioFromPairs(`Age ${s.age}`, "How do you spend this year in custody?", [
+      ["Join a program.", { discipline: 1, hope: 1 }],
+      ["Keep your head down.", { stress: -1 }],
+      ["Fall in with trouble.", { stress: 1, hope: -1 }]
+    ]);
+  }
+  return {
+    title: `Age ${s.age}`,
+    body: "How do you respond to the charge?",
+    choices: [
+      { text: "Hire a lawyer and fight it.", fn: () => resolveCharge("lawyer") },
+      { text: "Cooperate and accept responsibility.", fn: () => resolveCharge("cooperate") },
+      { text: "Plead guilty early.", fn: () => resolveCharge("guilty") }
+    ]
+  };
+}
+
+
+function retirementPromptScenario() {
+  const s = app.state;
+  return {
+    title: `Age ${s.age}`,
+    body: "What do you do about retirement?",
+    choices: [
+      { text: "Retire now.", fn: retireNow },
+      { text: "Work part-time first.", fn: () => { s.salary *= 0.6; advanceYear({ stress: -1, hope: 1 }); } },
+      { text: "Keep working.", fn: () => advanceYear({ money: 4, stress: 1 }) }
+    ]
+  };
+}
+
+
+function scenarioFromPairs(title, body, pairs) {
+  return {
+    title, body,
+    choices: pairs.map(([text, delta]) => ({ text, fn: () => advanceYear(delta) }))
+  };
+}
+
+function endScenario(text) {
+  updateBadges();
+  autosave();
+  return {
+    title: `${app.state.name}'s life ends`,
+    body: text || `Ending: ${endingLabel()}`,
+    choices: [
+      { text: "Return to main menu.", fn: goHome }
+    ]
+  };
+}
+
+function endingLabel() {
+  const s = app.state;
+  if (s.retired && s.relationships >= 8) return "Loving Legacy";
+  if (s.average >= 92 && s.salary >= 100) return "High Achiever";
+  if (s.health <= 3 && s.age >= 45) return "Survivor";
+  if (s.criminalRecord && s.job) return "Rebuilder";
+  if (s.age >= 35 && s.salary >= 60 && s.average >= 84) return "Late Bloom";
+  if (s.stress >= 8) return "Burnt Out";
+  return "Quiet Meaning";
+}
+
+function finalReflection() {
+  const s = app.state;
+  const ending = determineEnding();
+  const notes = [];
+  if (s.educationStage && s.educationStage !== "None") notes.push(`Education reached: ${s.educationStage}.`);
+  if (s.job || s.retired) notes.push(s.retired ? `They eventually stepped into retirement.` : `Work remained part of the story through ${s.job || "later adulthood"}.`);
+  if (s.children) notes.push(`Family responsibilities shaped later years.`);
+  if (s.house) notes.push(`Housing became part of the weight they had to carry.`);
+  if (s.criminalRecord) notes.push(`A legal record changed what was easy and what was not.`);
+  if (s.illness) notes.push(`Health never stopped asking for attention.`);
+  if (ending === "High Achiever") notes.push(`Achievement, discipline, and measurable success defined much of this life.`);
+  if (ending === "Burnt Out") notes.push(`Too much pressure was carried for too long, and the cost stayed visible.`);
+  if (ending === "Loving Legacy") notes.push(`Care, connection, and the people kept close mattered most in the end.`);
+  if (ending === "Late Bloom") notes.push(`The strongest years came later, after uncertainty and rebuilding.`);
+  if (ending === "Survivor") notes.push(`Endurance mattered as much as ambition.`);
+  if (ending === "Quiet Meaning") notes.push(`This life was not loud, but it still made a pattern worth reading.`);
+  return `${s.name}'s ending: ${ending}.
+
+${notes.join(" ")}`;
+}
+
+function chooseActivityAction() {
+  const s = app.state;
+  const options = s.age <= 10 ? DATA.childhoodActivities : (s.age <= 17 ? DATA.teenActivities : DATA.adultActivities);
+  setScenario({
+    title: `Age ${s.age}`,
+    body: "Which activity do you want to focus on?",
+    choices: options.map(a => ({ text: a, fn: () => { s.currentActivity = a; addLog(`${s.name} shifts focus to ${a}.`); render(); setScenario(generateYearScenario()); } }))
+  });
+}
+
+
+function takeLoanAction() {
+  const s = app.state;
+  setScenario({
+    title: "Take out a loan",
+    body: "How much do you want to borrow?",
+    choices: [20, 40, 80].map(amount => ({ text: `Borrow $${amount}k`, fn: () => { s.money += amount; s.debt += amount; s.loanHistory.push({ age: s.age, amount }); addLog(`${s.name} borrows $${amount}k.`); render(); setScenario(generateYearScenario()); } })).concat([{ text: "Never mind.", fn: () => setScenario(generateYearScenario()) }])
+  });
+}
+
+function buyHouseAction() {
+  const s = app.state;
+  setScenario({
+    title: "Buy property",
+    body: "What kind of home do you want to buy?",
+    choices: DATA.houseOptions.map(h => ({ text: `${h.label} — $${h.cost}k`, fn: () => {
+      const down = Math.min(h.cost, Math.max(30, h.cost * 0.15));
+      s.money -= down;
+      s.debt += Math.max(0, h.cost - down);
+      s.house = h.label;
+      s.houseUpkeep = h.upkeep;
+      addLog(`${s.name} buys a ${h.label.toLowerCase()}.`);
+      render(); setScenario(generateYearScenario());
+    }})).concat([{ text: "Wait and keep renting.", fn: () => setScenario(generateYearScenario()) }])
+  });
+}
+
+function buyCarAction() {
+  const s = app.state;
+  setScenario({
+    title: "Buy a car",
+    body: "What kind of car do you want?",
+    choices: DATA.carOptions.map(c => ({ text: `${c.label} — $${c.cost}k`, fn: () => {
+      if (s.money < c.cost * 0.2) {
+        s.debt += c.cost;
+      } else {
+        s.money -= c.cost * 0.2;
+        s.debt += c.cost * 0.8;
+      }
+      s.car = c.label;
+      s.carUpkeep = c.upkeep;
+      addLog(`${s.name} buys ${c.label.toLowerCase()}.`);
+      render(); setScenario(generateYearScenario());
+    }})).concat([{ text: "Not now.", fn: () => setScenario(generateYearScenario()) }])
+  });
+}
+
+function goBackToSchoolAction() {
+  const s = app.state;
+
+  if (s.justGraduated || s.schoolStage === "After High School" || s.educationStage === "High School Graduate" || s.schoolStage === "Gap Year") {
+    showPostHighSchoolPortal();
+    return;
+  }
+
+  if (s.inSchool) {
+    const choices = [];
+
+    if (["University", "College / Trades", "Graduate School", "Professional School"].includes(s.schoolStage)) {
+      choices.push(
+        { text: "Continue this program.", fn: () => advanceYear({ average: 2, discipline: 1 }) },
+        { text: "Reduce your course load.", fn: () => advanceYear({ stress: -1, average: 1, money: -2 }) },
+        { text: "Change your major or field.", fn: () => chooseMajor(s.schoolStage === "College / Trades" ? "College / Trades" : "University", "mid") }
+      );
+
+      if (s.schoolStage === "University") {
+        choices.push({ text: "Apply to transfer to another university.", fn: () => choosePostSecondaryType("University") });
+        if (s.yearsInPostSecondary >= 2) {
+          choices.push({ text: "Apply to graduate school.", fn: () => applyGraduateSchoolAction("Graduate School") });
+          choices.push({ text: "Apply to professional school.", fn: () => applyGraduateSchoolAction("Professional School") });
+        }
+      } else if (s.schoolStage === "College / Trades") {
+        choices.push({ text: "Apply to another college or trades program.", fn: () => choosePostSecondaryType("College / Trades") });
+        choices.push({ text: "Apply to university after this.", fn: () => choosePostSecondaryType("University") });
+      } else if (s.schoolStage === "Graduate School") {
+        choices.push({ text: "Stay in your graduate program.", fn: () => advanceYear({ average: 2, discipline: 1, stress: 1 }) });
+        choices.push({ text: "Apply to professional school after this.", fn: () => applyGraduateSchoolAction("Professional School") });
+      } else if (s.schoolStage === "Professional School") {
+        choices.push({ text: "Stay in your professional program.", fn: () => advanceYear({ average: 2, discipline: 1, stress: 1 }) });
+      }
+
+      choices.push(
+        { text: "Leave school for now.", fn: () => { s.inSchool = false; s.schoolStage = "Working Years"; addLog(`${s.name} steps away from school.`); render(); setScenario(generateYearScenario()); } },
+        { text: "Go back.", fn: () => render() }
+      );
+
+      showChoiceModal({
+        header: "School portal",
+        title: ["Graduate School", "Professional School"].includes(s.schoolStage) ? "Advanced study options" : "Post-secondary options",
+        body: "Pick what you want to do with your education next.",
+        choices,
+        footer: `${s.schoolStage}${s.major ? ` • ${s.major}` : ""}${s.postSecondaryStatus ? ` • ${s.postSecondaryStatus}` : ""}`
+      });
+      return;
+    }
+
+    if (s.schoolStage === "High School" && s.age >= 17) {
+      showPostHighSchoolPortal();
+      return;
+    }
+
+    showChoiceModal({
+      header: "School portal",
+      title: "Student options",
+      body: "Choose what you want to do with school this year.",
+      choices: [
+        { text: "Keep going.", fn: () => advanceYear({ average: 2, discipline: 1 }) },
+        { text: "Reduce your course load.", fn: () => advanceYear({ stress: -1, average: 1, money: -2 }) },
+        { text: "Go back.", fn: () => render() }
+      ],
+      footer: s.schoolStage
+    });
+    return;
+  }
+
+  const choices = [];
+  if (s.educationStage === "High School Graduate" || s.educationStage === "None") {
+    choices.push(
+      { text: "Apply to top-tier or highly competitive universities.", fn: () => choosePostSecondaryType("University") },
+      { text: "Apply to college, community college, or trades.", fn: () => choosePostSecondaryType("College / Trades") },
+      { text: "Take a gap year first.", fn: () => { s.schoolStage = "Gap Year"; s.postSecondaryStatus = "Gap year"; advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
+      { text: "Start working instead.", fn: () => { s.schoolStage = "Working Years"; s.field = "General"; s.postSecondaryStatus = "Working"; advanceYear({ money: 2, hope: 1 }); } }
+    );
+  }
+  if (["University", "College / Trades"].includes(s.educationStage)) {
+    choices.push(
+      { text: "Apply to graduate school.", fn: () => applyGraduateSchoolAction("Graduate School") },
+      { text: "Apply to professional school.", fn: () => applyGraduateSchoolAction("Professional School") }
+    );
+  }
+  choices.push(
+    { text: "Take a certificate program.", fn: () => { s.inSchool = true; s.schoolStage = "College / Trades"; s.yearsInPostSecondary = 0; s.money -= 8; s.certifications.push("Certificate"); s.postSecondaryStatus = "Mature student certificate"; advanceYear({ purpose: 1, performance: 1 }); } },
+    { text: "Go back.", fn: () => render() }
+  );
+
+  showChoiceModal({
+    header: "School portal",
+    title: (s.educationStage === "High School Graduate" || s.educationStage === "None") ? "After high school" : "Return to school",
+    body: (s.educationStage === "High School Graduate" || s.educationStage === "None")
+      ? "Choose the path you want to apply for next."
+      : "Pick the kind of school path you want to pursue next.",
+    choices,
+    footer: s.educationStage || "No completed credential yet"
+  });
+}
+
+function askRaiseAction() {
+  const s = app.state;
+  const odds = 0.35 + (s.performance - 5) * 0.07 + ((app.state.currentWorld?.raises) || 0);
+  if (chance(odds)) {
+    const bump = Math.max(3, Math.round(s.salary * 0.08));
+    s.salary += bump;
+    addLog(`${s.name} successfully negotiates a raise.`);
+    showLetter({ type: "Career Update", title: "Raise Approved", body: `Your request is accepted.
+
+New salary: $${Math.round(s.salary)}k`, meta: `Performance mattered here.` });
+  } else {
+    s.stress += 1;
+    addLog(`${s.name} asks for a raise and is turned down.`);
+    showLetter({ type: "Career Update", title: "Raise Denied", body: `The answer is no for now. Timing, budgets, or perception work against you.`, meta: `This can still change later.` });
+  }
+  render();
+  setScenario(generateYearScenario());
+}
+
+function askPromotionAction() {
+  const s = app.state;
+  const odds = 0.22 + (s.performance - 5) * 0.08;
+  if (chance(odds)) {
+    s.jobLevel = clamp(s.jobLevel + 1, 0, 5);
+    s.job = jobTitleForState();
+    s.salary += 9;
+    addLog(`${s.name} secures a promotion.`);
+  } else {
+    s.stress += 1;
+    addLog(`${s.name} pushes for promotion but is told not yet.`);
+  }
+  render();
+  setScenario(generateYearScenario());
+}
+
+function quitJobAction() {
+  const s = app.state;
+  if (!s.job) return;
+  addLog(`${s.name} leaves a job at ${s.company}.`);
+  s.job = null; s.salary = 0; s.company = null; s.workCulture = ""; s.jobLevel = 0; s.hope += 1; s.stress -= 1;
+  render();
+  setScenario(generateYearScenario());
+}
+
+function educationRank(stage) {
+  const map = {
+    "None": 0,
+    "Elementary School": 0,
+    "Middle School": 0,
+    "High School": 0,
+    "High School Graduate": 1,
+    "College / Trades": 2,
+    "University": 3,
+    "Graduate School": 4,
+    "Professional School": 5
+  };
+  return map[stage] ?? 0;
+}
+
+function currentEducationRank() {
+  const s = app.state;
+  if (s.inSchool && ["University", "College / Trades", "Graduate School", "Professional School"].includes(s.schoolStage)) {
+    return educationRank(s.schoolStage);
+  }
+  return educationRank(s.educationStage);
+}
+
+function availableJobsForField(field) {
+  return DATA.jobBoard[field] || DATA.jobBoard.General;
+}
+
+function applyToSpecificJob(role) {
+  const s = app.state;
+  const eligible = currentEducationRank() >= educationRank(role.minEducation);
+  if (!eligible) return;
+  s.targetRole = role;
+  addLog(`${s.name} applies for ${role.title}.`);
+  const schoolSignal = currentEducationRank() * 0.05;
+  const odds = 0.28 + schoolSignal + (s.performance - 5) * 0.04 + ((s.average || 75) - 70) / 120 - (s.criminalRecord ? 0.2 : 0);
+  if (chance(odds)) {
+    setScenario(interviewScenario());
+  } else {
+    addLog(`${s.name} applies for ${role.title} but does not hear back this round.`);
+    s.hope -= 1;
+    render();
+    setScenario(generateYearScenario());
+  }
+}
+
+function applyJobsAction() {
+  const s = app.state;
+  s.applicationsThisYear += 1;
+  const primaryField = s.field || fieldFromMajor(s.major) || "General";
+  const fields = [...new Set([primaryField, "General", "Business", "Arts", "Education", "Computer Science", "Medicine", "Skilled Trades"])];
+  const jobs = fields.flatMap(f => availableJobsForField(f).map(job => ({...job, boardField: f}))).slice(0, 14);
+  const cards = jobs.map(job => {
+    const eligible = currentEducationRank() >= educationRank(job.minEducation);
+    return {
+      text: `${job.title} — $${job.salary}k`,
+      html: `<div class="job-card ${eligible ? 'eligible' : 'ineligible'}"><div class="job-top"><strong>${job.title}</strong><span>$${job.salary}k</span></div><div class="job-meta">Field: ${job.boardField || primaryField} • Education needed: ${job.minEducation}</div><div class="job-desc">${job.description}</div><div class="job-eligibility">${eligible ? 'You can apply' : 'You do not meet the education requirement yet'}</div></div>`,
+      disabled: !eligible,
+      fn: () => applyToSpecificJob(job)
+    };
+  });
+
+  showChoiceModal({
+    header: "Job board",
+    title: `Apply for work in ${field}`,
+    body: "Pick a role to apply for. Roles you currently qualify for are highlighted.",
+    choices: cards.concat([{ text: "Go back.", fn: () => setScenario(generateYearScenario()) }])
+  });
+}
+
+function startBusinessAction() {
+  const s = app.state;
+  if (s.money < 50) return;
+  s.money -= 35;
+  s.businessOwner = true;
+  s.field = s.field || "Business";
+  s.job = "Founder";
+  s.company = `${s.name} Studio`;
+  s.salary = 30 + Math.round(Math.random() * 20);
+  addLog(`${s.name} starts a business.`);
+  render();
+  setScenario(generateYearScenario());
+}
+
+function crimeAction() {
+  const s = app.state;
+  setScenario({
+    title: "A risky choice",
+    body: "What illegal choice do you make?",
+    choices: [
+      { text: "Shoplift something minor.", fn: () => commitCrimeOutcome("minor") },
+      { text: "Drive after drinking.", fn: () => commitCrimeOutcome("dui") },
+      { text: "Join a fraud scheme.", fn: () => commitCrimeOutcome("serious") },
+      { text: "Back out.", fn: () => setScenario(generateYearScenario()) }
+    ]
+  });
+}
+
+function commitCrimeOutcome(kind) {
+  const s = app.state;
+  const caught = chance(kind === "minor" ? 0.32 : kind === "dui" ? 0.48 : 0.58);
+  if (!caught) {
+    s.money += kind === "minor" ? 1 : kind === "dui" ? 0 : 12;
+    s.stress += 1;
+    addLog(`${s.name} commits an offence and avoids immediate consequences.`);
+    render(); setScenario(generateYearScenario());
+    return;
+  }
+  s.underCharges = true;
+  addLog(`${s.name} is charged after a ${kind === "minor" ? "minor offence" : kind === "dui" ? "DUI" : "fraud case"}.`);
+  showLetter({ type: "Legal Notice", title: "Charge Filed", body: `A charge has now moved out of rumor and into process.
+
+Severity: ${kind}
+This may lead to a warning, fine, probation, community service, or jail depending on outcome.`, meta: `Canadian legal context influences the result, but this remains a simplified simulation.` });
+  render();
+  setScenario(legalScenario());
+}
+
+function resolveCharge(mode) {
+  const s = app.state;
+  let severity = Math.random();
+  if (mode === "lawyer") { s.money -= 10; severity -= 0.12; }
+  if (mode === "cooperate") severity -= 0.07;
+  if (mode === "guilty") severity -= 0.05;
+
+  s.underCharges = false;
+  if (severity < 0.2) {
+    s.money -= 2; addLog(`${s.name} receives a warning and fine.`);
+  } else if (severity < 0.45) {
+    s.money -= 6; s.criminalRecord = true; addLog(`${s.name} receives probation and a record.`);
+  } else if (severity < 0.7) {
+    s.money -= 10; s.criminalRecord = true; s.stress += 2; addLog(`${s.name} receives a heavier sentence and a criminal record.`);
+  } else {
+    s.criminalRecord = true; s.jailYears = chance(0.5) ? 1 : 2; s.job = null; s.salary = 0; s.company = null; addLog(`${s.name} is sentenced to custody.`);
+  }
+  render();
+  setScenario(generateYearScenario());
+}
+
+function retireAction() {
+  setScenario(retirementPromptScenario());
+}
+
+function retireNow() {
+  const s = app.state;
+  s.retired = true;
+  s.retirementIncome = Math.round((s.salary * 0.34) + (s.money > 150 ? 10 : 0));
+  s.job = null; s.company = null; s.salary = 0; s.schoolStage = "Retirement";
+  addLog(`${s.name} retires.`);
+  render();
+  setScenario(generateYearScenario());
+}
+
+
+function chooseSchoolOffer(stage, major, tier = "mid") {
+  const s = app.state;
+  const universityPools = {
+    high: ["University of British Columbia", "McGill University", "University of Toronto", "Queen's University"],
+    mid: ["Simon Fraser University", "University of Victoria", "University of Calgary", "Western University"],
+    safe: ["Thompson Rivers University", "University of the Fraser Valley", "Vancouver Island University", "Kwantlen Polytechnic University"]
+  };
+  const collegePools = {
+    high: ["BCIT", "NAIT", "SAIT", "Top Trades and Applied Institute"],
+    mid: ["Langara College", "Douglas College", "Vancouver Community College", "Camosun College"],
+    safe: ["Community College Pathway", "Regional Trades Centre", "Open Access Technical Program", "Local Apprenticeship Intake"]
+  };
+  const pool = stage === "University" ? universityPools[tier] : collegePools[tier];
+  const picks = [...pool].sort(() => Math.random() - 0.5).slice(0, 3);
+  app.state.pendingSchoolApps = { stage, major, tier, picks };
+  setScenario({
+    title: "Applications",
+    body: "Which schools do you apply to?",
+    choices: [
+      { text: `Apply to ${picks[0]} only`, fn: () => resolveSchoolApplications([picks[0]], stage, major, tier) },
+      { text: `Apply to ${picks[0]} and ${picks[1]}`, fn: () => resolveSchoolApplications([picks[0], picks[1]], stage, major, tier) },
+      { text: "Apply broadly to all three", fn: () => resolveSchoolApplications(picks, stage, major, tier) },
+      { text: "Change your plan", fn: () => choosePostSecondaryType(stage) }
+    ]
+  });
+}
+
+
+function resolveSchoolApplications(applied, stage, major, tier) {
+  const s = app.state;
+  const baseOdds = stage === "University"
+    ? { high: 0.42, mid: 0.68, safe: 0.86 }[tier]
+    : { high: 0.55, mid: 0.78, safe: 0.92 }[tier];
+  const averageAdj = (s.average - 75) / 100;
+  const accepted = applied.filter(() => chance(clamp(baseOdds + averageAdj, 0.15, 0.97)));
+  if (!accepted.length) {
+    setScenario({
+      title: "Application Results",
+      body: "Your applications come back with no offer this round. What do you do next?",
+      choices: [
+        { text: "Apply again to a less competitive path.", fn: () => choosePostSecondaryType(stage) },
+        { text: "Take a gap year.", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.educationStage = "High School Graduate"; s.postSecondaryStatus = "No offer this round"; advanceYear({ hope: -1, purpose: 1 }); } },
+        { text: "Start working.", fn: () => { s.schoolStage = "Working Years"; s.inSchool = false; s.educationStage = "High School Graduate"; s.field = "General"; s.postSecondaryStatus = "No offer this round"; advanceYear({ hope: -1 }); } }
+      ]
+    });
+    return;
+  }
+
+  const costMap = stage === "University"
+    ? { high: [26, 24, 22], mid: [19, 17, 16], safe: [14, 12, 11] }
+    : { high: [16, 14, 13], mid: [11, 10, 9], safe: [7, 6, 5] };
+  setScenario({
+    title: "Application Results",
+    body: "You receive offers. Which one do you accept?",
+    choices: accepted.map((school, idx) => ({
+      text: `${school} — about $${costMap[tier][idx] || costMap[tier][0]}k per year`,
+      fn: () => {
+        s.schoolStage = stage;
+        s.inSchool = true;
+        s.major = major;
+        s.field = fieldFromMajor(major);
+        s.postSecondaryStatus = `Accepted — ${school}`;
+        s.yearsInPostSecondary = 0;
+        s.money -= costMap[tier][idx] || costMap[tier][0];
+        showLetter({
+          type: "Admissions Office",
+          title: "Offer of Admission",
+          body: `${s.name},\n\nYou have been admitted to ${school} for ${major}.`,
+          meta: `Estimated yearly cost: $${costMap[tier][idx] || costMap[tier][0]}k`
+        });
+        advanceYear({ hope: 1, stress: 1 });
+      }
+    })).concat([{ text: "Take a gap year instead.", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.postSecondaryStatus = "Deferred"; advanceYear({ hope: 1, purpose: 1 }); } }, { text: "Go back.", fn: () => chooseSchoolOffer(stage, major, tier) }])
+  });
+}
+
+function pendingOfferScenario() {
+  const o = app.state.pendingOffer;
+  return {
+    title: `Age ${app.state.age} — A job offer turns into a decision`,
+    body: `Someone finally puts possibility into writing. This role is real enough to change your next year.\n\nCompany: ${o.company}\nRole: ${o.title}\nSalary: $${Math.round(o.salary)}k\nCulture: ${o.culture}`,
+    choices: [
+      { text: "Accept the offer.", fn: acceptPendingOffer },
+      { text: "Negotiate before accepting.", fn: negotiateOfferAction },
+      { text: "Decline and keep searching.", fn: declineOfferAction }
+    ]
+  };
+}
+
+function acceptPendingOffer() {
+  const s = app.state, o = s.pendingOffer;
+  if (!o) return setScenario(generateYearScenario());
+  s.company = o.company;
+  s.workCulture = o.culture;
+  s.field = o.field;
+  s.jobLevel = o.level;
+  s.job = o.title;
+  s.salary = o.salary;
+  s.pendingOffer = null;
+  addLog(`${s.name} accepts a role at ${s.company}.`);
+  render();
+  setScenario(generateYearScenario());
+}
+
+function negotiateOfferAction() {
+  const s = app.state, o = s.pendingOffer;
+  if (!o) return setScenario(generateYearScenario());
+  const odds = 0.32 + (s.average - 75) / 100 + (s.performance - 5) * 0.03;
+  if (chance(odds)) {
+    o.salary += 4;
+    addLog(`${s.name} negotiates a better offer from ${o.company}.`);
+  } else {
+    addLog(`${s.name} tries to negotiate, but the company holds the line.`);
+    if (chance(0.12)) { s.pendingOffer = null; addLog(`The offer is withdrawn.`); }
+  }
+  render();
+  setScenario(generateYearScenario());
+}
+
+function declineOfferAction() {
+  const s = app.state;
+  if (s.pendingOffer) addLog(`${s.name} turns down an offer from ${s.pendingOffer.company}.`);
+  s.pendingOffer = null;
+  s.hope -= 1;
+  render();
+  setScenario(generateYearScenario());
+}
+
+function interviewScenario() {
+  const s = app.state;
+  return {
+    title: `Age ${s.age}`,
+    body: "How do you handle the interview?",
+    choices: [
+      { text: "Prepare carefully and answer directly.", fn: () => resolveInterview(0.18, 1) },
+      { text: "Lean on charm and improvisation.", fn: () => resolveInterview(0.08, 0) },
+      { text: "Over-prepare and come in tense.", fn: () => resolveInterview(0.03, -1) },
+      { text: "Cancel. You are not ready.", fn: () => { s.hope -= 1; addLog(`${s.name} backs out of an interview.`); render(); setScenario(generateYearScenario()); } }
+    ]
+  };
+}
+
+function resolveInterview(bonus, perfDelta) {
+  const s = app.state;
+  s.performance = clamp(s.performance + perfDelta, 0, 10);
+  const odds = 0.28 + (s.average - 70) / 100 + (s.performance - 5) * 0.03 + bonus - (s.criminalRecord ? 0.18 : 0);
+  if (chance(odds)) autoOfferJobMaybe();
+  else {
+    addLog(`${s.name} interviews but does not get the role.`);
+    s.hope -= 1;
+  }
+  render();
+  setScenario(generateYearScenario());
+}
+
+function rentHousingAction() {
+  const s = app.state;
+  const options = [
+    ["Roommate apartment", 12, "Shared apartment"],
+    ["Studio", 18, "Studio rental"],
+    ["Family rental", 24, "Family rental"]
+  ];
+  setScenario({
+    title: "Choose a rental",
+    body: "Renting can buy flexibility, but it can also keep money flowing away from ownership.",
+    choices: options.map(([label, rent, name]) => ({ text: `${label} — $${rent}k / year`, fn: () => { s.rent = rent; s.rentedHome = name; s.moves += 1; addLog(`${s.name} moves into a ${label.toLowerCase()}.`); render(); setScenario(generateYearScenario()); } })).concat([{ text: "Stay where you are.", fn: () => setScenario(generateYearScenario()) }])
+  });
+}
+
+function manageHousingAction() {
+  const s = app.state;
+  setScenario({
+    title: "Housing decisions",
+    body: `A house is not only an asset. It is upkeep, timing, and the way debt attaches itself to ordinary life.\n\nCurrent home: ${s.house}`,
+    choices: [
+      { text: "Pay extra toward the mortgage.", fn: () => { const pay = Math.min(18, Math.max(6, s.money * 0.15)); s.money -= pay; s.debt = Math.max(0, s.debt - pay); addLog(`${s.name} pays down housing debt.`); render(); setScenario(generateYearScenario()); } },
+      { text: "Sell the house and downsize.", fn: () => { s.money += 18; s.debt = Math.max(0, s.debt - 28); s.rent = 12; s.rentedHome = "Downsized rental"; s.house = null; s.houseUpkeep = 0; addLog(`${s.name} sells a home and downsizes.`); render(); setScenario(generateYearScenario()); } },
+      { text: "Keep things as they are.", fn: () => setScenario(generateYearScenario()) }
+    ]
+  });
+}
+
+function manageCarAction() {
+  const s = app.state;
+  setScenario({
+    title: "Car decisions",
+    body: `A car keeps solving one problem by creating three quieter ones: maintenance, insurance, and risk.\n\nCurrent car: ${s.car}`,
+    choices: [
+      { text: "Pay off part of the car debt.", fn: () => { const pay = Math.min(8, Math.max(3, s.money * 0.08)); s.money -= pay; s.debt = Math.max(0, s.debt - pay); addLog(`${s.name} pays down car debt.`); render(); setScenario(generateYearScenario()); } },
+      { text: "Sell the car.", fn: () => { s.money += 6; s.car = null; s.carUpkeep = 0; s.carInsurance = false; addLog(`${s.name} sells their car.`); render(); setScenario(generateYearScenario()); } },
+      { text: "Keep driving it.", fn: () => setScenario(generateYearScenario()) }
+    ]
+  });
+}
+
+function insuranceAction() {
+  const s = app.state;
+  setScenario({
+    title: "Insurance",
+    body: "What insurance do you want this year?",
+    choices: [
+      { text: s.healthInsurance ? "Keep health insurance" : "Buy health insurance — $2k / year", fn: () => { s.healthInsurance = true; addLog(`${s.name} maintains health coverage.`); render(); setScenario(generateYearScenario()); } },
+      { text: s.carInsurance ? "Keep car insurance" : "Buy car insurance — $1.5k / year", fn: () => { s.carInsurance = true; addLog(`${s.name} insures a car.`); render(); setScenario(generateYearScenario()); } },
+      { text: s.homeInsurance ? "Keep home insurance" : "Buy home insurance — $1.8k / year", fn: () => { s.homeInsurance = true; addLog(`${s.name} insures their home.`); render(); setScenario(generateYearScenario()); } },
+      { text: "Leave insurance unchanged.", fn: () => setScenario(generateYearScenario()) }
+    ]
+  });
+}
+
+function payDebtAction() {
+  const s = app.state;
+  const pay = Math.min(s.debt, Math.max(5, Math.floor(s.money * 0.2)));
+  if (pay <= 0) return setScenario(generateYearScenario());
+  s.money -= pay;
+  s.debt = Math.max(0, s.debt - pay);
+  addLog(`${s.name} pays down ${pay}k of debt.`);
+  render();
+  setScenario(generateYearScenario());
+}
+
+function bankruptcyAction() {
+  const s = app.state;
+  setScenario({
+    title: "Bankruptcy becomes a real possibility",
+    body: "Do you file for bankruptcy?",
+    choices: [
+      { text: "File for bankruptcy.", fn: () => { s.bankruptcyUsed = true; s.debt *= 0.35; s.money = Math.max(s.money, 2); s.hope -= 1; s.stress -= 2; s.criminalRecord = s.criminalRecord; addLog(`${s.name} files for bankruptcy and restructures their finances.`); render(); setScenario(generateYearScenario()); } },
+      { text: "Try to manage without it.", fn: () => setScenario(generateYearScenario()) }
+    ]
+  });
+}
+
+function applyGraduateSchoolAction(type) {
+  const options = type === "Graduate School"
+    ? ["Computer Science", "Business", "Engineering", "Arts", "Education", "Medicine", "Social Sciences"]
+    : ["Law", "Medicine", "MBA", "Teaching Credential"];
+  setScenario({
+    title: type === "Graduate School" ? "Graduate school applications" : "Professional school applications",
+    body: "Choose the field you want to apply in.",
+    choices: options.map(opt => ({
+      text: opt,
+      fn: () => chooseGraduateTier(type, opt)
+    })).concat([{ text: "Go back.", fn: goBackToSchoolAction }])
+  });
+}
+
+function chooseGraduateTier(type, focus) {
+  setScenario({
+    title: focus,
+    body: "Choose the kind of schools you want to target.",
+    choices: [
+      { text: "Highly competitive schools", fn: () => resolveGraduateApplications(type, focus, "high") },
+      { text: "Balanced programs", fn: () => resolveGraduateApplications(type, focus, "mid") },
+      { text: "Safer options", fn: () => resolveGraduateApplications(type, focus, "safe") },
+      { text: "Go back.", fn: () => applyGraduateSchoolAction(type) }
+    ]
+  });
+}
+
+function resolveGraduateApplications(type, focus, tier) {
+  const s = app.state;
+  const pools = type === "Graduate School"
+    ? {
+        high: ["University of Toronto", "University of British Columbia", "McGill University"],
+        mid: ["Simon Fraser University", "University of Victoria", "University of Calgary"],
+        safe: ["University of Northern British Columbia", "Thompson Rivers University", "Kwantlen Polytechnic University"]
+      }
+    : {
+        high: ["University of Toronto", "McGill University", "University of British Columbia"],
+        mid: ["University of Victoria", "Western University", "University of Ottawa"],
+        safe: ["Lakehead University", "Thompson Rivers University", "Regional Professional Program"]
+      };
+  const costs = type === "Graduate School"
+    ? { high: 18, mid: 14, safe: 10 }
+    : { high: 28, mid: 22, safe: 16 };
+  const baseOdds = type === "Graduate School"
+    ? { high: 0.32, mid: 0.58, safe: 0.78 }[tier]
+    : { high: 0.24, mid: 0.46, safe: 0.68 }[tier];
+  const picks = pools[tier];
+  const odds = clamp(baseOdds + ((s.average - 75) / 100) + ((s.discipline - 5) * 0.03), 0.12, 0.97);
+  const accepted = picks.filter(() => chance(odds));
+  if (!accepted.length) {
+    showLetter({
+      type: "Admissions Office",
+      title: "Application Decision",
+      body: `${s.name},\n\nNo offer arrives this round for ${focus}.`,
+      meta: "You can work, strengthen your file, and try again later."
+    });
+    s.hope -= 1;
+    render();
+    setScenario(generateYearScenario());
+    return;
+  }
+  setScenario({
+    title: "Graduate results",
+    body: "You receive offers. Which one do you accept?",
+    choices: accepted.map(school => ({
+      text: `${school} — about $${costs[tier]}k per year`,
+      fn: () => {
+        s.inSchool = true;
+        s.schoolStage = type;
+        s.gradTrack = focus;
+        s.major = focus;
+        s.field = focus === "Law" || focus === "MBA" || focus === "Teaching Credential" ? "General" : fieldFromMajor(focus);
+        s.postSecondaryStatus = `Accepted — ${school}`;
+        s.money -= costs[tier];
+        s.yearsInPostSecondary = 0;
+        showLetter({
+          type: "Admissions Office",
+          title: type === "Graduate School" ? "Graduate Admission" : "Professional Program Offer",
+          body: `${s.name},\n\nYou have been admitted to ${school} for ${focus}.`,
+          meta: `Estimated yearly cost: $${costs[tier]}k`
+        });
+        advanceYear({ purpose: 2, stress: 1 });
+      }
+    })).concat([{ text: "Go back.", fn: () => chooseGraduateTier(type, focus) }])
+  });
+}
+
+function showLetter({ type, title, body, meta }) {
+  $("modalContent").innerHTML = `
+    <div class="letter-head">${type}</div>
+    <h2 class="letter-title">${title}</h2>
+    <div class="letter-body">${body.replace(/\n/g, "<br>")}</div>
+    <div class="letter-meta">${meta}</div>
+    <div class="letter-sign">The Weight of Becoming</div>
+  `;
+  $("modal").classList.remove("hidden");
+}
+
+function closeModal() {
+  $("modal").classList.add("hidden");
+  app.modalActions = {};
+}
+
+function showChoiceModal({ header = "Decision", title = "", body = "", choices = [], footer = "" }) {
+  const ids = choices.map((_, idx) => `modal_choice_${Date.now()}_${idx}`);
+  app.modalActions = {};
+  choices.forEach((choice, idx) => { if (!choice.disabled) app.modalActions[ids[idx]] = choice.fn; });
+  $("modalContent").innerHTML = `
+    <div class="letter-head">${header}</div>
+    <h2 class="letter-title">${title}</h2>
+    <div class="letter-body">${String(body).replace(/\n/g, "<br>")}</div>
+    <div class="modal-choice-list">${choices.map((choice, idx) => {
+      const inner = choice.html || choice.text;
+      const cls = `modal-choice-btn ${choice.disabled ? 'disabled' : ''} ${choice.html ? 'rich-choice' : ''}`;
+      const attr = choice.disabled ? 'disabled aria-disabled="true"' : '';
+      return `<button class="${cls}" data-choice-id="${ids[idx]}" ${attr}>${inner}</button>`;
+    }).join("")}</div>
+    ${footer ? `<div class="letter-meta">${footer}</div>` : ""}
+  `;
+  $("modal").classList.remove("hidden");
+  $$(".modal-choice-btn").forEach(btn => {
+    if (btn.disabled) return;
+    btn.onclick = () => {
+      const fn = app.modalActions[btn.dataset.choiceId];
+      closeModal();
+      if (fn) fn();
+    };
+  });
+}
+
+function showIllnessPopup() {
+  const s = app.state;
+  if (!s?.illness || !s.alive) return;
+  const options = medicalOptionsFor(s.illness, s.healthInsurance);
+  showChoiceModal({
+    header: "Medical decision",
+    title: `${capitalize(s.illness)} requires attention`,
+    body: `You can leave this for later, but recovery usually improves when you deal with it now.`,
+    choices: options.map(opt => ({
+      text: `${opt.label} — $${opt.display}`,
+      fn: () => {
+        s.money -= opt.cost;
+        s.health = clamp(s.health + opt.health, 0, 10);
+        s.stress = clamp(s.stress + opt.stress, 0, 10);
+        s.hope = clamp(s.hope + opt.hope, 0, 10);
+        addLog(`${s.name} chooses ${opt.shortLabel} for ${s.illness}.`);
+        if (opt.clear || chance(opt.recoverChance)) s.illness = "";
+        render();
+      }
+    })).concat([{
+      text: "Leave it for now.",
+      fn: () => {
+        s.health = clamp(s.health - 1, 0, 10);
+        s.stress = clamp(s.stress + 1, 0, 10);
+        addLog(`${s.name} puts off treatment for ${s.illness}.`);
+        render();
+      }
+    }]),
+    footer: s.healthInsurance ? "Insurance lowers some costs." : "Without insurance, medication and follow-up care cost more."
+  });
+}
+
+function autosave() {
+  if (!app.state?.username) return;
+  const current = readAccount(app.state.username) || { password: app.state.password, badges: [] };
+  const mergedBadges = Array.from(new Set([...(current.badges || []), ...app.state.badges]));
+  localStorage.setItem(accountKey(app.state.username), JSON.stringify({
+    password: app.state.password,
+    save: app.state,
+    badges: mergedBadges
+  }));
+}
+
+function accountKey(username) { return `twob_account_${username}`; }
+function readAccount(username) {
+  const raw = localStorage.getItem(accountKey(username));
+  return raw ? JSON.parse(raw) : null;
+}
+
+function updateBadgeShelfPreview() {
+  const username = $("loadUsernameInput").value.trim() || $("usernameInput").value.trim();
+  const shelf = $("badgeShelf");
+  if (!username) {
+    shelf.className = "badge-shelf empty";
+    shelf.textContent = "Enter a username to view saved badges.";
+    return;
+  }
+  const account = readAccount(username);
+  if (!account || !(account.badges || []).length) {
+    shelf.className = "badge-shelf empty";
+    shelf.textContent = "No saved badges found for that username yet.";
+    return;
+  }
+  shelf.className = "badge-shelf";
+  shelf.innerHTML = account.badges.map(b => `<span class="badge">${b}</span>`).join("");
+}
+
+document.addEventListener("DOMContentLoaded", init);
