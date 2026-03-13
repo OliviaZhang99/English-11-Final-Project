@@ -50,7 +50,7 @@ const DATA = {
   ],
   jobBoard: {
     "Computer Science": [
-      { title: "IT Support Assistant", minEducation: "High School Graduate", salary: 46, description: "Entry technical support and troubleshooting for a small company.", recordPolicy: "Sometimes" },
+      { title: "IT Support Assistant", minEducation: "High School Graduate", salary: 46, description: "Entry technical support and troubleshooting for a small company." },
       { title: "Junior Web Developer", minEducation: "College / Trades", salary: 64, description: "Build and maintain front-end pages, small features, and internal tools." },
       { title: "Software Developer I", minEducation: "University", salary: 79, description: "Write production code, fix bugs, and work with a development team." }
     ],
@@ -70,12 +70,12 @@ const DATA = {
       { title: "Creative Strategist", minEducation: "University", salary: 61, description: "Blend concept development, communication, and campaign planning." }
     ],
     "Education": [
-      { title: "After-school Program Worker", minEducation: "High School Graduate", salary: 39, description: "Support children and youth through structured programs.", recordPolicy: "No" },
+      { title: "After-school Program Worker", minEducation: "High School Graduate", salary: 39, description: "Support children and youth through structured programs." },
       { title: "Education Assistant", minEducation: "College / Trades", salary: 48, description: "Assist students in classrooms and learning support settings." },
       { title: "Teacher", minEducation: "University", salary: 68, description: "Teach, assess, plan, and support students in a formal school setting." }
     ],
     "Medicine": [
-      { title: "Clinic Receptionist", minEducation: "High School Graduate", salary: 42, description: "Administrative support in a medical office or clinic.", recordPolicy: "Sometimes" },
+      { title: "Clinic Receptionist", minEducation: "High School Graduate", salary: 42, description: "Administrative support in a medical office or clinic." },
       { title: "Licensed Practical Nurse", minEducation: "College / Trades", salary: 66, description: "Direct patient care in hospitals, clinics, or long-term care." },
       { title: "Physician", minEducation: "Professional School", salary: 145, description: "Diagnosis, treatment, and long-term medical responsibility." }
     ],
@@ -85,17 +85,14 @@ const DATA = {
       { title: "Policy Analyst", minEducation: "University", salary: 71, description: "Research social systems and build policy recommendations." }
     ],
     "Skilled Trades": [
-      { title: "Apprentice", minEducation: "High School Graduate", salary: 48, description: "Train on the job while building practical trade skills.", recordPolicy: "Yes" },
+      { title: "Apprentice", minEducation: "High School Graduate", salary: 48, description: "Train on the job while building practical trade skills." },
       { title: "Journeyperson", minEducation: "College / Trades", salary: 74, description: "Independent skilled trade work with recognized training." },
       { title: "Site Supervisor", minEducation: "College / Trades", salary: 88, description: "Lead crews, timelines, and safety on larger projects." }
     ],
     "General": [
-      { title: "Retail Associate", minEducation: "High School Graduate", salary: 39, description: "Entry customer service work with flexible hours.", recordPolicy: "Yes" },
-      { title: "Housekeeper / Maid", minEducation: "High School Graduate", salary: 34, description: "Cleaning, setup, and guest support work.", recordPolicy: "Yes" },
-      { title: "Park Maintenance Worker", minEducation: "High School Graduate", salary: 38, description: "Outdoor maintenance and city upkeep work.", recordPolicy: "Yes" },
-      { title: "Park Patrol Assistant", minEducation: "High School Graduate", salary: 41, description: "Public-facing patrol support and reporting.", recordPolicy: "Sometimes" },
-      { title: "Administrative Assistant", minEducation: "College / Trades", salary: 49, description: "Office support, scheduling, communication, and coordination.", recordPolicy: "No" },
-      { title: "Program Coordinator", minEducation: "University", salary: 61, description: "Coordinate projects, stakeholders, and reporting requirements.", recordPolicy: "No" }
+      { title: "Retail Associate", minEducation: "High School Graduate", salary: 39, description: "Entry customer service work with flexible hours." },
+      { title: "Administrative Assistant", minEducation: "College / Trades", salary: 49, description: "Office support, scheduling, communication, and coordination." },
+      { title: "Program Coordinator", minEducation: "University", salary: 61, description: "Coordinate projects, stakeholders, and reporting requirements." }
     ]
   }
 };
@@ -114,9 +111,6 @@ const app = {
     ["Homeowner", s => !!s.house],
     ["Entrepreneur", s => s.businessOwner],
     ["Rebuilder", s => s.criminalRecord && s.job && s.performance >= 6],
-    ["System Marked", s => s.criminalRecord && !s.job && s.age >= 30],
-    ["Served Time", s => s.releaseYear !== null],
-    ["Second Chance", s => s.releaseYear !== null && s.job],
     ["Graduate Scholar", s => s.educationStage === "Graduate School" || s.educationStage === "Professional School"],
     ["Retired", s => s.retired],
     ["Worldly", s => s.moves >= 2]
@@ -134,6 +128,7 @@ function init() {
   populateSetupOptions();
   bindUI();
   showScreen("menuScreen");
+  updateBadgeShelfPreview();
 }
 
 function populateSetupOptions() {
@@ -150,10 +145,16 @@ function fillSelect(select, items) {
 function bindUI() {
   $("randomizeBtn").onclick = randomizeSetup;
   $("startBtn").onclick = startGame;
+  $("loadBtn").onclick = loadGame;
+  $("createAccountBtn").onclick = createOrLinkAccount;
+  $("viewBadgeShelfBtn").onclick = updateBadgeShelfPreview;
   $("closeModalBtn").onclick = closeModal;
+  $("accountBtn").onclick = openAccountModal;
+  $("closeAccountModalBtn").onclick = closeAccountModal;
   $("modal").addEventListener("click", e => {
     if (e.target.id === "modal") closeModal();
   });
+  $("accountModal").addEventListener("click", e => { if (e.target.id === "accountModal") closeAccountModal(); });
   $("homeBtn").onclick = goHome;
 }
 
@@ -170,6 +171,8 @@ function defaultState(setup) {
   const talent = DATA.talents.find(t => t.name === setup.talent);
   return {
     name: setup.name,
+    username: setup.username || "",
+    password: setup.password || "",
     age: 0,
     alive: true,
     background: setup.background,
@@ -178,7 +181,7 @@ function defaultState(setup) {
     backgroundNote: bg.note,
     identityNote: DATA.identities.find(x => x.name === setup.identity).note,
     talentNote: talent.note,
-    money: 0,
+    money: bg.money,
     debt: 0,
     salary: 0,
     rent: 0,
@@ -220,12 +223,6 @@ function defaultState(setup) {
     criminalRecord: false,
     underCharges: false,
     jailYears: 0,
-    probationYears: 0,
-    communityServiceHours: 0,
-    lastCrimeSeverity: "",
-    releaseYear: null,
-    peakSalary: 0,
-    majorLifeScore: 0,
     illness: "",
     healthFlags: [],
     postSecondaryStatus: "",
@@ -236,6 +233,10 @@ function defaultState(setup) {
     currentWorld: null,
     justGraduated: false,
     yearsWorked: 0,
+    peakSalary: 0,
+    movedOut: false,
+    endingFits: null,
+    endingBadgesUnlocked: [],
     yearsInPostSecondary: 0,
     certifications: [],
     applicationsThisYear: 0,
@@ -258,29 +259,95 @@ function defaultState(setup) {
 function startGame() {
   const setup = {
     name: $("nameInput").value.trim() || "Avery",
+    username: $("usernameInput").value.trim(),
+    password: $("passwordInput").value,
     background: $("backgroundSelect").value,
     identity: $("identitySelect").value,
     talent: $("talentSelect").value
   };
 
+  if (setup.username && !setup.password) {
+    alert("Add a password if you want a saved account, or leave both username and password blank to play as a guest.");
+    return;
+  }
+
+  if (setup.username) {
+    const existing = readAccount(setup.username);
+    if (existing && existing.password !== setup.password) {
+      alert("That username already exists with a different password.");
+      return;
+    }
+  }
+
+  closeAccountModal();
   app.state = defaultState(setup);
   addLog("A new life begins.");
   showScreen("gameScreen");
   $("homeBtn").classList.remove("hidden");
   render();
   setScenario(introScenario());
+  autosave();
 }
 
+function loadGame() {
+  const username = $("loadUsernameInput").value.trim();
+  const password = $("loadPasswordInput").value;
+  if (!username || !password) {
+    alert("Enter both username and password to load a saved life.");
+    return;
+  }
+  const account = readAccount(username);
+  if (!account || account.password !== password || !account.save) {
+    alert("No saved life matched that login.");
+    return;
+  }
+  closeAccountModal();
+  app.state = account.save;
+  showScreen("gameScreen");
+  $("homeBtn").classList.remove("hidden");
+  render();
+  setScenario(generateYearScenario());
+}
 
+function createOrLinkAccount() {
+  const username = $("usernameInput").value.trim();
+  const password = $("passwordInput").value;
+  if (!username || !password) {
+    alert("Enter both a username and password.");
+    return;
+  }
+  const existing = readAccount(username);
+  if (existing && existing.password !== password) {
+    alert("That username already exists with a different password.");
+    return;
+  }
 
+  const saveState = app.state ? { ...app.state, username, password } : null;
+  localStorage.setItem(accountKey(username), JSON.stringify({
+    password,
+    save: saveState,
+    badges: Array.from(new Set([...(existing?.badges || []), ...(app.state?.badges || [])]))
+  }));
+
+  if (app.state) {
+    app.state.username = username;
+    app.state.password = password;
+    autosave();
+  }
+
+  updateBadgeShelfPreview();
+  closeAccountModal();
+  alert(app.state ? "Account linked. This life can now save and load." : "Account created. Start a life and it will save under this username.");
+}
 
 function goHome() {
-  if (confirm("Return to the main menu?")) {
+  if (confirm("Return to the main menu? Unsaved guest progress will be lost.")) {
     app.state = null;
     app.currentScenario = null;
     showScreen("menuScreen");
     $("homeBtn").classList.add("hidden");
-    }
+    updateBadgeShelfPreview();
+  }
 }
 
 function showScreen(id) {
@@ -289,7 +356,13 @@ function showScreen(id) {
   });
 }
 
+function openAccountModal() {
+  $("accountModal").classList.remove("hidden");
+}
 
+function closeAccountModal() {
+  $("accountModal").classList.add("hidden");
+}
 
 function introScenario() {
   const s = app.state;
@@ -366,7 +439,14 @@ function renderSummary() {
   }
 
   if (s.field) rows.push(["Current Field", s.field]);
-  if (s.job || s.retired) rows.push(["Job", s.job || "Retired"]);
+  const jobStatus = s.retired
+    ? "Retired"
+    : s.jailYears > 0
+      ? "In jail"
+      : s.job
+        ? s.job
+        : (!s.inSchool && s.age >= 18 ? "Gap Year" : "—");
+  rows.push(["Job", jobStatus]);
   if (s.company) rows.push(["Company", s.company]);
   if (s.salary || s.retired) rows.push(["Salary", s.retired ? `$${Math.round(s.retirementIncome)}k pension` : `$${Math.round(s.salary)}k`]);
 
@@ -433,17 +513,6 @@ function renderActions() {
   if (card) card.classList.remove("hidden");
 
   const actions = [];
-  if (s.jailYears > 0) {
-    if (s.illness) actions.push(["Handle illness", showIllnessPopup]);
-    actions.push(["Continue", () => setScenario(generateYearScenario())]);
-    actions.forEach(([label, fn]) => {
-      const btn = document.createElement("button");
-      btn.textContent = label;
-      btn.onclick = fn;
-      container.appendChild(btn);
-    });
-    return;
-  }
   if (s.age >= 12 && s.age <= 26) actions.push(["Change activity", chooseActivityAction]);
   if (s.age >= 18 && !s.retired) actions.push([schoolActionLabel(s), goBackToSchoolAction]);
   if (s.age >= 16) actions.push(["Take out a loan", takeLoanAction]);
@@ -459,7 +528,7 @@ function renderActions() {
   if (s.age >= 18 && s.job && !s.retired) actions.push(["Ask for a raise", askRaiseAction]);
   if (s.age >= 21 && s.job && !s.retired) actions.push(["Ask for promotion", askPromotionAction]);
   if (s.age >= 18 && s.job && !s.retired) actions.push(["Quit job", quitJobAction]);
-  if (s.age >= 18 && !s.job && !s.retired && !s.inSchool && s.jailYears === 0) actions.push([s.criminalRecord ? "Apply for jobs (record check)" : "Apply for jobs", applyJobsAction]);
+  if (s.age >= 18 && !s.job && !s.retired && !s.inSchool && s.jailYears === 0) actions.push(["Apply for jobs", applyJobsAction]);
   if (s.age >= 18 && !s.job && !s.retired && s.schoolStage === "Gap Year") actions.push(["Apply for jobs", applyJobsAction]);
   if (s.age >= 16 && !s.retired) actions.push([s.relationshipStatus === "Single" ? "Dating" : "Relationships", relationshipAction]);
   if (s.age >= 18 && !s.businessOwner && !s.retired && s.money >= 50) actions.push(["Start a business", startBusinessAction]);
@@ -522,12 +591,34 @@ function ageUp() {
   updateBadges();
   clampCoreStats();
   normalizeFinances();
+  autosave();
   render();
+}
+
+
+function educationYearlyCost() {
+  const s = app.state;
+  if (!s.inSchool) return 0;
+  const tier = s.postSecondaryStatus?.includes("Accepted") ? (s.postSecondaryStatus.includes("University") ? "mid" : "mid") : "mid";
+  if (!["University", "College / Trades", "Graduate School", "Professional School"].includes(s.schoolStage)) return 0;
+  const base = {
+    "University": 6,
+    "College / Trades": 3,
+    "Graduate School": 5,
+    "Professional School": 8
+  }[s.schoolStage] || 0;
+  const familySupport = {"Working Class": 0.55, "Middle Class": 0.35, "Upper Class": 0.12}[s.background] ?? 0.35;
+  let cost = base;
+  if (!s.movedOut) cost *= 0.55;
+  cost *= (1 - familySupport);
+  if (s.scholarshipAid) cost = Math.max(0, cost - s.scholarshipAid);
+  return +Math.max(0, cost).toFixed(1);
 }
 
 function yearlyCosts() {
   const s = app.state;
-  let costs = s.houseUpkeep + s.carUpkeep + s.rent + s.spouseSupport;
+  let costs = 0;
+  if (s.age >= 18) costs += s.houseUpkeep + s.carUpkeep + s.rent + s.spouseSupport;
   if (s.healthInsurance) costs += 2;
   if (s.carInsurance && s.car) costs += 1.5;
   if (s.homeInsurance && s.house) costs += 1.8;
@@ -537,11 +628,19 @@ function yearlyCosts() {
     costs += Math.min(16, Math.max(4, s.debt * 0.07));
   }
   if (s.retired) s.money += s.retirementIncome;
-  if (s.salary && s.jailYears === 0) {
-    let workFactor = 1;
-    workFactor = Math.max(0.45, workFactor);
-    s.money += s.salary * 0.58 * workFactor;
-    s.pension += s.salary * 0.04 * workFactor;
+  if (s.salary) {
+    s.money += s.salary * 0.58;
+    s.pension += s.salary * 0.04;
+    s.peakSalary = Math.max(s.peakSalary || 0, s.salary);
+  }
+  const schoolCost = educationYearlyCost();
+  if (schoolCost > 0) {
+    costs += schoolCost;
+    if (chance(0.28 + Math.max(0, (s.average - 80) / 50))) {
+      const award = +(1 + Math.random() * 3).toFixed(1);
+      s.money += award;
+      addLog(`${s.name} receives ${award}k in scholarships or family help.`);
+    }
   }
   if (s.businessOwner && chance(0.3)) {
     const swing = Math.round((Math.random() * 18) - 6);
@@ -704,7 +803,7 @@ New role: ${s.job}
 New salary: $${Math.round(s.salary)}k`, meta: `Company culture: ${s.workCulture}` });
     }
 
-    const firingRisk = 0.015 + Math.max(0, 5 - s.performance) * 0.035 + (app.state.currentWorld?.firing || 0) + (s.criminalRecord ? 0.02 : 0);
+    const firingRisk = 0.015 + Math.max(0, 5 - s.performance) * 0.035 + (app.state.currentWorld?.firing || 0) + (s.criminalRecord ? 0.01 : 0);
     if (chance(firingRisk)) {
       addLog(`${s.name} loses a job at ${s.company}.`);
       if (chance(0.7)) showLetter({ type: "Employment Notice", title: "Termination Letter", body: `The role is ending. Performance, changing conditions, or company pressure all played a part.
@@ -812,59 +911,28 @@ function updateRelationshipProgress() {
   }
 }
 
-function isLifeThreateningIllness(illness) {
-  return ["cancer", "heart disease", "stroke", "organ failure", "a traumatic injury"].includes(illness);
-}
-
 function updateHealthProgress() {
   const s = app.state;
-  const naturalAgingRisk = s.age < 18 ? 0.001 : s.age < 35 ? 0.002 : s.age < 50 ? 0.005 : s.age < 65 ? 0.013 : s.age < 80 ? 0.04 : 0.11;
-  const stressRisk = Math.max(0, s.stress - 6) * 0.01;
-  const activityBoost = s.currentActivity === "Gym" ? 0.6 : s.currentActivity === "Therapy" ? 0.35 : 0;
-  const baselineDropChance = s.age < 45 ? 0.04 : s.age < 65 ? 0.08 : 0.14;
+  const ageRisk = s.age < 18 ? 0.006 : s.age < 35 ? 0.016 : s.age < 50 ? 0.032 : 0.055;
+  const stressRisk = Math.max(0, s.stress - 6) * 0.015;
+  const activityBoost = s.currentActivity === "Gym" ? 0.8 : s.currentActivity === "Therapy" ? 0.5 : 0;
+  s.health = clamp(s.health - (chance(0.10) ? 1 : 0) + activityBoost, 1, 10);
 
-  if (chance(baselineDropChance)) s.health -= 1;
-  s.health = clamp(s.health + activityBoost, 0, 10);
-
-  if (!s.illness) {
-    const illnessRoll = naturalAgingRisk + stressRisk + (s.age >= 45 ? 0.015 : 0);
-    if (chance(illnessRoll)) {
-      const conditions = [];
-      if (s.age < 18) conditions.push("a bad flu", "an infection", "a sprain");
-      if (s.age >= 18) conditions.push("burnout", "anxiety", "a back injury", "chronic pain", "a traumatic injury");
-      if (s.age >= 35) conditions.push("an autoimmune condition", "a heart warning", "serious pneumonia");
-      if (s.age >= 48) conditions.push("cancer", "heart disease", "stroke");
-      if (s.age >= 60) conditions.push("organ failure");
-      s.illness = rand(conditions);
-      s.health -= isLifeThreateningIllness(s.illness) ? 2 : 1;
-      s.stress += 1;
-      addLog(`${s.name} is dealing with ${s.illness}.`);
-    }
+  if (!s.illness && chance(ageRisk + stressRisk)) {
+    const conditions = [];
+    if (s.age < 18) conditions.push("a bad flu", "a sprain", "an infection");
+    if (s.age >= 18) conditions.push("burnout", "anxiety", "a back injury", "chronic pain");
+    if (s.age >= 38) conditions.push("an autoimmune condition", "a heart warning");
+    if (s.age >= 48) conditions.push("cancer", "heart disease");
+    s.illness = rand(conditions);
+    s.health -= /cancer|heart disease/.test(s.illness) ? 2 : 1;
+    s.stress += 1;
+    addLog(`${s.name} is dealing with ${s.illness}.`);
   }
 
-  if (chance(s.age < 18 ? 0.001 : s.age < 40 ? 0.003 : s.age < 65 ? 0.006 : 0.012)) {
-    const crash = rand(["a car crash", "a workplace accident", "a sudden fall", "a medical emergency"]);
-    addLog(`${s.name} survives ${crash}.`);
-    s.health -= chance(0.15) ? 3 : 2;
-    s.stress += 2;
-    if (chance(0.05 + Math.max(0, 4 - s.health) * 0.03)) {
-      s.illness = "a traumatic injury";
-    }
-  }
-
-  if (s.illness && !isLifeThreateningIllness(s.illness)) {
-    s.health = Math.max(s.health, 1);
-  }
-
-  let deathChance = 0;
-  if (s.age >= 70) deathChance += (s.age - 69) * 0.006;
-  if (s.illness && isLifeThreateningIllness(s.illness)) deathChance += 0.04 + Math.max(0, 4 - s.health) * 0.03;
-  if (s.health <= 1 && (s.age >= 75 || (s.illness && isLifeThreateningIllness(s.illness)))) deathChance += 0.08;
-
-  if (chance(deathChance)) {
+  if (s.health <= 0) {
     s.alive = false;
-    const cause = s.illness && isLifeThreateningIllness(s.illness) ? `Complications from ${s.illness} end the story here.` : `Age and accumulated strain finally close the story.`;
-    setScenario(endScenario(cause));
+    setScenario(endScenario("A body can only carry so much. The story closes here."));
   }
 }
 
@@ -873,23 +941,15 @@ function updateLegalProgress() {
   if (s.jailYears > 0) {
     s.jailYears -= 1;
     s.hope -= 1;
-    s.money -= 3;
-    s.relationships -= chance(0.22) ? 1 : 0;
-    if (chance(0.28)) {
-      addLog(rand([
-        `${s.name} keeps their head down and gets through another hard month inside.`,
-        `${s.name} joins a program inside and starts imagining life after release.`,
-        `${s.name} gets through a tense situation in jail without making it worse.`,
-        `${s.name} receives a letter from outside that changes the mood of the year.`
-      ]));
+    s.money -= 4;
+    if (chance(0.35)) {
+      addLog(`${s.name} joins a program while in custody.`);
+      s.discipline += 1;
     }
     if (s.jailYears <= 0) {
-      addLog(`${s.name} is released from jail.`);
+      addLog(`${s.name} is released from custody.`);
       s.criminalRecord = true;
       s.underCharges = false;
-      s.releaseYear = s.age;
-      s.stress += 2;
-      s.hope -= 1;
     }
   }
 }
@@ -1444,22 +1504,6 @@ function medicalOptionsFor(illness, insured) {
     "heart disease": [
       { label: "Begin medication and follow-up care", shortLabel: "follow-up care", cost: 0.42 * covered, display: Math.round(420 * covered), health: 1, stress: 0, hope: 0, recoverChance: 0.26 },
       { label: "Pay for hospital treatment", shortLabel: "hospital treatment", cost: 0.75 * covered, display: Math.round(750 * covered), health: 2, stress: 1, hope: 0, recoverChance: 0.38 }
-    ],
-    "stroke": [
-      { label: "Begin hospital rehab immediately", shortLabel: "hospital rehab", cost: 0.95 * covered, display: Math.round(950 * covered), health: 2, stress: 1, hope: 0, recoverChance: 0.22 },
-      { label: "Pay for urgent testing and medication", shortLabel: "urgent treatment", cost: 0.55 * covered, display: Math.round(550 * covered), health: 1, stress: 1, hope: 0, recoverChance: 0.14 }
-    ],
-    "organ failure": [
-      { label: "Begin hospital treatment", shortLabel: "hospital treatment", cost: 1.1 * covered, display: Math.round(1100 * covered), health: 2, stress: 1, hope: 0, recoverChance: 0.16 },
-      { label: "Seek specialist care", shortLabel: "specialist care", cost: 0.7 * covered, display: Math.round(700 * covered), health: 1, stress: 1, hope: 0, recoverChance: 0.1 }
-    ],
-    "a traumatic injury": [
-      { label: "Pay for surgery and rehab", shortLabel: "surgery and rehab", cost: 0.85 * covered, display: Math.round(850 * covered), health: 2, stress: 1, hope: 0, recoverChance: 0.28 },
-      { label: "Pay for hospital observation", shortLabel: "hospital observation", cost: 0.45 * covered, display: Math.round(450 * covered), health: 1, stress: 0, hope: 0, recoverChance: 0.16 }
-    ],
-    "serious pneumonia": [
-      { label: "Begin aggressive treatment", shortLabel: "aggressive treatment", cost: 0.35 * covered, display: Math.round(350 * covered), health: 2, stress: 0, hope: 0, recoverChance: 0.42 },
-      { label: "Pay for hospital monitoring", shortLabel: "hospital monitoring", cost: 0.5 * covered, display: Math.round(500 * covered), health: 2, stress: 1, hope: 0, recoverChance: 0.48 }
     ]
   };
   return options[illness] || [
@@ -1470,29 +1514,18 @@ function medicalOptionsFor(illness, insured) {
 function legalScenario() {
   const s = app.state;
   if (s.jailYears > 0) {
-    const event = rand([
-      "A cellmate tests your boundaries on your second week inside.",
-      "A guard tells you there is one spot left in a rehabilitation class.",
-      "A fight breaks out nearby and you have seconds to decide what kind of person to be in that moment.",
-      "You get a letter from outside that makes release feel possible again.",
-      "Kitchen duty gives you structure, routine, and just enough quiet to think."
+    return scenarioFromPairs(`Age ${s.age}`, "How do you spend this year in custody?", [
+      ["Join a program.", { discipline: 1, hope: 1 }],
+      ["Keep your head down.", { stress: -1 }],
+      ["Fall in with trouble.", { stress: 1, hope: -1 }]
     ]);
-    return {
-      title: `Age ${s.age} — Inside`,
-      body: event,
-      choices: [
-        { text: "Keep your head down.", fn: () => advanceYear({ stress: -1, discipline: 1 }) },
-        { text: "Join a program.", fn: () => advanceYear({ hope: 1, discipline: 1 }) },
-        { text: "Get pulled into trouble.", fn: () => advanceYear({ stress: 1, hope: -1, relationships: -1 }) }
-      ]
-    };
   }
   return {
-    title: `Age ${s.age} — Court date`,
-    body: "Justice Eleanor Graves reviews the file. The sentence is simplified for the game, and does not reflect a real legal outcome. What do you do?",
+    title: `Age ${s.age}`,
+    body: "How do you respond to the charge?",
     choices: [
-      { text: "Fight it with a lawyer.", fn: () => resolveCharge("lawyer") },
-      { text: "Accept responsibility.", fn: () => resolveCharge("cooperate") },
+      { text: "Hire a lawyer and fight it.", fn: () => resolveCharge("lawyer") },
+      { text: "Cooperate and accept responsibility.", fn: () => resolveCharge("cooperate") },
       { text: "Plead guilty early.", fn: () => resolveCharge("guilty") }
     ]
   };
@@ -1520,86 +1553,161 @@ function scenarioFromPairs(title, body, pairs) {
   };
 }
 
+
 const ENDING_CHARACTERS = {
   "High Achiever": {
-    name: "The Achiever",
+    name: "The Climber",
     icon: "🏔️",
-    quote: "You kept choosing height, and the world kept measuring you by it.",
-    summary: "Prestige, measurable success, and hard-earned advancement shaped this life."
+    quote: "You kept pushing until effort turned into altitude.",
+    summary: "Achievement, credentials, and visible success defined this life.",
+    meaning: "This ending fits lives shaped by strong grades, career growth, and visible achievement."
   },
   "Burnt Out": {
     name: "The Overextended One",
     icon: "🔥",
-    quote: "You kept producing even when recovery stopped being optional.",
-    summary: "Ambition stayed alive, but so did the cost of carrying too much."
+    quote: "You kept producing long after recovery stopped being optional.",
+    summary: "Pressure and output stayed high, and the cost stayed attached to them.",
+    meaning: "This ending fits lives where stress, exhaustion, and pressure kept building faster than recovery."
   },
   "Loving Legacy": {
     name: "The Caregiver",
     icon: "💞",
-    quote: "People stayed at the center, even when easier things pulled harder.",
-    summary: "Care, loyalty, and emotional presence mattered most in the shape of this life."
+    quote: "People kept becoming the center of the story.",
+    summary: "Care, family, and emotional presence mattered more than status.",
+    meaning: "This ending fits lives defined most by love, family, caregiving, and emotional presence."
   },
   "Late Bloom": {
     name: "The Late Bloom",
     icon: "🌱",
-    quote: "Direction arrived later, but once it came, it stayed.",
-    summary: "This life gathered strength after delay, uncertainty, or reinvention."
+    quote: "Direction came later, but it arrived for real.",
+    summary: "The strongest stretch came after delay, uncertainty, or rebuilding.",
+    meaning: "This ending fits lives that took time to stabilize, then found momentum later."
   },
   "Survivor": {
     name: "The Survivor",
     icon: "🛡️",
-    quote: "You did not get an easy body or an easy road, but you kept going.",
-    summary: "Serious hardship stayed present, but it never got the whole ending."
+    quote: "Staying here became its own kind of victory.",
+    summary: "This life was shaped by hardship, illness, or losses that never fully disappeared.",
+    meaning: "This ending fits lives marked by hardship, illness, major accidents, or repeated setbacks."
   },
   "Rebuilder": {
     name: "The Rebuilder",
     icon: "🧱",
-    quote: "You were changed by consequence, but not erased by it.",
-    summary: "After major damage came effort, structure, and the slow work of repair."
+    quote: "The damage stayed real, but so did the repair.",
+    summary: "Consequences changed the path, but not the whole ending.",
+    meaning: "This ending fits lives that fell apart in serious ways but still found a way back."
   },
-  "System Marked": {
-    name: "The Marked One",
-    icon: "⛓️",
-    quote: "The sentence ended before the doors reopened.",
-    summary: "A record kept following this life into jobs, rooms, and chances it wanted."
+  "Scholar": {
+    name: "The Scholar",
+    icon: "📘",
+    quote: "Learning stayed important even when life pulled elsewhere.",
+    summary: "Curiosity, grades, and study shaped this life more than spectacle did.",
+    meaning: "This ending fits lives strongly defined by school, study, credentials, and intellectual effort."
+  },
+  "Striver": {
+    name: "The Striver",
+    icon: "⚙️",
+    quote: "You kept trying to build something solid out of ordinary years.",
+    summary: "This life leaned on effort, persistence, and trying again more than brilliance.",
+    meaning: "This ending fits lives powered by persistence, discipline, and hard work more than easy wins."
   },
   "Quiet Meaning": {
     name: "The Quiet One",
     icon: "🌙",
-    quote: "Not every important life arrives with applause.",
-    summary: "This life held meaning in ordinary effort, private choices, and steady presence."
+    quote: "Not every meaningful life looks dramatic from the outside.",
+    summary: "This life mattered through ordinary choices, small loyalties, and steady days.",
+    meaning: "This ending fits steady, quieter lives that still formed a real pattern of meaning."
+  },
+  "Independent Spirit": {
+    name: "The Independent One",
+    icon: "🕊️",
+    quote: "You kept choosing your own path, even when it cost closeness or certainty.",
+    summary: "Autonomy, self-direction, and personal freedom shaped this life.",
+    meaning: "This ending fits lives that prioritized independence, self-direction, and personal freedom."
+  },
+  "Steady Builder": {
+    name: "The Builder",
+    icon: "🏡",
+    quote: "You did not need spectacle. You kept building a life that held.",
+    summary: "Practical choices, stability, and long-term structure shaped this life.",
+    meaning: "This ending fits lives built around stability, practical choices, work, and holding things together."
+  },
+  "Fallen Star": {
+    name: "The Fallen Star",
+    icon: "🌠",
+    quote: "For a while, you were rising fast. Then too much started breaking at once.",
+    summary: "Potential was real, but the collapse became part of the story too.",
+    meaning: "This ending fits lives with strong promise or success that later gave way to breakdown or collapse."
+  },
+  "Wounded Heart": {
+    name: "The Wounded Heart",
+    icon: "🫀",
+    quote: "Love mattered, but so did the damage it left behind.",
+    summary: "Relationships shaped this life deeply, whether through closeness, conflict, or loss.",
+    meaning: "This ending fits lives where love, heartbreak, separation, or emotional wounds stayed central."
   }
 };
 
-function endingScores() {
+function fitScore(n) { return Math.max(0, n); }
+
+function compressEndingFits(rawFits) {
+  const rawSorted = Object.entries(rawFits).sort((a, b) => b[1] - a[1]);
+  const maxRaw = rawSorted[0]?.[1] || 1;
+  const secondRaw = rawSorted[1]?.[1] || Math.max(0, maxRaw - 12);
+  const fits = {};
+
+  rawSorted.forEach(([label, raw], idx) => {
+    if (idx === 0) {
+      fits[label] = 100;
+      return;
+    }
+    const gapTop = maxRaw - raw;
+    const gapSecond = secondRaw - raw;
+    let pct = 96 - gapTop * 2.7 - gapSecond * 0.9;
+    if (raw < maxRaw * 0.72) pct -= 8;
+    if (raw < maxRaw * 0.58) pct -= 10;
+    fits[label] = clamp(Math.round(pct), 22, 96);
+  });
+
+  return fits;
+}
+
+function computeEndingFits() {
   const s = app.state;
-  const currentSalary = s.salary || 0;
-  const peakSalary = Math.max(s.peakSalary || 0, currentSalary);
-  return {
-    "High Achiever": (s.average >= 90 ? 4 : 0) + (peakSalary >= 100 ? 5 : 0) + (s.performance >= 8 ? 3 : 0) + (s.retired ? 1 : 0),
-    "Burnt Out": (s.stress >= 8 ? 6 : 0) + (s.health <= 4 ? 3 : 0) + (peakSalary >= 70 ? 1 : 0),
-    "Loving Legacy": (s.relationships >= 8 ? 5 : 0) + (s.children >= 1 ? 2 : 0) + (["Married", "Long-term relationship"].includes(s.relationshipStatus) ? 2 : 0) + (s.stress <= 6 ? 1 : 0),
-    "Late Bloom": (s.age >= 35 ? 2 : 0) + (peakSalary >= 60 ? 3 : 0) + (s.average >= 84 ? 2 : 0) + (s.job ? 1 : 0),
-    "Survivor": ((s.health <= 3 || isLifeThreateningIllness(s.illness)) ? 6 : 0) + (s.age >= 45 ? 2 : 0) + (s.alive ? 1 : 0),
-    "Rebuilder": (s.criminalRecord ? 4 : 0) + (s.releaseYear !== null ? 2 : 0) + (s.job ? 4 : 0) + (s.performance >= 6 ? 2 : 0),
-    "System Marked": (s.criminalRecord ? 5 : 0) + (!s.job ? 3 : 0) + (s.releaseYear !== null ? 2 : 0) + (s.age >= 30 ? 1 : 0),
-    "Quiet Meaning": 1 + (s.relationships >= 5 ? 1 : 0) + (peakSalary < 100 ? 1 : 0)
+  const peakSalary = s.peakSalary || s.salary || 0;
+  const familyWeight = s.relationships * 5 + s.children * 9 + (["Married", "Long-term relationship"].includes(s.relationshipStatus) ? 11 : 0);
+  const ambitionWeight = peakSalary * 0.42 + Math.max(0, s.average - 78) * 1.7 + s.discipline * 2.4 + (s.educationStage === "University" ? 10 : 0) + (["Graduate School", "Professional School"].includes(s.educationStage) ? 16 : 0);
+  const hardshipWeight = (10 - s.health) * 6 + s.stress * 5 + (s.illness ? 18 : 0) + ((s.majorAccidentHistory || 0) * 12);
+  const rebuildWeight = (s.criminalRecord ? 28 : 0) + (s.job ? 18 : 0) + s.discipline * 2.2 + Math.max(0, s.age - 30) * 0.7 + ((s.timeSinceRelease || 0) * 2.6);
+  const calmLife = (s.relationships * 3.8) + (s.hope * 2.7) + (s.trust * 2.7) - (s.stress * 2.9);
+  const independentWeight = Math.max(0, s.purpose - 4) * 4 + Math.max(0, s.moves || 0) * 4 + (s.relationshipStatus === "Single" ? 8 : 0) + (s.businessOwner ? 6 : 0);
+  const stableWeight = (s.house ? 15 : 0) + (s.job ? 10 : 0) + Math.max(0, peakSalary - 35) * 0.25 + Math.max(0, s.money) * 0.08 + (s.debt < 20 ? 8 : 0);
+  const romanceWeight = familyWeight + Math.max(0, s.relationships - 6) * 2 + (["Separated", "Divorced"].includes(s.relationshipStatus) ? 14 : 0) + (s.relationships <= 3 && s.age >= 30 ? 8 : 0);
+
+  const rawFits = {
+    "High Achiever": fitScore(ambitionWeight + Math.max(0, peakSalary - 70) * 0.28 + (s.jobLevel || 0) * 4 - familyWeight * 0.08 - hardshipWeight * 0.22),
+    "Burnt Out": fitScore((s.stress >= 8 ? 28 : 0) + Math.max(0, s.stress - 6) * 9 + (s.yearsWorked || 0) * 0.7 + Math.max(0, peakSalary - 65) * 0.22 + (s.health <= 3 ? 18 : 0) - (s.relationships * 1.5) - (s.hope * 1.6)),
+    "Loving Legacy": fitScore(familyWeight + (s.relationships >= 8 ? 12 : 0) + (s.age >= 45 ? 10 : 0) + (s.children ? 10 : 0) - Math.max(0, peakSalary - 95) * 0.14),
+    "Late Bloom": fitScore((s.age >= 35 ? 22 : 0) + Math.max(0, peakSalary - 50) * 0.4 + Math.max(0, s.average - 82) * 1.0 + (s.criminalRecord ? 10 : 0) + ((s.age >= 35 && (s.jobLevel || 0) >= 2) ? 14 : 0) - (s.age < 28 ? 28 : 0)),
+    "Survivor": fitScore(hardshipWeight + (s.age >= 45 ? 12 : 0) + (s.health <= 4 ? 15 : 0) - ambitionWeight * 0.08),
+    "Rebuilder": fitScore(rebuildWeight + (s.criminalRecord && s.job ? 14 : 0) + Math.max(0, s.relationships - 4) * 2.6 - (s.jailYears > 0 ? 16 : 0)),
+    "Scholar": fitScore((Math.max(0, s.average - 80) * 2.3) + (["University", "Graduate School", "Professional School"].includes(s.educationStage) ? 24 : 0) + (s.major !== "Undeclared" ? 6 : 0) + (s.average >= 88 ? 12 : 0) - Math.max(0, peakSalary - 95) * 0.08),
+    "Striver": fitScore((s.discipline * 4.2) + (s.purpose * 3.8) + Math.max(0, s.age - 20) * 0.5 + (s.job ? 8 : 0) + peakSalary * 0.08 - (s.stress * 1.3)),
+    "Quiet Meaning": fitScore(26 + calmLife + (s.job ? 4 : 0) + (s.house ? 5 : 0) - Math.max(0, peakSalary - 90) * 0.18),
+    "Independent Spirit": fitScore(independentWeight + Math.max(0, peakSalary - 45) * 0.18 + (s.relationshipStatus === "Single" ? 6 : 0) - (s.children ? 8 : 0)),
+    "Steady Builder": fitScore(stableWeight + calmLife * 0.45 + (s.age >= 35 ? 10 : 0) - Math.max(0, s.stress - 6) * 3.5),
+    "Fallen Star": fitScore(Math.max(0, peakSalary - 60) * 0.45 + Math.max(0, s.average - 84) * 1.3 + (s.health <= 4 ? 16 : 0) + (s.stress >= 8 ? 18 : 0) + (s.job ? 8 : 0) - Math.max(0, s.hope - 6) * 2.5),
+    "Wounded Heart": fitScore(romanceWeight + (["Separated", "Divorced"].includes(s.relationshipStatus) ? 12 : 0) + (s.relationships <= 3 && s.age >= 28 ? 8 : 0) - Math.max(0, peakSalary - 95) * 0.1)
   };
+  const fits = compressEndingFits(rawFits);
+  const sorted = Object.entries(fits).sort((a,b)=>b[1]-a[1]);
+  return {rawFits, fits, sorted};
 }
 
 function determineEnding() {
-  const scores = endingScores();
-  const priority = ["High Achiever", "Rebuilder", "System Marked", "Burnt Out", "Survivor", "Loving Legacy", "Late Bloom", "Quiet Meaning"];
-  let best = "Quiet Meaning";
-  let bestScore = -Infinity;
-  for (const key of priority) {
-    const score = scores[key] ?? -Infinity;
-    if (score > bestScore) {
-      best = key;
-      bestScore = score;
-    }
-  }
-  return best;
+  const scored = computeEndingFits();
+  app.state.endingFits = scored;
+  return scored.sorted[0][0];
 }
 
 function endingCharacterData() {
@@ -1607,34 +1715,54 @@ function endingCharacterData() {
   return { label, ...(ENDING_CHARACTERS[label] || ENDING_CHARACTERS["Quiet Meaning"]) };
 }
 
+function endingFitHtml() {
+  const scored = app.state.endingFits || computeEndingFits();
+  const visible = scored.sorted.filter(([,score]) => score >= 80).slice(0, 5);
+  const topScore = visible[0] ? visible[0][1] : 0;
+  const badges = visible.filter(([,score], idx) => idx === 0 || (score >= 88 && topScore - score <= 5)).map(([label]) => label);
+  app.state.endingBadgesUnlocked = badges;
+  return `
+    <div class="ending-fit-block">
+      <div class="ending-fit-title">Ending fit breakdown</div>
+      <div class="ending-fit-subtitle">Only endings with a fit of 80% or higher are shown.</div>
+      ${visible.map(([label,score]) => {
+        const info = ENDING_CHARACTERS[label];
+        return `<div class="ending-fit-row detailed"><div><span>${label}</span><p>${info?.meaning || "This ending fits key patterns in the life you played."}</p></div><strong>${score}%</strong></div>`;
+      }).join("")}
+      ${badges.length ? `<div class="ending-fit-note">Extra character badges earned: ${badges.join(", ")}</div>` : ""}
+    </div>`;
+}
+
 function endingBodyHtml(extraText = "") {
   const s = app.state;
   const ending = endingCharacterData();
-  const peakSalary = Math.max(s.peakSalary || 0, s.salary || 0);
   const highlights = [
     s.educationStage && s.educationStage !== "None" ? `Education: ${s.educationStage}` : null,
     s.major && s.major !== "Undeclared" ? `Field: ${s.major}` : null,
-    s.retired ? "Career stage: Retired" : (s.job ? `Career: ${s.job}` : null),
-    peakSalary > 0 ? `Peak salary: $${Math.round(peakSalary)}k` : null,
+    s.retired ? "Career stage: Retired" : (s.job ? `Career: ${s.job}` : (!s.inSchool && s.age >= 18 ? `Career: Gap Year` : null)),
+    (s.peakSalary || s.salary) > 0 ? `Peak salary: $${Math.round(s.peakSalary || s.salary)}k` : null,
     s.relationshipStatus && s.relationshipStatus !== "Single" ? `Relationships: ${s.relationshipStatus}` : null,
     s.children ? `Children: ${s.children}` : null
-  ].filter(Boolean).slice(0, 5);
+  ].filter(Boolean).slice(0, 6);
   const explanation = extraText || finalReflection();
   return `
     <div class="ending-card">
       <div class="ending-badge">Final Character</div>
       <div class="ending-icon">${ending.icon}</div>
       <h3>${ending.name}</h3>
-      <p class="ending-label">Ending unlocked: ${ending.label}</p>
+      <p class="ending-label">Best fitting ending: ${ending.label}</p>
       <p class="ending-quote">${ending.quote}</p>
       <p class="ending-summary">${ending.summary}</p>
+      <p class="ending-meaning"><strong>What this ending means:</strong> ${ending.meaning}</p>
       <div class="ending-highlight-list">${highlights.map(item => `<span class="ending-chip">${item}</span>`).join("")}</div>
+      ${endingFitHtml()}
       <div class="ending-explanation">${explanation.split("\n").join("<br>")}</div>
     </div>`;
 }
 
 function endScenario(text) {
   updateBadges();
+  autosave();
   return {
     title: `${app.state.name}'s life ends`,
     body: text || `Ending: ${determineEnding()}`,
@@ -1651,23 +1779,31 @@ function endingLabel() {
 
 function finalReflection() {
   const s = app.state;
-  const ending = determineEnding();
+  const scored = app.state.endingFits || computeEndingFits();
+  const ending = scored.sorted[0][0];
+  const second = scored.sorted.find(([label,score]) => label !== ending && score >= 80);
   const notes = [];
   if (s.educationStage && s.educationStage !== "None") notes.push(`Education reached: ${s.educationStage}.`);
-  if (s.job || s.retired) notes.push(s.retired ? `Work eventually gave way to retirement.` : `Work remained part of the story through ${s.job || "later adulthood"}.`);
+  if (s.job || s.retired) notes.push(s.retired ? `They eventually stepped into retirement.` : `Work stayed part of the story through ${s.job || "later adulthood"}.`);
   if (s.children) notes.push(`Family responsibilities shaped later years.`);
-  if (s.house) notes.push(`Housing became part of the weight they had to carry.`);
-  if (s.criminalRecord) notes.push(`A criminal record changed what was easy and what was not.`);
+  if (s.house) notes.push(`Housing became part of the structure of this life.`);
+  if (s.criminalRecord) notes.push(`A legal record changed what was easy and what was not.`);
   if (s.illness) notes.push(`Health kept demanding decisions.`);
-  if (ending === "High Achiever") notes.push(`Achievement, reputation, and visible success defined much of this life.`);
-  if (ending === "Burnt Out") notes.push(`Too much pressure was carried for too long, and the cost stayed visible.`);
-  if (ending === "Loving Legacy") notes.push(`Care, connection, and the people kept close mattered most in the end.`);
-  if (ending === "Late Bloom") notes.push(`The strongest years came later, after uncertainty and rebuilding.`);
+  if (ending === "High Achiever") notes.push(`Achievement, credentials, and visible success fit this life best.`);
+  if (ending === "Burnt Out") notes.push(`Pressure stayed high long enough to leave a mark.`);
+  if (ending === "Loving Legacy") notes.push(`Care, family, and closeness mattered more than recognition.`);
+  if (ending === "Late Bloom") notes.push(`The strongest version of this life arrived later.`);
   if (ending === "Survivor") notes.push(`Endurance mattered as much as ambition.`);
-  if (ending === "Rebuilder") notes.push(`Consequence changed the path, but rebuilding changed the ending.`);
-  if (ending === "System Marked") notes.push(`The record lasted longer than the sentence, and the world kept asking for proof.`);
-  if (ending === "Quiet Meaning") notes.push(`This life was not loud, but it still made a pattern worth reading.`);
-  return `${s.name}'s ending: ${ending}.\n\n${notes.join(" ")}`;
+  if (ending === "Rebuilder") notes.push(`Repair mattered more than pretending nothing happened.`);
+  if (ending === "Scholar") notes.push(`Learning and intellectual effort stayed central.`);
+  if (ending === "Striver") notes.push(`Effort and persistence defined this life more than easy talent did.`);
+  if (ending === "Quiet Meaning") notes.push(`This life was not dramatic all the time, but it still formed a real pattern.`);
+  if (ending === "Independent Spirit") notes.push(`Freedom and self-direction shaped this life more than settling into one expected path.`);
+  if (ending === "Steady Builder") notes.push(`Practical choices and long-term structure mattered more than spectacle.`);
+  if (ending === "Fallen Star") notes.push(`Potential and damage both became part of the story.`);
+  if (ending === "Wounded Heart") notes.push(`Relationships left some of the deepest marks on this life.`);
+  if (second) notes.push(`Another close fit was ${second[0]} at ${second[1]}%.`);
+  return `${s.name}'s best fitting ending: ${ending}.\n\n${notes.join(" ")}`;
 }
 
 function chooseActivityAction() {
@@ -1762,6 +1898,7 @@ function buyHouseAction() {
       s.debt += Math.max(0, h.cost - down);
       s.house = h.label;
       s.houseUpkeep = h.upkeep;
+      s.movedOut = true;
       addLog(`${s.name} buys a ${h.label.toLowerCase()}.`);
       render(); setScenario(generateYearScenario());
     }})).concat([{ text: "Wait and keep renting.", fn: () => setScenario(generateYearScenario()) }])
@@ -1963,24 +2100,10 @@ function applyToSpecificJob(role) {
   const s = app.state;
   const eligible = currentEducationRank() >= educationRank(role.minEducation);
   if (!eligible) return;
-  if (s.criminalRecord && role.recordPolicy === "No") {
-    addLog(`${s.name} is screened out of ${role.title} because of a background check.`);
-    s.hope -= 1;
-    render();
-    setScenario(generateYearScenario());
-    return;
-  }
-  if (s.criminalRecord && role.recordPolicy === "Sometimes" && chance(0.45)) {
-    addLog(`${s.name} applies for ${role.title}, but the background check closes the door.`);
-    s.hope -= 1;
-    render();
-    setScenario(generateYearScenario());
-    return;
-  }
   s.targetRole = role;
   addLog(`${s.name} applies for ${role.title}.`);
   const schoolSignal = currentEducationRank() * 0.05;
-  const odds = 0.28 + schoolSignal + (s.performance - 5) * 0.04 + ((s.average || 75) - 70) / 120 - (s.criminalRecord ? 0.12 : 0);
+  const odds = 0.28 + schoolSignal + (s.performance - 5) * 0.04 + ((s.average || 75) - 70) / 120 - (s.criminalRecord ? 0.2 : 0);
   if (chance(odds)) {
     setScenario(interviewScenario());
   } else {
@@ -2001,7 +2124,7 @@ function applyJobsAction() {
     const eligible = currentEducationRank() >= educationRank(job.minEducation);
     return {
       text: `${job.title} — $${job.salary}k`,
-      html: `<div class="job-card ${eligible ? 'eligible' : 'ineligible'}"><div class="job-top"><strong>${job.title}</strong><span>$${job.salary}k</span></div><div class="job-meta">Field: ${job.boardField || primaryField} • Education needed: ${job.minEducation} • Record policy: ${job.recordPolicy || "Sometimes"}</div><div class="job-desc">${job.description}</div><div class="job-eligibility">${eligible ? 'You can apply now' : 'Education requirement not met yet'}</div></div>`,
+      html: `<div class="job-card ${eligible ? 'eligible' : 'ineligible'}"><div class="job-top"><strong>${job.title}</strong><span>$${job.salary}k</span></div><div class="job-meta">Field: ${job.boardField || primaryField} • Education needed: ${job.minEducation}</div><div class="job-desc">${job.description}</div><div class="job-eligibility">${eligible ? 'You can apply now' : 'Education requirement not met yet'}</div></div>`,
       disabled: !eligible,
       fn: () => applyToSpecificJob(job)
     };
@@ -2031,17 +2154,14 @@ function startBusinessAction() {
 }
 
 function crimeAction() {
+  const s = app.state;
   setScenario({
     title: "A risky choice",
-    body: "What line do you cross?",
+    body: "What illegal choice do you make?",
     choices: [
-      { text: "Shoplift from a large store.", fn: () => commitCrimeOutcome("shoplifting") },
-      { text: "Get into a bar fight.", fn: () => commitCrimeOutcome("fight") },
-      { text: "Vandalize property.", fn: () => commitCrimeOutcome("vandalism") },
-      { text: "Break into a car for quick cash.", fn: () => commitCrimeOutcome("theft") },
-      { text: "Sell fake concert tickets online.", fn: () => commitCrimeOutcome("fraud") },
-      { text: "Drive under the influence.", fn: () => commitCrimeOutcome("dui") },
-      { text: "Kill someone during a violent confrontation.", fn: () => commitCrimeOutcome("homicide") },
+      { text: "Shoplift something minor.", fn: () => commitCrimeOutcome("minor") },
+      { text: "Drive after drinking.", fn: () => commitCrimeOutcome("dui") },
+      { text: "Join a fraud scheme.", fn: () => commitCrimeOutcome("serious") },
       { text: "Back out.", fn: () => setScenario(generateYearScenario()) }
     ]
   });
@@ -2049,77 +2169,40 @@ function crimeAction() {
 
 function commitCrimeOutcome(kind) {
   const s = app.state;
-  const map = {
-    shoplifting: { caught: 0.32, fine: 2, jail: 0, label: "shoplifting" },
-    fight: { caught: 0.5, fine: 5, jail: 1, label: "a bar fight" },
-    vandalism: { caught: 0.46, fine: 4, jail: 1, label: "vandalism" },
-    theft: { caught: 0.58, fine: 6, jail: 2, label: "a car break-in" },
-    fraud: { caught: 0.64, fine: 10, jail: 3, label: "ticket fraud" },
-    dui: { caught: 0.62, fine: 8, jail: 2, label: "a DUI" },
-    homicide: { caught: 0.9, fine: 0, jail: 12, label: "killing someone" }
-  };
-  const item = map[kind];
-  if (!chance(item.caught)) {
-    s.money += kind === "fraud" ? 10 : kind === "theft" ? 4 : 0;
+  const caught = chance(kind === "minor" ? 0.32 : kind === "dui" ? 0.48 : 0.58);
+  if (!caught) {
+    s.money += kind === "minor" ? 1 : kind === "dui" ? 0 : 12;
     s.stress += 1;
-    addLog(`${s.name} commits ${item.label} and avoids immediate consequences.`);
-    render();
-    setScenario(generateYearScenario());
+    addLog(`${s.name} commits an offence and avoids immediate consequences.`);
+    render(); setScenario(generateYearScenario());
     return;
   }
   s.underCharges = true;
-  s.lastCrimeSeverity = kind;
-  addLog(`${s.name} is charged after ${item.label}.`);
-  const sentenceLine = item.jail > 0 ? `Sentence in this simulation: ${item.jail} year${item.jail === 1 ? "" : "s"} in jail.` : `Sentence in this simulation: a fine of $${item.fine}k.`;
-  showLetter({
-    type: "Charge Filed",
-    title: "A charge enters the system",
-    body: `A rumour has become a legal process.
+  addLog(`${s.name} is charged after a ${kind === "minor" ? "minor offence" : kind === "dui" ? "DUI" : "fraud case"}.`);
+  showLetter({ type: "Legal Notice", title: "Charge Filed", body: `A charge has now moved out of rumor and into process.
 
-Justice Eleanor Graves, a senior provincial judge, reviews the file.
-
-${sentenceLine}`,
-    meta: `This is just a simplified simulation. It does not reflect a real legal scenario.`
-  });
+Severity: ${kind}
+This may lead to a warning, fine, probation, community service, or jail depending on outcome.`, meta: `Canadian legal context influences the result, but this remains a simplified simulation.` });
   render();
   setScenario(legalScenario());
 }
 
 function resolveCharge(mode) {
   const s = app.state;
-  const base = {
-    shoplifting: { fine: 2, jail: 0 },
-    fight: { fine: 5, jail: 1 },
-    vandalism: { fine: 4, jail: 1 },
-    theft: { fine: 6, jail: 2 },
-    fraud: { fine: 10, jail: 3 },
-    dui: { fine: 8, jail: 2 },
-    homicide: { fine: 0, jail: 12 }
-  }[s.lastCrimeSeverity || "fight"];
+  let severity = Math.random();
+  if (mode === "lawyer") { s.money -= 10; severity -= 0.12; }
+  if (mode === "cooperate") severity -= 0.07;
+  if (mode === "guilty") severity -= 0.05;
 
   s.underCharges = false;
-  s.criminalRecord = true;
-
-  let fine = base.fine;
-  let jail = base.jail;
-  if (mode === "lawyer" && fine > 0) {
-    s.money -= 10;
-    fine = Math.max(1, fine - 1);
-    if (jail > 1) jail -= 1;
-  } else if (mode === "cooperate") {
-    if (fine > 0) fine = Math.max(1, fine - 1);
-  }
-
-  if (fine > 0) {
-    s.money -= fine;
-    addLog(`${s.name} is fined $${fine}k.`);
-  }
-  if (jail > 0) {
-    s.jailYears = jail;
-    s.job = null; s.salary = 0; s.company = null;
-    addLog(`${s.name} gets ${jail} year${jail === 1 ? "" : "s"} of jail time.`);
+  if (severity < 0.2) {
+    s.money -= 2; addLog(`${s.name} receives a warning and fine.`);
+  } else if (severity < 0.45) {
+    s.money -= 6; s.criminalRecord = true; addLog(`${s.name} receives probation and a record.`);
+  } else if (severity < 0.7) {
+    s.money -= 10; s.criminalRecord = true; s.stress += 2; addLog(`${s.name} receives a heavier sentence and a criminal record.`);
   } else {
-    addLog(`${s.name} avoids jail but leaves court with a criminal record.`);
+    s.criminalRecord = true; s.jailYears = chance(0.5) ? 1 : 2; s.job = null; s.salary = 0; s.company = null; addLog(`${s.name} is sentenced to custody.`);
   }
   render();
   setScenario(generateYearScenario());
@@ -2204,7 +2287,8 @@ function resolveSchoolApplications(applied, stage, major, tier) {
         s.field = fieldFromMajor(major);
         s.postSecondaryStatus = `Accepted — ${school}`;
         s.yearsInPostSecondary = 0;
-        s.money -= costMap[tier][idx] || costMap[tier][0];
+        const upfront = Math.max(0.5, ((costMap[tier][idx] || costMap[tier][0]) * (s.movedOut ? 0.2 : 0.08)).toFixed(1));
+        s.money -= Number(upfront);
         showLetter({
           type: "Admissions Office",
           title: "Offer of Admission",
@@ -2307,7 +2391,7 @@ function rentHousingAction() {
   setScenario({
     title: "Choose a rental",
     body: "Renting can buy flexibility, but it can also keep money flowing away from ownership.",
-    choices: options.map(([label, rent, name]) => ({ text: `${label} — $${rent}k / year`, fn: () => { s.rent = rent; s.rentedHome = name; s.moves += 1; addLog(`${s.name} moves into a ${label.toLowerCase()}.`); render(); setScenario(generateYearScenario()); } })).concat([{ text: "Stay where you are.", fn: () => setScenario(generateYearScenario()) }])
+    choices: options.map(([label, rent, name]) => ({ text: `${label} — $${rent}k / year`, fn: () => { s.rent = rent; s.rentedHome = name; s.moves += 1; s.movedOut = true; addLog(`${s.name} moves into a ${label.toLowerCase()}.`); render(); setScenario(generateYearScenario()); } })).concat([{ text: "Stay where you are.", fn: () => setScenario(generateYearScenario()) }])
   });
 }
 
@@ -2447,13 +2531,14 @@ function resolveGraduateApplications(type, focus, tier) {
         s.major = focus;
         s.field = focus === "Law" || focus === "MBA" || focus === "Teaching Credential" ? "General" : fieldFromMajor(focus);
         s.postSecondaryStatus = `Accepted — ${school}`;
-        s.money -= costs[tier];
+        const upfront = Math.max(0.8, +(costs[tier] * (s.movedOut ? 0.22 : 0.1)).toFixed(1));
+        s.money -= upfront;
         s.yearsInPostSecondary = 0;
         showLetter({
           type: "Admissions Office",
           title: type === "Graduate School" ? "Graduate Admission" : "Professional Program Offer",
           body: `${s.name},\n\nYou have been admitted to ${school} for ${focus}.`,
-          meta: `Estimated yearly cost: $${costs[tier]}k`
+          meta: `Estimated yearly cost after support is usually much lower unless you are living on your own.`
         });
         advanceYear({ purpose: 2, stress: 1 });
       }
@@ -2536,7 +2621,39 @@ function showIllnessPopup() {
   });
 }
 
+function autosave() {
+  if (!app.state?.username) return;
+  const current = readAccount(app.state.username) || { password: app.state.password, badges: [] };
+  const mergedBadges = Array.from(new Set([...(current.badges || []), ...app.state.badges]));
+  localStorage.setItem(accountKey(app.state.username), JSON.stringify({
+    password: app.state.password,
+    save: app.state,
+    badges: mergedBadges
+  }));
+}
 
+function accountKey(username) { return `twob_account_${username}`; }
+function readAccount(username) {
+  const raw = localStorage.getItem(accountKey(username));
+  return raw ? JSON.parse(raw) : null;
+}
 
+function updateBadgeShelfPreview() {
+  const username = $("loadUsernameInput").value.trim() || $("usernameInput").value.trim();
+  const shelf = $("badgeShelf");
+  if (!username) {
+    shelf.className = "badge-shelf empty";
+    shelf.textContent = "Enter a username to view saved badges.";
+    return;
+  }
+  const account = readAccount(username);
+  if (!account || !(account.badges || []).length) {
+    shelf.className = "badge-shelf empty";
+    shelf.textContent = "No saved badges found for that username yet.";
+    return;
+  }
+  shelf.className = "badge-shelf";
+  shelf.innerHTML = account.badges.map(b => `<span class="badge">${b}</span>`).join("");
+}
 
 document.addEventListener("DOMContentLoaded", init);
