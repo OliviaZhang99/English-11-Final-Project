@@ -128,7 +128,6 @@ function init() {
   populateSetupOptions();
   bindUI();
   showScreen("menuScreen");
-  updateBadgeShelfPreview();
 }
 
 function populateSetupOptions() {
@@ -145,17 +144,12 @@ function fillSelect(select, items) {
 function bindUI() {
   $("randomizeBtn").onclick = randomizeSetup;
   $("startBtn").onclick = startGame;
-  $("loadBtn").onclick = loadGame;
-  $("createAccountBtn").onclick = createOrLinkAccount;
-  $("viewBadgeShelfBtn").onclick = updateBadgeShelfPreview;
+  $("reflectionBtn").onclick = openReflection;
   $("closeModalBtn").onclick = closeModal;
-  $("accountBtn").onclick = openAccountModal;
-  $("closeAccountModalBtn").onclick = closeAccountModal;
+  $("homeBtn").onclick = goHome;
   $("modal").addEventListener("click", e => {
     if (e.target.id === "modal") closeModal();
   });
-  $("accountModal").addEventListener("click", e => { if (e.target.id === "accountModal") closeAccountModal(); });
-  $("homeBtn").onclick = goHome;
 }
 
 function randomizeSetup() {
@@ -259,31 +253,17 @@ function defaultState(setup) {
 function startGame() {
   const setup = {
     name: $("nameInput").value.trim() || "Avery",
-    username: $("usernameInput").value.trim(),
-    password: $("passwordInput").value,
     background: $("backgroundSelect").value,
     identity: $("identitySelect").value,
     talent: $("talentSelect").value
   };
 
-  if (setup.username && !setup.password) {
-    alert("Add a password if you want a saved account, or leave both username and password blank to play as a guest.");
-    return;
-  }
-
-  if (setup.username) {
-    const existing = readAccount(setup.username);
-    if (existing && existing.password !== setup.password) {
-      alert("That username already exists with a different password.");
-      return;
-    }
-  }
-
-  closeAccountModal();
   app.state = defaultState(setup);
   addLog("A new life begins.");
   showScreen("gameScreen");
   $("homeBtn").classList.remove("hidden");
+  $("reflectionBtn").classList.remove("hidden");
+  $("reflectionBtn").classList.remove("hidden");
   render();
   setScenario(introScenario());
   autosave();
@@ -341,28 +321,27 @@ function createOrLinkAccount() {
 }
 
 function goHome() {
-  if (confirm("Return to the main menu? Unsaved guest progress will be lost.")) {
+  if (confirm("Return to the main menu? Current progress will be lost.")) {
     app.state = null;
     app.currentScenario = null;
     showScreen("menuScreen");
     $("homeBtn").classList.add("hidden");
-    updateBadgeShelfPreview();
+    $("reflectionBtn").classList.add("hidden");
   }
 }
 
+function openReflection() {
+  showScreen("reflectionScreen");
+  $("homeBtn").classList.remove("hidden");
+  $("reflectionBtn").classList.remove("hidden");
+}
+
 function showScreen(id) {
-  ["menuScreen", "gameScreen"].forEach(screenId => {
+  ["menuScreen", "gameScreen", "reflectionScreen"].forEach(screenId => {
     $(screenId).classList.toggle("active", screenId === id);
   });
 }
 
-function openAccountModal() {
-  $("accountModal").classList.remove("hidden");
-}
-
-function closeAccountModal() {
-  $("accountModal").classList.add("hidden");
-}
 
 function introScenario() {
   const s = app.state;
@@ -2636,24 +2615,6 @@ function accountKey(username) { return `twob_account_${username}`; }
 function readAccount(username) {
   const raw = localStorage.getItem(accountKey(username));
   return raw ? JSON.parse(raw) : null;
-}
-
-function updateBadgeShelfPreview() {
-  const username = $("loadUsernameInput").value.trim() || $("usernameInput").value.trim();
-  const shelf = $("badgeShelf");
-  if (!username) {
-    shelf.className = "badge-shelf empty";
-    shelf.textContent = "Enter a username to view saved badges.";
-    return;
-  }
-  const account = readAccount(username);
-  if (!account || !(account.badges || []).length) {
-    shelf.className = "badge-shelf empty";
-    shelf.textContent = "No saved badges found for that username yet.";
-    return;
-  }
-  shelf.className = "badge-shelf";
-  shelf.innerHTML = account.badges.map(b => `<span class="badge">${b}</span>`).join("");
 }
 
 document.addEventListener("DOMContentLoaded", init);

@@ -14,6 +14,7 @@
         <p class="subtitle">Olivia Zhang • English 11 Final Project</p>
       </div>
       <div class="top-actions">
+        <button id="reflectionBtn" class="ghost hidden">Reflection</button>
         <button id="homeBtn" class="ghost hidden">Main Menu</button>
       </div>
     </header>
@@ -57,18 +58,12 @@
                 <button id="randomizeBtn">Randomize Setup</button>
                 <button id="startBtn" class="primary">Start New Life</button>
               </div>
-              <p class="small-note">Use the button in the top right only if you want to save a life or load one later.</p>
+              <p class="small-note">Start a life and move through it one year at a time.</p>
             </div>
 
             <div class="card menu-side-card">
               <h3>Before You Start</h3>
-              <p class="menu-side-copy">Choose a name, background, identity, and talent. Then start. You can play as a guest, or sign up later if you want badges and progress to save.</p>
-
-              <div class="saved-badges-block">
-                <h4>Saved badge shelf</h4>
-                <div id="badgeShelf" class="badge-shelf empty">No badge shelf loaded.</div>
-                <button id="viewBadgeShelfBtn" class="ghost small-btn">View Badge Shelf</button>
-              </div>
+              <p class="menu-side-copy">Choose a name, background, identity, and talent. Then start. Use the Reflection button later if you want to open your reflection page.</p>
             </div>
           </div>
         </div>
@@ -99,6 +94,21 @@
             <div id="logArea" class="log-area"></div>
           </div>
         </div>
+
+        <div id="reflectionScreen" class="screen">
+          <div class="card reflection-card">
+            <div class="scene-header">
+              <div>
+                <p class="eyebrow">English 11 Final Project</p>
+                <h2>Reflection</h2>
+              </div>
+            </div>
+            <div class="reflection-wrap">
+              <textarea class="reflection-textbox" readonly>Need to put stuff there.</textarea>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       <aside class="sidebar">
@@ -113,38 +123,6 @@
       </aside>
     </main>
   </div>
-
-  <div id="accountModal" class="modal hidden" aria-hidden="true">
-    <div class="modal-box account-box">
-      <button id="closeAccountModalBtn" class="modal-close">×</button>
-      <div class="account-grid">
-        <div>
-          <h3>Save a New Life</h3>
-          <label>
-            <span>Username</span>
-            <input id="usernameInput" type="text" placeholder="Create a username" />
-          </label>
-          <label>
-            <span>Password</span>
-            <input id="passwordInput" type="password" placeholder="Create a password" />
-          </label>
-          <p class="small-note dark-note">Leave both blank if you want to keep playing as a guest.</p>
-        </div>
-        <div>
-          <h3>Load a Saved Life</h3>
-          <label>
-            <span>Username</span>
-            <input id="loadUsernameInput" type="text" placeholder="Username" />
-          </label>
-          <label>
-            <span>Password</span>
-            <input id="loadPasswordInput" type="password" placeholder="Password" />
-          </label>
-          <div class="button-row wrap">
-            <button id="createAccountBtn">Save / Link Account</button>
-            <button id="loadBtn" class="primary">Load Life</button>
-          </div>
-        </div>
       </div>
     </div>
   </div>

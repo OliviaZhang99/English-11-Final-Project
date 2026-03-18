@@ -255,3 +255,24 @@ input, select {
 .ending-fit-row.detailed p { margin:0; font-size:.95rem; line-height:1.5; color:#4a3828; }
 .ending-fit-row.detailed strong { white-space:nowrap; color:#5b4328; font-size:1rem; }
 .ending-fit-note { margin-top: 12px; color:#5a4734; font-size:.95rem; }
+
+
+.reflection-card {
+  min-height: 420px;
+}
+.reflection-wrap {
+  margin-top: 12px;
+}
+.reflection-textbox {
+  width: 100%;
+  min-height: 300px;
+  resize: none;
+  background: #0e131c;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px 18px;
+  line-height: 1.7;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+}
