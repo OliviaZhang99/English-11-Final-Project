@@ -249,6 +249,7 @@ function defaultState(setup) {
     bankruptcyUsed: false,
     spouseSupport: 0,
     emergencyFund: 0,
+    gapYearStartAge: null,
   };
 }
 
@@ -504,6 +505,15 @@ function addLog(text) {
   if (app.state.log.length > 40) app.state.log.shift();
 }
 
+function startGapYear() {
+  const s = app.state;
+  s.schoolStage = "Gap Year";
+  s.inSchool = false;
+  s.educationStage = "High School Graduate";
+  s.postSecondaryStatus = "Gap year";
+  s.gapYearStartAge = s.age;
+}
+
 function normalizeFinances() {
   const s = app.state;
   if (!s) return;
@@ -688,8 +698,14 @@ function updateEducationProgress() {
     s.educationStage = s.schoolStage;
   } else if (s.schoolStage === "Gap Year") {
     s.inSchool = false;
+    if (s.gapYearStartAge == null) s.gapYearStartAge = Math.max(0, s.age - 1);
     if (!["University", "College / Trades", "Graduate School", "Professional School"].includes(s.educationStage)) {
       s.educationStage = "High School Graduate";
+    }
+    if (s.age > s.gapYearStartAge) {
+      s.schoolStage = "After High School";
+      s.postSecondaryStatus = "Gap year complete";
+      s.gapYearStartAge = null;
     }
   } else if (!s.retired) {
     s.schoolStage = "Working Years";
@@ -1216,7 +1232,7 @@ function showGraduationDecisionModal() {
       { text: "Apply to balanced public universities", fn: () => choosePostSecondaryType("University", "mid") },
       { text: "Apply to local or lower-cost universities", fn: () => choosePostSecondaryType("University", "safe") },
       { text: "Apply to college, community college, or trades", fn: () => choosePostSecondaryType("College / Trades", "mid") },
-      { text: "Take a gap year", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.educationStage = "High School Graduate"; s.postSecondaryStatus = "Gap year"; render(); setScenario(gapYearScenario()); } },
+      { text: "Take a gap year", fn: () => { startGapYear(); render(); setScenario(gapYearScenario()); } },
       { text: "Start working", fn: () => { s.schoolStage = "Working Years"; s.inSchool = false; s.educationStage = "High School Graduate"; s.field = s.field || "General"; s.postSecondaryStatus = "Working"; render(); setScenario(generateYearScenario()); } }
     ],
     footer: "You can also use the school button in Life actions if you want to apply afterward."
@@ -1233,7 +1249,7 @@ function postHighSchoolScenario() {
 Where do you want to apply?`,
     choices: [
       { text: "Open the school portal.", fn: () => showPostHighSchoolPortal() },
-      { text: "Take a gap year.", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.educationStage = "High School Graduate"; s.postSecondaryStatus = "Gap year"; advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
+      { text: "Take a gap year.", fn: () => { startGapYear(); advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
       { text: "Start working right away.", fn: () => { s.schoolStage = "Working Years"; s.inSchool = false; s.educationStage = "High School Graduate"; s.field = "General"; advanceYear({ hope: 1, money: 2 }); } }
     ]
   };
@@ -1251,7 +1267,7 @@ function showPostHighSchoolPortal() {
       { text: "Apply to public universities", fn: () => choosePostSecondaryType("University", "mid") },
       { text: "Apply to local or lower-cost universities", fn: () => choosePostSecondaryType("University", "safe") },
       { text: "Apply to college, community college, or trades", fn: () => choosePostSecondaryType("College / Trades", "mid") },
-      { text: "Take a gap year", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.educationStage = "High School Graduate"; s.postSecondaryStatus = "Gap year"; advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
+      { text: "Take a gap year", fn: () => { startGapYear(); advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
       { text: "Start working", fn: () => { s.schoolStage = "Working Years"; s.inSchool = false; s.educationStage = "High School Graduate"; s.field = s.field || "General"; s.postSecondaryStatus = "Working"; advanceYear({ hope: 1, money: 2 }); } },
       { text: "Go back", fn: () => setScenario(generateYearScenario()) }
     ],
@@ -1950,6 +1966,33 @@ function endingFitHtml() {
     </div>
   `;
 }
+function endingBodyHtml(text) {
+  const s = app.state;
+  const ending = endingCharacterData();
+  const highlights = [
+    `Age ${s.age}`,
+    s.educationStage,
+    s.job || (s.retired ? "Retired" : "No long-term job"),
+    `Peak salary $${Math.round(s.peakSalary || s.salary || 0)}k`
+  ].filter(Boolean);
+
+  return `
+    <div class="ending-card">
+      <div class="ending-badge">Final Character</div>
+      <div class="ending-icon">${ending.icon}</div>
+      <h3>${ending.name}</h3>
+      <p class="ending-label">${ending.label}</p>
+      <p class="ending-quote">${ending.quote}</p>
+      <p class="ending-summary">${ending.summary}</p>
+      <div class="ending-highlight-list">
+        ${highlights.map(item => `<span class="ending-chip">${item}</span>`).join("")}
+      </div>
+      <p class="ending-explanation">${text || finalReflection()}</p>
+    </div>
+    ${endingFitHtml()}
+  `;
+}
+
 function endScenario(text) {
   updateBadges();
   autosave();
@@ -2400,7 +2443,7 @@ function goBackToSchoolAction() {
     choices.push(
       { text: "Apply to universities.", fn: () => showPostHighSchoolPortal() },
       { text: "Apply to college, community college, or trades.", fn: () => choosePostSecondaryType("College / Trades") },
-      { text: "Take a gap year first.", fn: () => { s.schoolStage = "Gap Year"; s.postSecondaryStatus = "Gap year"; advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
+      { text: "Take a gap year first.", fn: () => { startGapYear(); advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
       { text: "Start working instead.", fn: () => { s.schoolStage = "Working Years"; s.field = "General"; s.postSecondaryStatus = "Working"; advanceYear({ money: 2, hope: 1 }); } }
     );
   }
@@ -2700,7 +2743,7 @@ function resolveSchoolApplications(applied, stage, major, tier) {
       body: "Your applications come back with no offer this round. What do you do next?",
       choices: [
         { text: "Apply again to a less competitive path.", fn: () => choosePostSecondaryType(stage) },
-        { text: "Take a gap year.", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.educationStage = "High School Graduate"; s.postSecondaryStatus = "No offer this round"; advanceYear({ hope: -1, purpose: 1 }); } },
+        { text: "Take a gap year.", fn: () => { startGapYear(); s.postSecondaryStatus = "No offer this round"; advanceYear({ hope: -1, purpose: 1 }); } },
         { text: "Start working.", fn: () => { s.schoolStage = "Working Years"; s.inSchool = false; s.educationStage = "High School Graduate"; s.field = "General"; s.postSecondaryStatus = "No offer this round"; advanceYear({ hope: -1 }); } }
       ]
     });
@@ -2732,7 +2775,7 @@ function resolveSchoolApplications(applied, stage, major, tier) {
         });
         advanceYear({ hope: 1, stress: 1 });
       }
-    })).concat([{ text: "Take a gap year instead.", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.postSecondaryStatus = "Deferred"; advanceYear({ hope: 1, purpose: 1 }); } }, { text: "Go back.", fn: () => chooseSchoolOffer(stage, major, tier) }])
+    })).concat([{ text: "Take a gap year instead.", fn: () => { startGapYear(); s.postSecondaryStatus = "Deferred"; advanceYear({ hope: 1, purpose: 1 }); } }, { text: "Go back.", fn: () => chooseSchoolOffer(stage, major, tier) }])
   });
 }
 

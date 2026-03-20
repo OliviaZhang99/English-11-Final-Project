@@ -257,22 +257,50 @@ input, select {
 .ending-fit-note { margin-top: 12px; color:#5a4734; font-size:.95rem; }
 
 
-.reflection-card {
-  min-height: 420px;
+/* developer note on main menu */
+.developer-note-box {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,.08);
 }
-.reflection-wrap {
-  margin-top: 12px;
+.developer-note-box h4 {
+  margin: 0 0 8px;
 }
-.reflection-textbox {
-  width: 100%;
-  min-height: 300px;
-  resize: none;
-  background: #0e131c;
-  color: var(--text);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 16px 18px;
-  line-height: 1.7;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1rem;
+
+/* keep sidebar on the left in game view */
+.layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0,1fr);
+  gap: 18px;
+  align-items: start;
+}
+.sidebar {
+  order: 1;
+}
+.main-panel {
+  order: 2;
+}
+
+/* menu mode keeps only the menu visible while preserving left-right menu cards */
+.layout.menu-mode {
+  grid-template-columns: 1fr;
+}
+.layout.menu-mode .sidebar {
+  display: none;
+}
+.layout.menu-mode .main-panel {
+  order: 1;
+}
+
+@media (max-width: 1100px) {
+  .layout,
+  .layout.menu-mode {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    order: 2;
+  }
+  .main-panel {
+    order: 1;
+  }
 }
