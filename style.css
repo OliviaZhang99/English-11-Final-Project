@@ -257,15 +257,6 @@ input, select {
 .ending-fit-note { margin-top: 12px; color:#5a4734; font-size:.95rem; }
 
 
-/* developer note on main menu */
-.developer-note-box {
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255,255,255,.08);
-}
-.developer-note-box h4 {
-  margin: 0 0 8px;
-}
 
 /* keep sidebar on the left in game view */
 .layout {
