@@ -11,7 +11,7 @@
     <header class="topbar">
       <div>
         <h1>The Weight of Becoming</h1>
-        <p class="subtitle">Olivia Zhang's BCOS English 11 Final Project</p>
+        <p class="subtitle">Olivia Zhang • English 11 Final Project</p>
       </div>
       <div class="top-actions">
         <button id="homeBtn" class="ghost hidden">Main Menu</button>
@@ -23,11 +23,11 @@
         <div id="menuScreen" class="screen active">
           <div class="card hero menu-hero">
             <div class="hero-copy">
-              <p class="eyebrow">Interactive narrative gam made by Olivia Zhang</p>
+              <p class="eyebrow">Interactive narrative game</p>
               <h2>The Weight of Becoming</h2>
               <p class="menu-intro">
-                A life moves forward one year at a time. Some choices open doors, and some choices close them.
-                Some things arrive before you are ready. Good luck!
+                A life moves forward one year at a time. Some choices help. Some choices make things harder.
+                Some things happen before you are ready for them.
               </p>
             </div>
           </div>
@@ -57,11 +57,12 @@
                 <button id="randomizeBtn">Randomize Setup</button>
                 <button id="startBtn" class="primary">Start New Life</button>
               </div>
+              <p class="small-note">Choose a name, background, identity, and talent, then start.</p>
             </div>
 
             <div class="card menu-side-card">
               <h3>Before You Start</h3>
-              <p class="menu-side-copy">Choose a name, background, identity, and talent. Then start.</p>
+              <p class="menu-side-copy">Choose a name, background, identity, and talent. Then start. The choices you make affect the life year by year.</p>
             </div>
           </div>
         </div>
@@ -106,33 +107,7 @@
       </aside>
     </main>
   </div>
-
-  <div id="accountModal" class="modal hidden" aria-hidden="true">
-    <div class="modal-box account-box">
-      <button id="closeAccountModalBtn" class="modal-close">×</button>
-      <div class="account-grid">
-        <div>
-          <h3>Save a New Life</h3>
-          <label>
-          </label>
-        </div>
-        <div>
-          <h3>Load a Saved Life</h3>
-          <label>
-            <span>Username</span>
-            <input id="loadUsernameInput" type="text" placeholder="Username" />
-          </label>
-          <label>
-            <span>Password</span>
-            <input id="loadPasswordInput" type="password" placeholder="Password" />
-          </label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="modal" class="modal hidden" aria-hidden="true">
+<div id="modal" class="modal hidden" aria-hidden="true">
     <div class="modal-box">
       <button id="closeModalBtn" class="modal-close">×</button>
       <div id="modalContent"></div>
