@@ -1,35 +1,35 @@
 const DATA = {
   backgrounds: [
-    { name: "Working Class", note: "Money feels fragile. Practical choices matter early.", money: 10, discipline: 6, hope: 5, trust: 5 },
-    { name: "Middle Class", note: "There is some stability, but expectations can weigh on you.", money: 18, discipline: 6, hope: 6, trust: 6 },
-    { name: "Upper Class", note: "Resources open doors, but pressure and image can become its own burden.", money: 32, discipline: 5, hope: 6, trust: 5 }
+    { name: "Working Class", note: "Money feels fragile. Practical choices matter early on.", money: 10, discipline: 6, hope: 5, trust: 5 },
+    { name: "Middle Class", note: "There is some stability, but expectations can weigh on you too.", money: 18, discipline: 6, hope: 6, trust: 6 },
+    { name: "Upper Class", note: "Resources open doors, but pressure and image can become a burden too.", money: 32, discipline: 5, hope: 6, trust: 5 }
   ],
   identities: [
-    { name: "Woman", note: "Your life may involve in navigating gendered expectations and underestimation." },
-    { name: "Man", note: "Your life may involve around pressure around status, control, and emotional restraint." },
-    { name: "Non-binary", note: "Your life may ask for the self-definition and the search for people who understand you." },
-    { name: "Transgender", note: "Your life may ask for courage, self-definition, support, and persistence in different ways." }
+    { name: "Woman", note: "Your life may involve navigating gendered expectations and being underestimated sometimes." },
+    { name: "Man", note: "Your life may involve pressure around status, control, and emotional restraint even when you do not want it." },
+    { name: "Non-binary", note: "Your life may ask for self-definition and finding people who understand you." },
+    { name: "Transgender", note: "Your life may ask for courage, self-definition, support, and figuring things out in different ways." }
   ],
   talents: [
-    { name: "Sports", note: "Your body picks up movements and competition easily.", performance: 2, discipline: 1 },
-    { name: "Arts", note: "You are drawn to expressions, imagination, and creative details.", hope: 1, purpose: 1 },
-    { name: "Academics", note: "Learning and abstraction come naturally to you.", discipline: 2, grades: 4 },
-    { name: "Leadership", note: "People often notice your presences and initiatives.", trust: 1, performance: 1 },
-    { name: "Technology", note: "You like solving systems and understanding how things work. Often tinkering machines.", grades: 2, purpose: 1 }
+    { name: "Sports", note: "Your body picks up movement and competition pretty easily.", performance: 2, discipline: 1 },
+    { name: "Arts", note: "You are drawn to expression, imagination, and creative detail.", hope: 1, purpose: 1 },
+    { name: "Academics", note: "Learning and abstraction come naturally to you most of the time.", discipline: 2, grades: 4 },
+    { name: "Leadership", note: "People often notice your presence and initiative.", trust: 1, performance: 1 },
+    { name: "Technology", note: "You like solving systems and understanding how things work even when it gets frustrating.", grades: 2, purpose: 1 }
   ],
   childhoodActivities: ["Story Time", "Drawing", "Soccer", "Dance", "Music", "Swimming"],
   teenActivities: ["Dance Team", "Basketball", "Coding Club", "Debate", "Band", "Drama", "Volunteering", "Part-time Job", "Art Club", "Student Council", "Gym"],
   adultActivities: ["Gym", "Creative Projects", "Volunteering", "Networking", "Family Time", "Reading", "Side Hustle", "Travel", "Therapy", "Community Work"],
   majors: ["Computer Science", "Business", "Engineering", "Arts", "Education", "Medicine", "Social Sciences", "Skilled Trades"],
   worldEvents: [
-    { title: "A virus spreads again", body: "Hospitals fill quickly. Medical systems need more people, and stress rises almost everywhere.", effects: { health: -1 }, field: { Medicine: 1.18 } },
-    { title: "A recession tightens the economy", body: "Hiring slows, promotions become harder, and households begin to cut back.", effects: { money: -4, stress: 1 }, firing: 0.1, raises: -0.15 },
-    { title: "A technology boom accelerates", body: "Companies rush to hire technical workers, and digital skills are rewarded more.", field: { "Computer Science": 1.18, Engineering: 1.08, Business: 1.04 } },
-    { title: "Infrastructure spending expands", body: "Governments push large public projects and skilled trades and engineering benefit.", field: { "Skilled Trades": 1.16, Engineering: 1.12 } },
-    { title: "Arts funding is reduced", body: "Cultural organizations become more unstable and creative work gets harder to sustain financially.", field: { Arts: 0.88 } },
-    { title: "Teacher shortages grow", body: "Schools urgently need more workers. Education becomes more stable than usual.", field: { Education: 1.12 } },
-    { title: "Housing costs rise sharply", body: "Rent and mortgages become harder to carry. Even stable people feel squeezed and exhausted.", effects: { money: -5, stress: 1 } },
-    { title: "A public mental-health push expands support", body: "Counselling access improves. People finally get help earlier which decreases the stress.", effects: { hope: 1, stress: -1 } }
+    { title: "A virus spreads again", body: "Hospitals fill quickly. Medical systems need more people and stress rises almost everywhere.", effects: { health: -1 }, field: { Medicine: 1.18 } },
+    { title: "A recession tightens the economy", body: "Hiring slows, promotions become harder, and households start to cut back.", effects: { money: -4, stress: 1 }, firing: 0.1, raises: -0.15 },
+    { title: "A technology boom accelerates", body: "Companies rush to hire technical workers, and digital skills are rewarded more strongly.", field: { "Computer Science": 1.18, Engineering: 1.08, Business: 1.04 } },
+    { title: "Infrastructure spending expands", body: "Governments push large public projects. Skilled trades and engineering benefit more than usual.", field: { "Skilled Trades": 1.16, Engineering: 1.12 } },
+    { title: "Arts funding is reduced", body: "Cultural organizations become more unstable. Creative work gets harder to keep going financially.", field: { Arts: 0.88 } },
+    { title: "Teacher shortages grow", body: "Schools urgently need workers. Education becomes a bit more stable than usual.", field: { Education: 1.12 } },
+    { title: "Housing costs rise sharply", body: "Rent and mortgages become harder to carry. Even people who were doing fine feel squeezed.", effects: { money: -5, stress: 1 } },
+    { title: "A public mental-health push expands support", body: "Counselling access improves. Some people finally get help earlier.", effects: { hope: 1, stress: -1 } }
   ],
   companies: [
     { name: "Northline Systems", culture: "fast and demanding", raise: 0.05, stability: 0.85 },
@@ -90,7 +90,7 @@ const DATA = {
       { title: "Site Supervisor", minEducation: "College / Trades", salary: 88, description: "Lead crews, timelines, and safety on larger projects." }
     ],
     "General": [
-      { title: "Retail Associate", minEducation: "High School Graduate", salary: 39, description: "Entry-level customer service work with flexible hours." },
+      { title: "Retail Associate", minEducation: "High School Graduate", salary: 39, description: "Entry customer service work with flexible hours." },
       { title: "Administrative Assistant", minEducation: "College / Trades", salary: 49, description: "Office support, scheduling, communication, and coordination." },
       { title: "Program Coordinator", minEducation: "University", salary: 61, description: "Coordinate projects, stakeholders, and reporting requirements." }
     ]
@@ -145,16 +145,10 @@ function fillSelect(select, items) {
 function bindUI() {
   $("randomizeBtn").onclick = randomizeSetup;
   $("startBtn").onclick = startGame;
-  $("loadBtn").onclick = loadGame;
-  $("createAccountBtn").onclick = createOrLinkAccount;
-  $("viewBadgeShelfBtn").onclick = updateBadgeShelfPreview;
   $("closeModalBtn").onclick = closeModal;
-  $("accountBtn").onclick = openAccountModal;
-  $("closeAccountModalBtn").onclick = closeAccountModal;
   $("modal").addEventListener("click", e => {
     if (e.target.id === "modal") closeModal();
   });
-  $("accountModal").addEventListener("click", e => { if (e.target.id === "accountModal") closeAccountModal(); });
   $("homeBtn").onclick = goHome;
 }
 
@@ -197,6 +191,7 @@ function defaultState(setup) {
     schoolStage: "Early Childhood",
     educationStage: "None",
     major: "Undeclared",
+    secondMajor: "",
     gradTrack: "",
     currentActivity: rand(DATA.childhoodActivities),
     badges: [],
@@ -219,6 +214,9 @@ function defaultState(setup) {
     carUpkeep: 0,
     inSchool: true,
     relationshipStatus: "Single",
+    relationshipQuality: 0,
+    currentPartner: null,
+    datingCooldown: 0,
     children: 0,
     criminalRecord: false,
     underCharges: false,
@@ -251,35 +249,19 @@ function defaultState(setup) {
     bankruptcyUsed: false,
     spouseSupport: 0,
     emergencyFund: 0,
-    cachedAge: null,
-    cachedScenario: null
+    gapYearStartAge: null,
   };
 }
 
 function startGame() {
   const setup = {
     name: $("nameInput").value.trim() || "Avery",
-    username: $("usernameInput").value.trim(),
-    password: $("passwordInput").value,
+    username: "",
+    password: "",
     background: $("backgroundSelect").value,
     identity: $("identitySelect").value,
     talent: $("talentSelect").value
   };
-
-  if (setup.username && !setup.password) {
-    alert("Add a password if you want a saved account, or leave both username and password blank to play as a guest.");
-    return;
-  }
-
-  if (setup.username) {
-    const existing = readAccount(setup.username);
-    if (existing && existing.password !== setup.password) {
-      alert("That username already exists with a different password.");
-      return;
-    }
-  }
-
-  closeAccountModal();
   app.state = defaultState(setup);
   addLog("A new life begins.");
   showScreen("gameScreen");
@@ -289,64 +271,16 @@ function startGame() {
   autosave();
 }
 
-function loadGame() {
-  const username = $("loadUsernameInput").value.trim();
-  const password = $("loadPasswordInput").value;
-  if (!username || !password) {
-    alert("Enter both username and password to load a saved life.");
-    return;
-  }
-  const account = readAccount(username);
-  if (!account || account.password !== password || !account.save) {
-    alert("No saved life matched that login.");
-    return;
-  }
-  closeAccountModal();
-  app.state = account.save;
-  showScreen("gameScreen");
-  $("homeBtn").classList.remove("hidden");
-  render();
-  setScenario(generateYearScenario());
-}
+function loadGame() { return; }
 
-function createOrLinkAccount() {
-  const username = $("usernameInput").value.trim();
-  const password = $("passwordInput").value;
-  if (!username || !password) {
-    alert("Enter both a username and password.");
-    return;
-  }
-  const existing = readAccount(username);
-  if (existing && existing.password !== password) {
-    alert("That username already exists with a different password.");
-    return;
-  }
-
-  const saveState = app.state ? { ...app.state, username, password } : null;
-  localStorage.setItem(accountKey(username), JSON.stringify({
-    password,
-    save: saveState,
-    badges: Array.from(new Set([...(existing?.badges || []), ...(app.state?.badges || [])]))
-  }));
-
-  if (app.state) {
-    app.state.username = username;
-    app.state.password = password;
-    autosave();
-  }
-
-  updateBadgeShelfPreview();
-  closeAccountModal();
-  alert(app.state ? "Account linked. This life can now save and load." : "Account created. Start a life and it will save under this username.");
-}
+function createOrLinkAccount() { return; }
 
 function goHome() {
-  if (confirm("Return to the main menu? Unsaved guest progress will be lost.")) {
+  if (confirm("Return to the main menu? Current progress will be lost.")) {
     app.state = null;
     app.currentScenario = null;
     showScreen("menuScreen");
     $("homeBtn").classList.add("hidden");
-    updateBadgeShelfPreview();
   }
 }
 
@@ -354,15 +288,13 @@ function showScreen(id) {
   ["menuScreen", "gameScreen"].forEach(screenId => {
     $(screenId).classList.toggle("active", screenId === id);
   });
+  const layout = document.querySelector(".layout");
+  if (layout) layout.classList.toggle("menu-mode", id === "menuScreen");
 }
 
-function openAccountModal() {
-  $("accountModal").classList.remove("hidden");
-}
+function openAccountModal() { return; }
 
-function closeAccountModal() {
-  $("accountModal").classList.add("hidden");
-}
+function closeAccountModal() { return; }
 
 function introScenario() {
   const s = app.state;
@@ -435,6 +367,7 @@ function renderSummary() {
     rows.push(["Average Score", `${Math.round(s.average)}%`]);
     if (["University", "College / Trades", "Graduate School", "Professional School"].includes(s.schoolStage)) {
       rows.push(["Major", s.major]);
+      if (s.secondMajor) rows.push(["Second Major", s.secondMajor]);
     }
   }
 
@@ -449,6 +382,8 @@ function renderSummary() {
   rows.push(["Job", jobStatus]);
   if (s.company) rows.push(["Company", s.company]);
   if (s.salary || s.retired) rows.push(["Salary", s.retired ? `$${Math.round(s.retirementIncome)}k pension` : `$${Math.round(s.salary)}k`]);
+
+  if (s.currentPartner && s.relationshipStatus !== "Single") rows.push(["Partner", s.currentPartner.name]);
 
   rows.push(
     ["Money", `$${Math.round(s.money)}k`],
@@ -506,6 +441,7 @@ function renderActions() {
   const container = $("actionButtons");
   const card = $("actionCard");
   container.innerHTML = "";
+
   if (!s.alive) {
     if (card) card.classList.add("hidden");
     return;
@@ -513,6 +449,7 @@ function renderActions() {
   if (card) card.classList.remove("hidden");
 
   const actions = [];
+
   if (s.age >= 12 && s.age <= 26) actions.push(["Change activity", chooseActivityAction]);
   if (s.age >= 18 && !s.retired) actions.push([schoolActionLabel(s), goBackToSchoolAction]);
   if (s.age >= 16) actions.push(["Take out a loan", takeLoanAction]);
@@ -528,10 +465,23 @@ function renderActions() {
   if (s.age >= 18 && s.job && !s.retired) actions.push(["Ask for a raise", askRaiseAction]);
   if (s.age >= 21 && s.job && !s.retired) actions.push(["Ask for promotion", askPromotionAction]);
   if (s.age >= 18 && s.job && !s.retired) actions.push(["Quit job", quitJobAction]);
-  if (s.age >= 18 && !s.job && !s.retired && !s.inSchool && s.jailYears === 0) actions.push(["Apply for jobs", applyJobsAction]);
-  if (s.age >= 18 && !s.job && !s.retired && s.schoolStage === "Gap Year") actions.push(["Apply for jobs", applyJobsAction]);
-  if (s.age >= 16 && !s.retired) actions.push([s.relationshipStatus === "Single" ? "Dating" : "Relationships", relationshipAction]);
-  if (s.age >= 18 && !s.businessOwner && !s.retired && s.money >= 50) actions.push(["Start a business", startBusinessAction]);
+
+  if (s.age >= 18 && !s.job && !s.retired && !s.inSchool && s.jailYears === 0) {
+    actions.push(["Apply for jobs", applyJobsAction]);
+  }
+
+  if (s.age >= 16 && !s.retired && s.relationshipStatus === "Single" && (s.datingCooldown || 0) === 0) {
+    actions.push(["Start dating", relationshipAction]);
+  }
+
+  if (s.age >= 18 && !s.retired && s.relationshipStatus !== "Single") {
+    actions.push(["Relationship options", relationshipOptionsAction]);
+  }
+
+  if (s.age >= 18 && !s.businessOwner && !s.retired && s.money >= 50) {
+    actions.push(["Start a business", startBusinessAction]);
+  }
+
   if (s.age >= 16 && !s.retired) actions.push(["Commit crime", crimeAction]);
   if (s.age >= 55 && !s.retired) actions.push(["Consider retirement", retireAction]);
 
@@ -540,7 +490,6 @@ function renderActions() {
     btn.textContent = label;
     btn.onclick = fn;
     if (label === "Apply to schools" || label === "Apply for jobs") btn.classList.add("primary-action");
-    btn.onclick = fn;
     container.appendChild(btn);
   });
 }
@@ -556,6 +505,15 @@ function addLog(text) {
   if (app.state.log.length > 40) app.state.log.shift();
 }
 
+function startGapYear() {
+  const s = app.state;
+  s.schoolStage = "Gap Year";
+  s.inSchool = false;
+  s.educationStage = "High School Graduate";
+  s.postSecondaryStatus = "Gap year";
+  s.gapYearStartAge = s.age;
+}
+
 function normalizeFinances() {
   const s = app.state;
   if (!s) return;
@@ -568,15 +526,13 @@ function normalizeFinances() {
 
 function advanceYear(delta = {}) {
   const s = app.state;
-  s.cachedAge = null;
-  s.cachedScenario = null;
   Object.entries(delta).forEach(([k, v]) => {
     if (typeof s[k] === "number") s[k] += v;
   });
   ageUp();
+  app.currentScenario = null;
   setScenario(generateYearScenario());
 }
-
 function ageUp() {
   const s = app.state;
   s.age += 1;
@@ -615,9 +571,29 @@ function educationYearlyCost() {
   return +Math.max(0, cost).toFixed(1);
 }
 
+
 function yearlyCosts() {
   const s = app.state;
   let costs = 0;
+
+  let everydayCost = 0;
+  if (s.age <= 12) everydayCost = 0;
+  else if (s.age <= 17) everydayCost = 1.2;
+  else if (s.movedOut || s.rent || s.house) everydayCost = 8;
+  else everydayCost = 3.5;
+
+  if (s.relationshipStatus === "Married" || s.relationshipStatus === "Long-term relationship") {
+    everydayCost += 1.2;
+  }
+  if (s.children > 0) {
+    everydayCost += s.children * 2.2;
+  }
+  if (s.currentActivity === "Gym") everydayCost += 0.6;
+  if (s.currentActivity === "Travel") everydayCost += 1.5;
+  if (s.currentActivity === "Therapy") everydayCost += 1.0;
+
+  costs += everydayCost;
+
   if (s.age >= 18) costs += s.houseUpkeep + s.carUpkeep + s.rent + s.spouseSupport;
   if (s.healthInsurance) costs += 2;
   if (s.carInsurance && s.car) costs += 1.5;
@@ -648,6 +624,9 @@ function yearlyCosts() {
     addLog(`${s.name}'s business ${swing >= 0 ? 'earns' : 'loses'} ${Math.abs(swing)}k this year.`);
   }
   s.money -= costs;
+  if (everydayCost > 0.5) {
+    addLog(`${s.name} spends about ${everydayCost.toFixed(1)}k on everyday living this year.`);
+  }
   if (s.money < -25) {
     s.stress += 2;
     s.hope -= 1;
@@ -671,7 +650,7 @@ function applyWorldEventMaybe() {
     const e = rand(DATA.worldEvents);
     app.state.currentWorld = e;
     if (e.effects) Object.entries(e.effects).forEach(([k,v]) => app.state[k] += v);
-    addLog(`World event: ${e.title}.`);
+    addLog(`World event - ${e.title}.`);
     if (chance(0.16)) {
       showLetter({
         type: "Public Update",
@@ -690,7 +669,7 @@ function worldMetaText(e) {
   if (e.field) lines.push(`Fields affected: ${Object.entries(e.field).map(([k,v]) => `${k} ${v > 1 ? "up" : "down"}`).join(", ")}`);
   if (e.raises) lines.push(`Raise climate: ${e.raises > 0 ? "easier" : "harder"}`);
   if (e.firing) lines.push(`Job stability: reduced`);
-  return lines.join(" • ") || "This shifts the climate around work, money, and stress.";
+  return lines.join(" - ") || "This shifts the climate around work, money, and stress.";
 }
 
 function updateEducationProgress() {
@@ -719,8 +698,14 @@ function updateEducationProgress() {
     s.educationStage = s.schoolStage;
   } else if (s.schoolStage === "Gap Year") {
     s.inSchool = false;
+    if (s.gapYearStartAge == null) s.gapYearStartAge = Math.max(0, s.age - 1);
     if (!["University", "College / Trades", "Graduate School", "Professional School"].includes(s.educationStage)) {
       s.educationStage = "High School Graduate";
+    }
+    if (s.age > s.gapYearStartAge) {
+      s.schoolStage = "After High School";
+      s.postSecondaryStatus = "Gap year complete";
+      s.gapYearStartAge = null;
     }
   } else if (!s.retired) {
     s.schoolStage = "Working Years";
@@ -743,10 +728,13 @@ function updateEducationProgress() {
 
   if (["University", "College / Trades", "Graduate School", "Professional School"].includes(s.schoolStage)) {
     s.yearsInPostSecondary += 1;
-    if ((s.schoolStage === "University" && s.yearsInPostSecondary >= 4) ||
-        (s.schoolStage === "College / Trades" && s.yearsInPostSecondary >= 2) ||
-        (s.schoolStage === "Graduate School" && s.yearsInPostSecondary >= 2) ||
-        (s.schoolStage === "Professional School" && s.yearsInPostSecondary >= 3)) {
+
+    if (
+      (s.schoolStage === "University" && s.yearsInPostSecondary >= 4) ||
+      (s.schoolStage === "College / Trades" && s.yearsInPostSecondary >= 2) ||
+      (s.schoolStage === "Graduate School" && s.yearsInPostSecondary >= 2) ||
+      (s.schoolStage === "Professional School" && s.yearsInPostSecondary >= 4)
+    ) {
       addLog(`${s.name} completes ${s.schoolStage.toLowerCase()}.`);
       s.educationStage = s.schoolStage;
       s.schoolStage = "Working Years";
@@ -791,16 +779,18 @@ function updateCareerProgress() {
     const perfChange = Math.round((s.discipline + s.hope - s.stress - healthPenalty()) / 6) + (chance(0.35) ? 1 : 0) - (chance(0.3) ? 1 : 0);
     s.performance = clamp(s.performance + perfChange, 1, 10);
     s.salary = Math.max(18, +(s.salary * (1 + (companyRaiseRate() * worldFactor))).toFixed(1));
+    s.salary = Math.min(s.salary, realisticSalaryCap(s.field, s.jobLevel));
 
     if (chance(0.10 + Math.max(0, s.performance - 6) * 0.03) && s.jobLevel < 5) {
       s.jobLevel += 1;
-      s.salary += 6 + s.jobLevel * 2;
+      s.salary += 4 + s.jobLevel * 1.5;
+      s.salary = Math.min(s.salary, realisticSalaryCap(s.field, s.jobLevel));
       s.job = jobTitleForState();
       addLog(`${s.name} earns a promotion and becomes ${s.job}.`);
-      if (chance(0.65)) showLetter({ type: "Career Update", title: "Promotion Notice", body: `Your performance, consistency, and timing aligned. ${s.company} is moving you into a new role.
+      if (chance(0.65)) showLetter({ type: "Career Update", title: "Promotion Notice", body: `Your performance, consistency, and timing lined up. ${s.company} is moving you into a new role.
 
-New role: ${s.job}
-New salary: $${Math.round(s.salary)}k`, meta: `Company culture: ${s.workCulture}` });
+New role ${s.job}
+New salary $${Math.round(s.salary)}k`, meta: `Company culture ${s.workCulture}` });
     }
 
     const firingRisk = 0.015 + Math.max(0, 5 - s.performance) * 0.035 + (app.state.currentWorld?.firing || 0) + (s.criminalRecord ? 0.01 : 0);
@@ -808,8 +798,8 @@ New salary: $${Math.round(s.salary)}k`, meta: `Company culture: ${s.workCulture}
       addLog(`${s.name} loses a job at ${s.company}.`);
       if (chance(0.7)) showLetter({ type: "Employment Notice", title: "Termination Letter", body: `The role is ending. Performance, changing conditions, or company pressure all played a part.
 
-Former role: ${s.job}
-Final salary: $${Math.round(s.salary)}k`, meta: `This does not end a life. It changes the next decision.` });
+Former role ${s.job}
+Final salary $${Math.round(s.salary)}k`, meta: `This does not end a life. It changes what happens next.` });
       s.job = null; s.salary = 0; s.company = null; s.workCulture = ""; s.jobLevel = 0; s.stress += 2; s.hope -= 1;
     }
   }
@@ -834,6 +824,22 @@ function getFieldModifier(field) {
   return e.field[field] || 1;
 }
 
+function realisticSalaryCap(field, level = 0) {
+  const caps = {
+    "Computer Science": [65, 85, 105, 130, 160, 190],
+    "Business": [52, 68, 85, 105, 130, 160],
+    "Engineering": [60, 78, 98, 120, 145, 175],
+    "Arts": [42, 52, 65, 80, 95, 115],
+    "Education": [45, 58, 72, 88, 105, 125],
+    "Medicine": [55, 75, 110, 160, 240, 320],
+    "Social Sciences": [45, 58, 72, 90, 110, 130],
+    "Skilled Trades": [55, 72, 90, 110, 130, 150],
+    "General": [42, 52, 65, 80, 95, 110]
+  };
+  const row = caps[field] || caps["General"];
+  return row[Math.max(0, Math.min(level, row.length - 1))];
+}
+
 function jobTitleForState() {
   const field = app.state.field || "General";
   const levels = [
@@ -847,30 +853,37 @@ function jobTitleForState() {
   return levels[clamp(app.state.jobLevel, 0, levels.length - 1)];
 }
 
+
+
 function autoOfferJobMaybe() {
   const s = app.state;
   const role = s.targetRole;
-  const baseField = (role && (s.field || fieldFromMajor(s.major) || "General")) || s.field || fieldFromMajor(s.major);
-  s.field = baseField === "General" || !baseField ? rand(["Business", "Arts", "Education", "Skilled Trades"]) : baseField;
+  const fields = combinedStudyFields(s);
+  const baseField = role ? (role.boardField || s.field || fields[0]) : (s.field && s.field !== "General" ? s.field : rand(fields));
+  s.field = baseField === "General" || !baseField ? "General" : baseField;
+
   const company = rand(DATA.companies.filter(c => {
     if (s.field === "Medicine") return /Health|Public/.test(c.name) || true;
     return true;
   }));
+
   const baseSalary = role ? role.salary : ({
     "Computer Science": 76, Engineering: 74, Business: 60, Arts: 42,
     Education: 58, Medicine: 88, "Social Sciences": 51, "Skilled Trades": 63, General: 48
   }[s.field] || 48);
+
   const title = role ? role.title : `Entry-level ${s.field} role`;
   const level = role && ["High School Graduate","College / Trades","University","Graduate School","Professional School"].includes(role.minEducation)
     ? Math.max(0, educationRank(role.minEducation) - 1)
     : 0;
+
   s.pendingOffer = {
     company: company.name,
     culture: company.culture,
     field: s.field,
     level,
     title,
-    salary: Math.round(baseSalary * getFieldModifier(s.field)),
+    salary: Math.min(Math.round(baseSalary * getFieldModifier(s.field)), realisticSalaryCap(s.field, level)),
     description: role ? role.description : `A starting role in ${s.field}.`
   };
   s.targetRole = null;
@@ -887,27 +900,49 @@ Work culture: ${company.culture}`,
   });
 }
 
+
 function updateRelationshipProgress() {
   const s = app.state;
-  if (s.age >= 16 && chance(0.16)) {
-    const outcomes = [
-      () => { if (s.relationshipStatus === "Single") { s.relationshipStatus = "Dating"; s.relationships += 1; addLog(`${s.name} starts seeing someone.`); } },
-      () => { if (s.relationshipStatus === "Dating") { s.relationshipStatus = "Long-term relationship"; s.relationships += 1; addLog(`${s.name}'s relationship becomes more serious.`); } },
-      () => { if (["Long-term relationship", "Married"].includes(s.relationshipStatus) && chance(0.5)) { s.children += 1; s.stress += 1; s.relationships += 1; addLog(`${s.name}'s family grows.`); } },
-      () => { if (s.relationshipStatus === "Married" && chance(0.18 + Math.max(0, s.stress - 6) * 0.03)) { s.relationshipStatus = "Separated"; s.relationships -= 2; s.stress += 2; s.spouseSupport = s.children ? 4 : 2; addLog(`${s.name}'s marriage hits a serious rupture.`); } },
-      () => { if (["Dating", "Long-term relationship", "Separated"].includes(s.relationshipStatus) && chance(0.22)) { s.relationshipStatus = "Single"; s.relationships -= 2; s.stress += 2; if (s.children) s.spouseSupport = 3; addLog(`${s.name} goes through a breakup or split.`); } }
-    ];
-    rand(outcomes)();
+
+  if (s.datingCooldown > 0) s.datingCooldown -= 1;
+
+  if (s.relationshipStatus !== "Single" && s.currentPartner) {
+    if (s.relationshipQuality <= -4 && chance(0.22 + Math.max(0, (-s.relationshipQuality - 4)) * 0.05)) {
+      triggerBreakup("You were not handling the relationship well, and the damage kept piling up.");
+      return;
+    }
+
+    if (s.relationshipStatus === "Dating" && s.relationshipQuality >= 7 && chance(0.2)) {
+      s.relationshipStatus = "Long-term relationship";
+      addLog(`${s.name} and ${s.currentPartner.name} become more serious.`);
+    }
+
+    if (s.relationshipStatus === "Long-term relationship" && s.relationshipQuality >= 8 && s.age >= 24 && chance(0.14)) {
+      s.relationshipStatus = "Married";
+      s.relationships += 1;
+      addLog(`${s.name} marries ${s.currentPartner.name}.`);
+    }
   }
-  if (s.age >= 24 && s.relationshipStatus === "Long-term relationship" && chance(0.12)) {
-    s.relationshipStatus = "Married";
-    s.relationships += 1;
-    addLog(`${s.name} gets married.`);
+
+  if (s.age >= 16 && s.relationshipStatus !== "Single" && chance(0.08)) {
+    if (["Long-term relationship", "Married"].includes(s.relationshipStatus) && chance(0.32)) {
+      s.children += 1;
+      s.stress += 1;
+      s.relationships += 1;
+      addLog(`${s.name}'s family grows.`);
+    }
   }
+
   if (s.relationshipStatus === "Separated" && chance(0.35)) {
-    s.relationshipStatus = chance(0.4) ? "Married" : "Divorced";
-    if (s.relationshipStatus === "Divorced") addLog(`${s.name} finalizes a divorce.`);
-    else addLog(`${s.name} and their partner decide to try again.`);
+    s.relationshipStatus = chance(0.4) ? "Married" : "Single";
+    if (s.relationshipStatus === "Single") {
+      s.currentPartner = null;
+      s.relationshipQuality = 0;
+      addLog(`${s.name}'s separation becomes permanent.`);
+    } else {
+      s.relationshipQuality = Math.max(3, s.relationshipQuality);
+      addLog(`${s.name} and ${s.currentPartner?.name || "their partner"} decide to try again.`);
+    }
   }
 }
 
@@ -959,7 +994,7 @@ function updateBadges() {
   app.badgeDefs.forEach(([name, rule]) => {
     if (!s.badges.includes(name) && rule(s)) {
       s.badges.push(name);
-      addLog(`Badge unlocked: ${name}.`);
+      addLog(`Badge unlocked - ${name}.`);
     }
   });
 }
@@ -986,7 +1021,9 @@ function uniqueScenario(bucket, factoryList) {
 
 function generateYearScenario() {
   const s = app.state;
+
   if (!s.alive) return endScenario("This life has ended.");
+
   if (s.age >= 85 || (s.age >= 68 && chance(0.14 + Math.max(0, 4 - s.health) * 0.03))) {
     s.alive = false;
     return endScenario(finalReflection());
@@ -994,6 +1031,7 @@ function generateYearScenario() {
 
   if (s.pendingOffer) return pendingOfferScenario();
   if (s.schoolStage === "Gap Year") return gapYearScenario();
+
   if (s.justGraduated) {
     if (!s.graduationLetterShown) {
       s.graduationLetterShown = true;
@@ -1010,21 +1048,16 @@ function generateYearScenario() {
 
   if (s.underCharges || s.jailYears > 0) return legalScenario();
   if (s.age >= 55 && !s.retired && chance(0.18)) return retirementPromptScenario();
+  if (s.age >= 16 && s.relationshipStatus !== "Single" && chance(0.24)) return relationshipLifeScenario();
   if (s.age >= 18 && s.inSchool && ["University", "College / Trades", "Graduate School", "Professional School"].includes(s.schoolStage) && chance(0.24)) return postSecondaryScenario();
   if (s.age >= 18 && s.job && chance(0.28)) return workScenario();
   if (s.age >= 18 && !s.job && !s.inSchool && chance(0.2)) return adultLifeScenario();
 
-  if (s.cachedAge === s.age && s.cachedScenario) return s.cachedScenario;
-
-  let scene;
-  if (s.age <= 4) scene = childScenario();
-  else if (s.age <= 10) scene = schoolChildScenario();
-  else if (s.age <= 13) scene = middleScenario();
-  else if (s.age <= 17) scene = teenScenario();
-  else scene = adultLifeScenario();
-  s.cachedAge = s.age;
-  s.cachedScenario = scene;
-  return scene;
+  if (s.age <= 4) return childScenario();
+  if (s.age <= 10) return schoolChildScenario();
+  if (s.age <= 13) return middleScenario();
+  if (s.age <= 17) return teenScenario();
+  return adultLifeScenario();
 }
 
 function gapYearScenario() {
@@ -1199,7 +1232,7 @@ function showGraduationDecisionModal() {
       { text: "Apply to balanced public universities", fn: () => choosePostSecondaryType("University", "mid") },
       { text: "Apply to local or lower-cost universities", fn: () => choosePostSecondaryType("University", "safe") },
       { text: "Apply to college, community college, or trades", fn: () => choosePostSecondaryType("College / Trades", "mid") },
-      { text: "Take a gap year", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.educationStage = "High School Graduate"; s.postSecondaryStatus = "Gap year"; render(); setScenario(gapYearScenario()); } },
+      { text: "Take a gap year", fn: () => { startGapYear(); render(); setScenario(gapYearScenario()); } },
       { text: "Start working", fn: () => { s.schoolStage = "Working Years"; s.inSchool = false; s.educationStage = "High School Graduate"; s.field = s.field || "General"; s.postSecondaryStatus = "Working"; render(); setScenario(generateYearScenario()); } }
     ],
     footer: "You can also use the school button in Life actions if you want to apply afterward."
@@ -1216,7 +1249,7 @@ function postHighSchoolScenario() {
 Where do you want to apply?`,
     choices: [
       { text: "Open the school portal.", fn: () => showPostHighSchoolPortal() },
-      { text: "Take a gap year.", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.educationStage = "High School Graduate"; s.postSecondaryStatus = "Gap year"; advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
+      { text: "Take a gap year.", fn: () => { startGapYear(); advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
       { text: "Start working right away.", fn: () => { s.schoolStage = "Working Years"; s.inSchool = false; s.educationStage = "High School Graduate"; s.field = "General"; advanceYear({ hope: 1, money: 2 }); } }
     ]
   };
@@ -1234,11 +1267,11 @@ function showPostHighSchoolPortal() {
       { text: "Apply to public universities", fn: () => choosePostSecondaryType("University", "mid") },
       { text: "Apply to local or lower-cost universities", fn: () => choosePostSecondaryType("University", "safe") },
       { text: "Apply to college, community college, or trades", fn: () => choosePostSecondaryType("College / Trades", "mid") },
-      { text: "Take a gap year", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.educationStage = "High School Graduate"; s.postSecondaryStatus = "Gap year"; advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
+      { text: "Take a gap year", fn: () => { startGapYear(); advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
       { text: "Start working", fn: () => { s.schoolStage = "Working Years"; s.inSchool = false; s.educationStage = "High School Graduate"; s.field = s.field || "General"; s.postSecondaryStatus = "Working"; advanceYear({ hope: 1, money: 2 }); } },
       { text: "Go back", fn: () => setScenario(generateYearScenario()) }
     ],
-    footer: `Final average: ${Math.round(s.average)}% • Pick a path, then choose a major, then apply.`
+    footer: `Final average ${Math.round(s.average)}% - Pick a path, then choose a major, then apply.`
   });
 }
 
@@ -1274,17 +1307,55 @@ function choosePostSecondaryType(stage, forcedTier = null) {
 }
 
 
+
+function availableMajorChoices(stage, exclude = []) {
+  const base = stage === "College / Trades"
+    ? DATA.majors.filter(m => m !== "Medicine")
+    : DATA.majors;
+  return base.filter(m => !exclude.includes(m));
+}
+
+function combinedStudyFields(s) {
+  const fields = [];
+  const first = fieldFromMajor(s.major);
+  const second = fieldFromMajor(s.secondMajor || "");
+  if (first && first !== "General") fields.push(first);
+  if (second && second !== "General" && second !== first) fields.push(second);
+  return fields.length ? fields : ["General"];
+}
+
+
 function chooseMajor(stage = "University", tier = "mid") {
+  const choices = availableMajorChoices(stage).map(m => ({
+    text: m,
+    fn: () => chooseSchoolOffer(stage, m, tier)
+  }));
   setScenario({
     title: stage === "University" ? "Choose a major" : "Choose a program",
     body: stage === "University" ? "What major do you want to pursue?" : "What field or program do you want to pursue?",
-    choices: DATA.majors.map(m => ({
-      text: m,
-      fn: () => chooseSchoolOffer(stage, m, tier)
-    })).concat([{ text: "Go back.", fn: () => choosePostSecondaryType(stage) }])
+    choices: choices.concat([{ text: "Go back.", fn: () => choosePostSecondaryType(stage) }])
   });
 }
 
+
+
+function chooseSecondMajorAction() {
+  const s = app.state;
+  const options = availableMajorChoices("University", [s.major]).map(m => ({
+    text: m,
+    fn: () => {
+      s.secondMajor = m;
+      addLog(`${s.name} adds a second major in ${m}.`);
+      render();
+      setScenario(generateYearScenario());
+    }
+  }));
+  setScenario({
+    title: "Choose a second major",
+    body: "Pick a second major to study alongside your first one.",
+    choices: options.concat([{ text: "Go back.", fn: goBackToSchoolAction }])
+  });
+}
 
 function postSecondaryScenario() {
   const s = app.state;
@@ -1433,6 +1504,124 @@ function adultLifeScenario() {
 }
 
 
+
+function relationshipLifeScenario() {
+  const s = app.state;
+  const partner = s.currentPartner || { name: "your partner", personality: "kind", job: "worker" };
+  const name = partner.name;
+  const status = s.relationshipStatus;
+
+  const datingScenarios = [
+    () => ({
+      title: `Age ${s.age}`,
+      body: `You are preparing for an anniversary gift for ${name}. What do you buy?`,
+      choices: [
+        relationshipChoice("Something thoughtful and personal.", { money: -2, relationships: 1, trust: 1 }, 2, 0),
+        relationshipChoice("Something expensive to impress them.", { money: -6, relationships: 1, stress: 1 }, 1, 0),
+        relationshipChoice("Keep it simple and low-cost.", { money: -1, relationships: 1 }, 1, 0),
+        relationshipChoice("Say gifts are not really your thing.", { money: 1, relationships: -1, trust: -1 }, -2, 0.12)
+      ]
+    }),
+    () => ({
+      title: `Age ${s.age}`,
+      body: `${name} has had a rough week and clearly wants support. What do you do?`,
+      choices: [
+        relationshipChoice("Make time and listen carefully.", { relationships: 2, trust: 1, stress: -1 }, 2, 0),
+        relationshipChoice("Offer practical help right away.", { relationships: 1, trust: 1 }, 1, 0),
+        relationshipChoice("Give them space and check in later.", { relationships: 1, stress: -1 }, 1, 0),
+        relationshipChoice("Stay focused on your own problems.", { relationships: -2, trust: -1 }, -3, 0.18)
+      ]
+    }),
+    () => ({
+      title: `Age ${s.age}`,
+      body: `${name} asks if this relationship is actually going somewhere. How do you respond?`,
+      choices: [
+        relationshipChoice("Be honest and say you want to keep building this.", { trust: 2, relationships: 2, hope: 1 }, 2, 0),
+        relationshipChoice("Say you care, but you need more time.", { trust: 1, relationships: 1 }, 1, 0),
+        relationshipChoice("Avoid the question and change the subject.", { trust: -2, stress: 1 }, -2, 0.16),
+        relationshipChoice("Say you are not sure this is serious.", { relationships: -2, trust: -2, hope: -1 }, -4, 0.28)
+      ]
+    }),
+    () => ({
+      title: `Age ${s.age}`,
+      body: `You forgot a date that mattered to ${name}. What do you do?`,
+      choices: [
+        relationshipChoice("Apologize properly and make it up to them.", { money: -2, trust: 1, relationships: 1 }, 1, 0),
+        relationshipChoice("Admit it, but act like it is not a big deal.", { trust: -1, relationships: -1 }, -2, 0.14),
+        relationshipChoice("Blame stress and your schedule.", { stress: 1, trust: -2 }, -3, 0.2),
+        relationshipChoice("Turn it into an argument.", { relationships: -2, trust: -2, stress: 1 }, -4, 0.28)
+      ]
+    })
+  ];
+
+  const seriousScenarios = [
+    () => ({
+      title: `Age ${s.age}`,
+      body: `${name} wants you to meet their family. What do you do?`,
+      choices: [
+        relationshipChoice("Go and make a real effort.", { relationships: 2, trust: 1, stress: 1 }, 2, 0),
+        relationshipChoice("Go, but keep some distance.", { relationships: 1 }, 1, 0),
+        relationshipChoice("Put it off for now.", { stress: -1, trust: -1 }, -1, 0.1),
+        relationshipChoice("Refuse because it feels too serious.", { relationships: -2, trust: -2 }, -3, 0.22)
+      ]
+    }),
+    () => ({
+      title: `Age ${s.age}`,
+      body: `Money becomes awkward between you and ${name}. How do you handle it?`,
+      choices: [
+        relationshipChoice("Have an honest conversation about it.", { trust: 2, relationships: 1, stress: 1 }, 2, 0),
+        relationshipChoice("Cover more of the cost yourself.", { relationships: 1, money: -4, stress: 1 }, 1, 0),
+        relationshipChoice("Avoid the conversation for now.", { stress: 1, trust: -1 }, -1, 0.12),
+        relationshipChoice("Argue over every dollar.", { relationships: -2, trust: -2, stress: 1 }, -3, 0.22)
+      ]
+    }),
+    () => ({
+      title: `Age ${s.age}`,
+      body: `${name} says you have been distant lately. What do you do?`,
+      choices: [
+        relationshipChoice("Rearrange your schedule and make real time.", { relationships: 2, stress: 1 }, 2, 0),
+        relationshipChoice("Explain honestly that life is crowded right now.", { trust: 2, relationships: 1 }, 1, 0),
+        relationshipChoice("Promise more and hope it fixes itself later.", { trust: -1, stress: 1 }, -2, 0.14),
+        relationshipChoice("Pull back and keep focusing on your own life.", { purpose: 1, relationships: -2 }, -3, 0.24)
+      ]
+    })
+  ];
+
+  const marriedScenarios = [
+    () => ({
+      title: `Age ${s.age}`,
+      body: `Your routines with ${name} are becoming stale. What do you do?`,
+      choices: [
+        relationshipChoice("Plan a real date and break the routine.", { relationships: 2, money: -2, hope: 1 }, 2, 0),
+        relationshipChoice("Talk honestly about feeling distant.", { trust: 2, relationships: 1 }, 2, 0),
+        relationshipChoice("Focus on work and hope it passes.", { performance: 1, relationships: -2 }, -2, 0.16),
+        relationshipChoice("Withdraw and say nothing.", { stress: 1, trust: -2 }, -3, 0.24)
+      ]
+    }),
+    () => ({
+      title: `Age ${s.age}`,
+      body: `A major purchase comes up. How do you and ${name} handle it?`,
+      choices: [
+        relationshipChoice("Plan the budget together first.", { trust: 2, relationships: 1, money: -2 }, 2, 0),
+        relationshipChoice("Buy it because life is short.", { hope: 1, money: -7, stress: 1 }, -1, 0.06),
+        relationshipChoice("Delay it until things are stable.", { trust: 1, money: 1, stress: -1 }, 1, 0),
+        relationshipChoice("Fight about who should pay.", { relationships: -2, trust: -2, stress: 1 }, -3, 0.2)
+      ]
+    })
+  ];
+
+  if (status === "Dating") {
+    return uniqueScenario("relationship_dating_story", datingScenarios.concat(seriousScenarios.slice(0, 1)));
+  }
+  if (status === "Long-term relationship") {
+    return uniqueScenario("relationship_long_story", datingScenarios.concat(seriousScenarios));
+  }
+  if (status === "Married" || status === "Separated") {
+    return uniqueScenario("relationship_married_story", datingScenarios.concat(seriousScenarios, marriedScenarios));
+  }
+  return uniqueScenario("relationship_general_story", datingScenarios);
+}
+
 function illnessScenario() {
   const s = app.state;
   const options = medicalOptionsFor(s.illness, s.healthInsurance);
@@ -1440,7 +1629,7 @@ function illnessScenario() {
     title: `Age ${s.age}`,
     body: `How do you handle ${s.illness}?`,
     choices: options.map(opt => ({
-      text: `${opt.label} — $${opt.display}`,
+      text: `${opt.label} - $${opt.display}`,
       fn: () => {
         s.money -= opt.cost;
         s.health = clamp(s.health + opt.health, 0, 10);
@@ -1558,93 +1747,93 @@ const ENDING_CHARACTERS = {
   "High Achiever": {
     name: "The Climber",
     icon: "🏔️",
-    quote: "You kept pushing until effort turned into altitude.",
+    quote: "You kept pushing and the effort led somewhere real.",
     summary: "Achievement, credentials, and visible success defined this life.",
-    meaning: "This ending fits lives that are shaped by strong grades, career growth, and visible achievement. Congratulations!"
+    meaning: "This ending fits lives shaped by strong grades, career growth, and visible achievement."
   },
   "Burnt Out": {
     name: "The Overextended One",
     icon: "🔥",
-    quote: "You kept producing long after recovery stopped being optional.",
+    quote: "You kept going even after rest was clearly needed.",
     summary: "Pressure and output stayed high, and the cost stayed attached to them.",
-    meaning: "This ending fits lives where stress, exhaustion, and pressure kept building faster than recovery. Maybe it is better to take things slowly?"
+    meaning: "This ending fits lives where stress, exhaustion, and pressure kept building faster than recovery."
   },
   "Loving Legacy": {
     name: "The Caregiver",
     icon: "💞",
-    quote: "Love kept becoming the center of the story.",
+    quote: "People stayed at the center of this life.",
     summary: "Care, family, and emotional presence mattered more than status.",
-    meaning: "This ending fits lives that are defined most by love, family, caregiving, and emotional presence. Congratulations!"
+    meaning: "This ending fits lives defined most by love, family, caregiving, and emotional presence."
   },
   "Late Bloom": {
     name: "The Late Bloom",
     icon: "🌱",
-    quote: "Direction came later, but it arrived for real.",
+    quote: "Direction came later, but it did arrive.",
     summary: "The strongest stretch came after delay, uncertainty, or rebuilding.",
-    meaning: "This ending fits lives that took time to stabilize, and then found momentum later. Congratulations!"
+    meaning: "This ending fits lives that took time to stabilize, then found momentum later."
   },
   "Survivor": {
     name: "The Survivor",
     icon: "🛡️",
     quote: "Staying here became its own kind of victory.",
     summary: "This life was shaped by hardship, illness, or losses that never fully disappeared.",
-    meaning: "This ending fits lives that are marked by hardship,   illness, major accidents, or repeated setbacks. You were a strong person that lived through it."
+    meaning: "This ending fits lives marked by hardship, illness, major accidents, or repeated setbacks."
   },
   "Rebuilder": {
     name: "The Rebuilder",
     icon: "🧱",
     quote: "The damage stayed real, but so did the repair.",
     summary: "Consequences changed the path, but not the whole ending.",
-    meaning: "This ending fits lives that are that fell apart in serious ways but still found a way back. Congratulations!"
+    meaning: "This ending fits lives that fell apart in serious ways but still found a way back."
   },
   "Scholar": {
     name: "The Scholar",
     icon: "📘",
-    quote: "Learning stayed important even when life pulled elsewhere.",
+    quote: "Learning stayed important even when life pulled in other directions.",
     summary: "Curiosity, grades, and study shaped this life more than spectacle did.",
-    meaning: "This ending fits lives strongly defined by school, study, credentials, and intellectual effort. It is finally time to rest. Congratulations!"
+    meaning: "This ending fits lives strongly defined by school, study, credentials, and intellectual effort."
   },
   "Striver": {
     name: "The Striver",
     icon: "⚙️",
     quote: "You kept trying to build something solid out of ordinary years.",
     summary: "This life leaned on effort, persistence, and trying again more than brilliance.",
-    meaning: "This ending fits lives powered by persistence, discipline, and hard work more than easy wins. Congratulations!"
+    meaning: "This ending fits lives powered by persistence, discipline, and hard work more than easy wins."
   },
   "Quiet Meaning": {
     name: "The Quiet One",
     icon: "🌙",
     quote: "Not every meaningful life looks dramatic from the outside.",
-    summary: "This life mattered through ordinary choices and steady days.",
-    meaning: "This ending fits steady, quieter lives that still formed a real pattern of meaning. Congratulations!"
+    summary: "This life mattered through ordinary choices, small loyalties, and steady days.",
+    meaning: "This ending fits steady, quieter lives that still formed a real pattern of meaning."
   },
   "Independent Spirit": {
     name: "The Independent One",
     icon: "🕊️",
-    quote: "You kept choosing your own path, and even when it cost closeness or certainty.",
-    summary: "Autonomy and personal freedom shaped this life.",
-    meaning: "This ending fits lives that prioritized independence, self-direction, and personal freedom. Congratulations!"
+    quote: "You kept choosing your own path even when it cost closeness or certainty.",
+    summary: "Autonomy, self-direction, and personal freedom shaped this life.",
+    meaning: "This ending fits lives that prioritized independence, self-direction, and personal freedom."
   },
   "Steady Builder": {
     name: "The Builder",
     icon: "🏡",
-    quote: "You did not need to be spectacular, you kept building a life that held.",
+    quote: "You did not need spectacle. You kept building a life that held together.",
     summary: "Practical choices, stability, and long-term structure shaped this life.",
-    meaning: "This ending fits lives built around stability, practical choices, work, and holding things together. Congratulations!"
+    meaning: "This ending fits lives built around stability, practical choices, work, and holding things together."
   },
   "Fallen Star": {
     name: "The Fallen Star",
     icon: "🌠",
-    quote: "For a while, you were rising fast! Then too much started breaking at once.",
-    summary: "Potential was real, but the collapse became too real",
-    meaning: "This ending fits lives with strong promise or success that later gave way to breakdown or collapse. Maybe it is better to take things slowly?"
+    quote: "For a while, you were rising fast. Then too much started breaking at once.",
+    summary: "Potential was real, but the collapse became part of the story too.",
+    meaning: "This ending fits lives with strong promise or success that later gave way to breakdown or collapse."
   },
   "Wounded Heart": {
     name: "The Wounded Heart",
     icon: "🫀",
     quote: "Love mattered, but so did the damage it left behind.",
-    summary: "Relationships shaped this life deeply.",
-    meaning: "This ending fits lives where love, heartbreak, separation, or emotional wounds stayed central. Although it may have been difficult, you found a way forward. Congratulations!"
+    summary: "Relationships shaped this life deeply, whether through closeness, conflict, or loss.",
+    meaning: "This ending fits lives where love, heartbreak, separation, or emotional wounds stayed central."
   }
 };
 
@@ -1715,49 +1904,93 @@ function endingCharacterData() {
   return { label, ...(ENDING_CHARACTERS[label] || ENDING_CHARACTERS["Quiet Meaning"]) };
 }
 
+
+
 function endingFitHtml() {
   const scored = app.state.endingFits || computeEndingFits();
-  const visible = scored.sorted.filter(([,score]) => score >= 80).slice(0, 5);
-  const topScore = visible[0] ? visible[0][1] : 0;
-  const badges = visible.filter(([,score], idx) => idx === 0 || (score >= 88 && topScore - score <= 5)).map(([label]) => label);
-  app.state.endingBadgesUnlocked = badges;
+  const qualified = scored.sorted.filter(([, score]) => score >= 80);
+  const labels = qualified.map(([label]) => label);
+  app.state.endingBadgesUnlocked = labels;
+
+  const earnedBadges = Array.from(new Set([
+    ...(app.state.badges || []),
+    ...labels
+  ]));
+
   return `
     <div class="ending-fit-block">
-      <div class="ending-fit-title">Ending fit breakdown</div>
-      <div class="ending-fit-subtitle">Only endings with a fit of 80% or higher are shown.</div>
-      ${visible.map(([label,score]) => {
+      <div class="ending-fit-title">Endings achieved</div>
+      <div class="ending-fit-subtitle">Every ending that this life qualifies for is shown below.</div>
+      ${qualified.map(([label]) => {
         const info = ENDING_CHARACTERS[label];
-        return `<div class="ending-fit-row detailed"><div><span>${label}</span><p>${info?.meaning || "This ending fits key patterns in the life you played."}</p></div><strong>${score}%</strong></div>`;
+        return `<div class="ending-fit-row detailed"><div><span>${label}</span><p>${info?.meaning || "This ending fits key patterns in the life you played."}</p></div></div>`;
       }).join("")}
-      ${badges.length ? `<div class="ending-fit-note">Extra character badges earned: ${badges.join(", ")}</div>` : ""}
+      ${earnedBadges.length ? `<div class="ending-fit-note">Badges earned in this life: ${earnedBadges.join(", ")}</div>` : ""}
     </div>`;
 }
 
-function endingBodyHtml(extraText = "") {
+function endingFitHtml() {
+  const scored = app.state.endingFits || computeEndingFits();
+  const qualified = scored.sorted.filter(([, score]) => score >= 80);
+  const labels = qualified.map(([label]) => label);
+  app.state.endingBadgesUnlocked = labels;
+
+  return `
+    <div class="ending-fit-block">
+      <div class="ending-fit-title">Endings achieved</div>
+      <div class="ending-fit-subtitle">Every ending that this life qualifies for is shown below.</div>
+
+      <div class="ending-grid">
+        ${qualified.map(([label]) => {
+          const info = ENDING_CHARACTERS[label] || {
+            name: label,
+            icon: "⭐",
+            quote: "",
+            summary: "",
+            meaning: "This ending fits key patterns in the life you played."
+          };
+
+          return `
+            <div class="ending-card secondary-ending">
+              <div class="ending-badge">Achieved Ending</div>
+              <div class="ending-icon">${info.icon}</div>
+              <h3>${info.name}</h3>
+              <p class="ending-label">${label}</p>
+              <p class="ending-quote">${info.quote}</p>
+              <p class="ending-summary">${info.summary}</p>
+              <p class="ending-meaning">${info.meaning}</p>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `;
+}
+function endingBodyHtml(text) {
   const s = app.state;
   const ending = endingCharacterData();
   const highlights = [
-    s.educationStage && s.educationStage !== "None" ? `Education: ${s.educationStage}` : null,
-    s.major && s.major !== "Undeclared" ? `Field: ${s.major}` : null,
-    s.retired ? "Career stage: Retired" : (s.job ? `Career: ${s.job}` : (!s.inSchool && s.age >= 18 ? `Career: Gap Year` : null)),
-    (s.peakSalary || s.salary) > 0 ? `Peak salary: $${Math.round(s.peakSalary || s.salary)}k` : null,
-    s.relationshipStatus && s.relationshipStatus !== "Single" ? `Relationships: ${s.relationshipStatus}` : null,
-    s.children ? `Children: ${s.children}` : null
-  ].filter(Boolean).slice(0, 6);
-  const explanation = extraText || finalReflection();
+    `Age ${s.age}`,
+    s.educationStage,
+    s.job || (s.retired ? "Retired" : "No long-term job"),
+    `Peak salary $${Math.round(s.peakSalary || s.salary || 0)}k`
+  ].filter(Boolean);
+
   return `
     <div class="ending-card">
       <div class="ending-badge">Final Character</div>
       <div class="ending-icon">${ending.icon}</div>
       <h3>${ending.name}</h3>
-      <p class="ending-label">Best fitting ending: ${ending.label}</p>
+      <p class="ending-label">${ending.label}</p>
       <p class="ending-quote">${ending.quote}</p>
       <p class="ending-summary">${ending.summary}</p>
-      <p class="ending-meaning"><strong>What this ending means:</strong> ${ending.meaning}</p>
-      <div class="ending-highlight-list">${highlights.map(item => `<span class="ending-chip">${item}</span>`).join("")}</div>
-      ${endingFitHtml()}
-      <div class="ending-explanation">${explanation.split("\n").join("<br>")}</div>
-    </div>`;
+      <div class="ending-highlight-list">
+        ${highlights.map(item => `<span class="ending-chip">${item}</span>`).join("")}
+      </div>
+      <p class="ending-explanation">${text || finalReflection()}</p>
+    </div>
+    ${endingFitHtml()}
+  `;
 }
 
 function endScenario(text) {
@@ -1765,7 +1998,7 @@ function endScenario(text) {
   autosave();
   return {
     title: `${app.state.name}'s life ends`,
-    body: text || `Ending: ${determineEnding()}`,
+    body: text || `Ending ${determineEnding()}`,
     bodyHtml: endingBodyHtml(text || ""),
     choices: [
       { text: "Return to main menu.", fn: goHome }
@@ -1777,13 +2010,14 @@ function endingLabel() {
   return determineEnding();
 }
 
+
 function finalReflection() {
   const s = app.state;
   const scored = app.state.endingFits || computeEndingFits();
   const ending = scored.sorted[0][0];
-  const second = scored.sorted.find(([label,score]) => label !== ending && score >= 80);
+  const qualified = scored.sorted.filter(([, score]) => score >= 80).map(([label]) => label);
   const notes = [];
-  if (s.educationStage && s.educationStage !== "None") notes.push(`Education reached: ${s.educationStage}.`);
+  if (s.educationStage && s.educationStage !== "None") notes.push(`Education reached ${s.educationStage}.`);
   if (s.job || s.retired) notes.push(s.retired ? `They eventually stepped into retirement.` : `Work stayed part of the story through ${s.job || "later adulthood"}.`);
   if (s.children) notes.push(`Family responsibilities shaped later years.`);
   if (s.house) notes.push(`Housing became part of the structure of this life.`);
@@ -1802,8 +2036,10 @@ function finalReflection() {
   if (ending === "Steady Builder") notes.push(`Practical choices and long-term structure mattered more than spectacle.`);
   if (ending === "Fallen Star") notes.push(`Potential and damage both became part of the story.`);
   if (ending === "Wounded Heart") notes.push(`Relationships left some of the deepest marks on this life.`);
-  if (second) notes.push(`Another close fit was ${second[0]} at ${second[1]}%.`);
-  return `${s.name}'s best fitting ending: ${ending}.\n\n${notes.join(" ")}`;
+  if (qualified.length > 1) notes.push(`This life also qualifies for ${qualified.slice(1).join(", ")}.`);
+  return `${s.name}'s primary ending is ${ending}.
+
+${notes.join(" ")}`;
 }
 
 function chooseActivityAction() {
@@ -1818,64 +2054,266 @@ function chooseActivityAction() {
 
 
 
+
+function articleFor(word) {
+  return /^[aeiou]/i.test(word) ? "an" : "a";
+}
+
+function randomPartner() {
+  const s = app.state;
+  const genders = ["woman", "man", "non-binary"];
+  const traits = ["warm and funny", "quiet and thoughtful", "ambitious and intense", "easygoing and kind", "creative and spontaneous", "serious but dependable", "confident and social"];
+  const jobs = [
+    "barista", "teacher", "nursing student", "software developer", "graphic designer",
+    "electrician apprentice", "retail supervisor", "lab assistant", "dance instructor",
+    "business student", "community worker", "mechanic", "server", "photographer"
+  ];
+  const meetingSpots = [
+    "through a friend", "through school", "through work", "at a community event",
+    "through a dating app", "at a café", "through a club or activity"
+  ];
+  const names = ["Maya", "Ethan", "Ava", "Noah", "Sage", "Liam", "Isla", "Jordan", "Aria", "Kai", "Leah", "Mason", "Rowan", "Nina", "Leo", "Zoe"];
+  return {
+    name: rand(names),
+    gender: rand(genders),
+    personality: rand(traits),
+    job: rand(jobs),
+    metWhere: rand(meetingSpots),
+    age: Math.max(16, s.age + Math.floor(Math.random() * 5) - 2)
+  };
+}
+
+function describePartner(p) {
+  return `${p.name} is ${p.age}. ${capitalize(p.gender)}. ${capitalize(p.personality)}. Works as ${articleFor(p.job)} ${p.job}. You met ${p.metWhere}.`;
+}
+
+function triggerBreakup(reasonText = "") {
+  const s = app.state;
+  const partnerName = s.currentPartner?.name || "your partner";
+  s.relationshipStatus = "Single";
+  s.relationshipQuality = 0;
+  s.currentPartner = null;
+  s.datingCooldown = 0;
+  s.relationships = clamp(s.relationships - 2, 0, 10);
+  s.hope = clamp(s.hope - 2, 0, 10);
+  s.stress = clamp(s.stress + 2, 0, 10);
+  addLog(`${s.name} and ${partnerName} break up.`);
+  if (reasonText) {
+    showLetter({
+      type: "Personal Life",
+      title: "The relationship ends",
+      body: `${partnerName} ends the relationship.\n\n${reasonText}`,
+      meta: "Patterns matter as much as one big mistake."
+    });
+  }
+}
+
+function relationshipChoice(text, delta = {}, qualityDelta = 0, breakupRisk = 0) {
+  return {
+    text,
+    fn: () => {
+      const s = app.state;
+      Object.entries(delta).forEach(([k, v]) => {
+        if (typeof s[k] === "number") s[k] += v;
+      });
+      s.relationshipQuality = clamp((s.relationshipQuality || 0) + qualityDelta, -10, 10);
+
+      if (s.relationshipStatus !== "Single" && breakupRisk > 0) {
+        const extraRisk = s.relationshipQuality <= -3 ? 0.16 : 0;
+        if (chance(breakupRisk + extraRisk)) {
+          triggerBreakup("The connection had been getting weaker, and this pushed it over the edge.");
+        }
+      }
+
+      advanceYear({});
+    }
+  };
+}
+
+
 function relationshipAction() {
   const s = app.state;
-  const choices = [];
-
-  function maybeStartRelationship(source, odds, extras = {}) {
-    if (chance(odds)) {
-      s.relationshipStatus = "Dating";
-      s.relationships += 2;
-      s.hope += 1;
-      if (extras.stress) s.stress += extras.stress;
-      if (extras.money) s.money += extras.money;
-      addLog(`${s.name} meets someone through ${source.toLowerCase()}.`);
-    } else {
-      if (extras.failHope) s.hope += extras.failHope;
-      if (extras.failStress) s.stress += extras.failStress;
-      if (extras.failMoney) s.money += extras.failMoney;
-      addLog(`${s.name} tries ${source.toLowerCase()}, but nothing turns into a relationship yet.`);
-    }
-    render();
+  if (s.relationshipStatus !== "Single") {
     setScenario(generateYearScenario());
+    return;
   }
 
-  if (s.relationshipStatus === "Single") {
-    choices.push(
-      { text: "Ask friends to set you up.", fn: () => maybeStartRelationship("a friend setup", 0.54, { failHope: -1 }) },
-      { text: "Try a dating app.", fn: () => maybeStartRelationship("a dating app", 0.46, { failHope: -1, failStress: 1 }) },
-      { text: "Meet people through school or work.", fn: () => maybeStartRelationship("school or work", 0.5, { failHope: -1 }) },
-      { text: "Go out more and see what happens.", fn: () => maybeStartRelationship("social events", 0.42, { failMoney: -1 }) },
-      { text: "Stay single for now.", fn: () => { s.purpose += 1; s.stress = clamp(s.stress - 1, 0, 10); addLog(`${s.name} stays single and focuses on other parts of life.`); render(); setScenario(generateYearScenario()); } }
-    );
-  } else {
-    choices.push(
-      { text: "Plan real time together.", fn: () => { s.relationships += 2; s.hope += 1; addLog(`${s.name} puts real time into the relationship.`); render(); setScenario(generateYearScenario()); } },
-      { text: "Have a serious talk about where this is going.", fn: () => {
-          if (s.relationshipStatus === "Dating") s.relationshipStatus = "Long-term relationship";
-          else if (s.relationshipStatus === "Long-term relationship" && chance(0.5)) s.relationshipStatus = "Married";
-          s.relationships += 1;
-          s.trust += 1;
-          addLog(`${s.name} has a defining conversation about the relationship.`);
+  showChoiceModal({
+    header: "Start dating",
+    title: "How do you want to meet someone new?",
+    body: "Choose how you want to put yourself out there.",
+    choices: [
+      { text: "Ask friends to set you up.", fn: () => presentDatingCandidate("through a friend") },
+      { text: "Try a dating app.", fn: () => presentDatingCandidate("through a dating app") },
+      { text: "Meet people through school or work.", fn: () => presentDatingCandidate("through school or work") },
+      { text: "Go out more and see what happens.", fn: () => presentDatingCandidate("at a social event") },
+      { text: "Never mind.", fn: () => setScenario(generateYearScenario()) }
+    ],
+    footer: "Once you start dating someone, this button disappears and relationship events happen naturally in the story."
+  });
+}
+
+function presentDatingCandidate(source) {
+  const s = app.state;
+  const p = randomPartner();
+  p.metWhere = source;
+  const compatibility = Math.floor(Math.random() * 4) + 4;
+  showChoiceModal({
+    header: "Someone new",
+    title: `You meet ${p.name}`,
+    body: `${describePartner(p)}
+
+Do you want to start dating this person?`,
+    choices: [
+      {
+        text: "Yes, start dating.",
+        fn: () => {
+          s.currentPartner = p;
+          s.relationshipStatus = "Dating";
+          s.relationshipQuality = compatibility;
+          s.relationships += 2;
+          s.hope += 1;
+          addLog(`${s.name} starts dating ${p.name}.`);
           render();
           setScenario(generateYearScenario());
-        } },
-      { text: "Keep some distance and focus on yourself.", fn: () => { s.stress = clamp(s.stress - 1, 0, 10); s.relationships -= 1; addLog(`${s.name} steps back and protects some personal space.`); render(); setScenario(generateYearScenario()); } },
-      { text: "Work through a difficult issue directly.", fn: () => { if (chance(0.6)) { s.relationships += 1; s.trust += 1; addLog(`${s.name} works through a difficult issue honestly.`); } else { s.relationships -= 2; s.stress += 1; addLog(`${s.name} tries to fix a problem, but the conversation goes badly.`); } render(); setScenario(generateYearScenario()); } }
-    );
-    if (["Long-term relationship", "Married"].includes(s.relationshipStatus)) {
-      choices.push({ text: "Talk about having a child.", fn: () => { if (chance(0.45)) { s.children += 1; s.relationships += 1; s.money -= 6; s.stress += 1; addLog(`${s.name}'s family grows.`); } else { s.relationships += 1; addLog(`${s.name} talks seriously about children, but the timing is not right yet.`); } render(); setScenario(generateYearScenario()); } });
-    }
-    choices.push({ text: "End the relationship.", fn: () => { s.relationshipStatus = "Single"; s.relationships -= 2; s.stress += 1; addLog(`${s.name} ends a relationship.`); render(); setScenario(generateYearScenario()); } });
-  }
-  choices.push({ text: "Go back.", fn: () => setScenario(generateYearScenario()) });
-  showChoiceModal({
-    header: s.relationshipStatus === "Single" ? "Dating" : "Relationships",
-    title: s.relationshipStatus === "Single" ? "What do you want to do about dating this year?" : "What do you want to do about your relationship this year?",
-    body: s.relationshipStatus === "Single" ? "Choose how you want to meet people, or decide to leave dating alone for now." : "Choose how you want to handle your personal life this year.",
-    choices,
-    footer: `Current status: ${s.relationshipStatus}`
+        }
+      },
+      {
+        text: "No, not this person.",
+        fn: () => {
+          addLog(`${s.name} decides not to start dating ${p.name}.`);
+          render();
+          setScenario(generateYearScenario());
+        }
+      }
+    ],
+    footer: `${p.name} seems ${p.personality}.`
   });
+}
+
+
+function relationshipOptionsAction() {
+  const s = app.state;
+  if (s.relationshipStatus === "Single") {
+    setScenario(generateYearScenario());
+    return;
+  }
+
+  const choices = [
+    {
+      text: "Break up",
+      fn: () => {
+        triggerBreakup("You choose to end the relationship yourself.");
+        render();
+        setScenario(generateYearScenario());
+      }
+    }
+  ];
+
+  if (["Dating", "Long-term relationship"].includes(s.relationshipStatus) && s.age >= 20) {
+    choices.unshift({
+      text: "Propose / ask for marriage",
+      fn: proposeMarriageAction
+    });
+  }
+
+  if (["Long-term relationship", "Married"].includes(s.relationshipStatus) && s.age >= 20) {
+    choices.splice(1, 0, {
+      text: "Talk about having kids",
+      fn: haveKidsAction
+    });
+  }
+
+  choices.push({ text: "Go back", fn: () => setScenario(generateYearScenario()) });
+
+  showChoiceModal({
+    header: "Relationship options",
+    title: `What do you want to do with ${s.currentPartner?.name || "your partner"}?`,
+    body: "Choose a direct relationship action.",
+    choices,
+    footer: `Current status ${s.relationshipStatus}`
+  });
+}
+
+function proposeMarriageAction() {
+  const s = app.state;
+  const partnerName = s.currentPartner?.name || "your partner";
+  let odds = 0.18;
+  if (s.relationshipStatus === "Long-term relationship") odds += 0.2;
+  odds += Math.max(0, s.relationshipQuality || 0) * 0.05;
+  if (s.money >= 15) odds += 0.05;
+  if (s.age >= 24) odds += 0.06;
+
+  if (chance(odds)) {
+    s.relationshipStatus = "Married";
+    s.relationshipQuality = Math.max(7, s.relationshipQuality || 0);
+    s.relationships = clamp(s.relationships + 2, 0, 10);
+    s.hope = clamp(s.hope + 1, 0, 10);
+    addLog(`${s.name} and ${partnerName} get engaged and move into marriage.`);
+    showLetter({
+      type: "Personal Life",
+      title: "The proposal works",
+      body: `${partnerName} says yes.`,
+      meta: "The relationship becomes a marriage."
+    });
+  } else {
+    s.relationshipQuality = clamp((s.relationshipQuality || 0) - 2, -10, 10);
+    s.relationships = clamp(s.relationships - 1, 0, 10);
+    s.stress = clamp(s.stress + 1, 0, 10);
+    addLog(`${s.name} proposes to ${partnerName}, but it does not go well.`);
+    showLetter({
+      type: "Personal Life",
+      title: "The proposal fails",
+      body: `${partnerName} is not ready, or does not want the same future right now.`,
+      meta: "A failed proposal can put real strain on a relationship."
+    });
+    if ((s.relationshipQuality || 0) <= -3 && chance(0.25)) {
+      triggerBreakup("The failed proposal exposed a deeper mismatch.");
+    }
+  }
+
+  render();
+  setScenario(generateYearScenario());
+}
+
+function haveKidsAction() {
+  const s = app.state;
+  const partnerName = s.currentPartner?.name || "your partner";
+  let odds = 0.2;
+  if (s.relationshipStatus === "Married") odds += 0.18;
+  odds += Math.max(0, s.relationshipQuality || 0) * 0.04;
+  if (s.money >= 20) odds += 0.08;
+  if (s.age >= 24) odds += 0.05;
+
+  if (chance(odds)) {
+    s.children += 1;
+    s.relationships = clamp(s.relationships + 1, 0, 10);
+    s.stress = clamp(s.stress + 1, 0, 10);
+    s.money -= 3;
+    addLog(`${s.name} and ${partnerName} decide to have a child, and the family grows.`);
+    showLetter({
+      type: "Personal Life",
+      title: "The family grows",
+      body: `${s.name} and ${partnerName} have a child.`,
+      meta: "Love can deepen, but responsibility grows too."
+    });
+  } else {
+    s.relationshipQuality = clamp((s.relationshipQuality || 0) - 1, -10, 10);
+    s.trust = clamp(s.trust - 1, 0, 10);
+    addLog(`${s.name} and ${partnerName} talk about kids, but it does not work out right now.`);
+    showLetter({
+      type: "Personal Life",
+      title: "The timing does not work",
+      body: `One of you is not ready for children right now.`,
+      meta: "That can still leave a mark on the relationship."
+    });
+    if ((s.relationshipQuality || 0) <= -4 && chance(0.18)) {
+      triggerBreakup("The disagreement about children becomes too serious to ignore.");
+    }
+  }
+
+  render();
+  setScenario(generateYearScenario());
 }
 
 function takeLoanAction() {
@@ -1892,7 +2330,7 @@ function buyHouseAction() {
   setScenario({
     title: "Buy property",
     body: "What kind of home do you want to buy?",
-    choices: DATA.houseOptions.map(h => ({ text: `${h.label} — $${h.cost}k`, fn: () => {
+    choices: DATA.houseOptions.map(h => ({ text: `${h.label} - $${h.cost}k`, fn: () => {
       const down = Math.min(h.cost, Math.max(30, h.cost * 0.15));
       s.money -= down;
       s.debt += Math.max(0, h.cost - down);
@@ -1910,7 +2348,7 @@ function buyCarAction() {
   setScenario({
     title: "Buy a car",
     body: "What kind of car do you want?",
-    choices: DATA.carOptions.map(c => ({ text: `${c.label} — $${c.cost}k`, fn: () => {
+    choices: DATA.carOptions.map(c => ({ text: `${c.label} - $${c.cost}k`, fn: () => {
       if (s.money < c.cost * 0.2) {
         s.debt += c.cost;
       } else {
@@ -1945,6 +2383,11 @@ function goBackToSchoolAction() {
       );
 
       if (s.schoolStage === "University") {
+        if (s.major !== "Undeclared" && !s.secondMajor) {
+          choices.push({ text: "Add a second major.", fn: () => chooseSecondMajorAction() });
+        } else if (s.secondMajor) {
+          choices.push({ text: "Change second major.", fn: () => chooseSecondMajorAction() });
+        }
         choices.push({ text: "Apply to transfer to another university.", fn: () => choosePostSecondaryType("University") });
         if (s.yearsInPostSecondary >= 2) {
           choices.push({ text: "Apply to graduate school.", fn: () => applyGraduateSchoolAction("Graduate School") });
@@ -1970,7 +2413,7 @@ function goBackToSchoolAction() {
         title: ["Graduate School", "Professional School"].includes(s.schoolStage) ? "Advanced study options" : "Post-secondary options",
         body: "Pick what you want to do with your education next.",
         choices,
-        footer: `${s.schoolStage}${s.major ? ` • ${s.major}` : ""}${s.postSecondaryStatus ? ` • ${s.postSecondaryStatus}` : ""}`
+        footer: `${s.schoolStage}${s.major ? ` - ${s.major}` : ""}${s.postSecondaryStatus ? ` - ${s.postSecondaryStatus}` : ""}`
       });
       return;
     }
@@ -1995,22 +2438,38 @@ function goBackToSchoolAction() {
   }
 
   const choices = [];
+
   if (s.educationStage === "High School Graduate" || s.educationStage === "None") {
     choices.push(
       { text: "Apply to universities.", fn: () => showPostHighSchoolPortal() },
       { text: "Apply to college, community college, or trades.", fn: () => choosePostSecondaryType("College / Trades") },
-      { text: "Take a gap year first.", fn: () => { s.schoolStage = "Gap Year"; s.postSecondaryStatus = "Gap year"; advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
+      { text: "Take a gap year first.", fn: () => { startGapYear(); advanceYear({ hope: 1, purpose: 1, money: 2 }); } },
       { text: "Start working instead.", fn: () => { s.schoolStage = "Working Years"; s.field = "General"; s.postSecondaryStatus = "Working"; advanceYear({ money: 2, hope: 1 }); } }
     );
   }
+
   if (["University", "College / Trades"].includes(s.educationStage)) {
     choices.push(
+      { text: "Apply to universities.", fn: () => choosePostSecondaryType("University") },
+      { text: "Apply to college, community college, or trades.", fn: () => choosePostSecondaryType("College / Trades") },
       { text: "Apply to graduate school.", fn: () => applyGraduateSchoolAction("Graduate School") },
       { text: "Apply to professional school.", fn: () => applyGraduateSchoolAction("Professional School") }
     );
   }
+
   choices.push(
-    { text: "Take a certificate program.", fn: () => { s.inSchool = true; s.schoolStage = "College / Trades"; s.yearsInPostSecondary = 0; s.money -= 8; s.certifications.push("Certificate"); s.postSecondaryStatus = "Mature student certificate"; advanceYear({ purpose: 1, performance: 1 }); } },
+    {
+      text: "Take a certificate program.",
+      fn: () => {
+        s.inSchool = true;
+        s.schoolStage = "College / Trades";
+        s.yearsInPostSecondary = 0;
+        s.money -= 8;
+        s.certifications.push("Certificate");
+        s.postSecondaryStatus = "Mature student certificate";
+        advanceYear({ purpose: 1, performance: 1 });
+      }
+    },
     { text: "Go back.", fn: () => render() }
   );
 
@@ -2024,13 +2483,13 @@ function goBackToSchoolAction() {
     footer: s.educationStage || "No completed credential yet"
   });
 }
-
 function askRaiseAction() {
   const s = app.state;
   const odds = 0.35 + (s.performance - 5) * 0.07 + ((app.state.currentWorld?.raises) || 0);
   if (chance(odds)) {
-    const bump = Math.max(3, Math.round(s.salary * 0.08));
+    const bump = Math.max(2, Math.round(s.salary * 0.05));
     s.salary += bump;
+    s.salary = Math.min(s.salary, realisticSalaryCap(s.field, s.jobLevel));
     addLog(`${s.name} successfully negotiates a raise.`);
     showLetter({ type: "Career Update", title: "Raise Approved", body: `Your request is accepted.
 
@@ -2050,7 +2509,8 @@ function askPromotionAction() {
   if (chance(odds)) {
     s.jobLevel = clamp(s.jobLevel + 1, 0, 5);
     s.job = jobTitleForState();
-    s.salary += 9;
+    s.salary += 6;
+    s.salary = Math.min(s.salary, realisticSalaryCap(s.field, s.jobLevel));
     addLog(`${s.name} secures a promotion.`);
   } else {
     s.stress += 1;
@@ -2114,27 +2574,45 @@ function applyToSpecificJob(role) {
   }
 }
 
+
+
 function applyJobsAction() {
   const s = app.state;
   s.applicationsThisYear += 1;
-  const primaryField = s.field || fieldFromMajor(s.major) || "General";
-  const fields = [...new Set([primaryField, "General", "Business", "Arts", "Education", "Computer Science", "Medicine", "Skilled Trades", "Engineering", "Social Sciences"])];
-  const jobs = fields.flatMap(f => availableJobsForField(f).map(job => ({...job, boardField: f}))).slice(0, 18);
-  const cards = jobs.map(job => {
+
+  const fields = combinedStudyFields(s);
+  const jobs = fields.flatMap(field =>
+    availableJobsForField(field).map(job => ({ ...job, boardField: field }))
+  );
+
+  const seen = new Set();
+  const uniqueJobs = jobs.filter(job => {
+    const key = `${job.boardField}:${job.title}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  const cards = uniqueJobs.map(job => {
     const eligible = currentEducationRank() >= educationRank(job.minEducation);
     return {
-      text: `${job.title} — $${job.salary}k`,
-      html: `<div class="job-card ${eligible ? 'eligible' : 'ineligible'}"><div class="job-top"><strong>${job.title}</strong><span>$${job.salary}k</span></div><div class="job-meta">Field: ${job.boardField || primaryField} • Education needed: ${job.minEducation}</div><div class="job-desc">${job.description}</div><div class="job-eligibility">${eligible ? 'You can apply now' : 'Education requirement not met yet'}</div></div>`,
+      text: `${job.title} - $${job.salary}k`,
+      html: `<div class="job-card ${eligible ? 'eligible' : 'ineligible'}"><div class="job-top"><strong>${job.title}</strong><span>$${job.salary}k</span></div><div class="job-meta">Field: ${job.boardField} - Education needed: ${job.minEducation}</div><div class="job-desc">${job.description}</div><div class="job-eligibility">${eligible ? 'You can apply now' : 'Education requirement not met yet'}</div></div>`,
       disabled: !eligible,
       fn: () => applyToSpecificJob(job)
     };
   });
 
+  const footer = fields[0] === "General"
+    ? "You can only apply to general jobs right now because you do not have a declared study path yet."
+    : `You can apply to all jobs connected to your studied field${fields.length > 1 ? "s" : ""}: ${fields.join(", ")}.`;
+
   showChoiceModal({
     header: "Job board",
-    title: `Apply for jobs — ${primaryField}`,
-    body: "Pick a role to apply for. The highlighted roles are the ones you currently qualify for.",
-    choices: cards.concat([{ text: "Go back.", fn: () => setScenario(generateYearScenario()) }])
+    title: `Apply for jobs - ${fields.join(" / ")}`,
+    body: "Pick any role in your studied field. The highlighted roles are the ones you currently qualify for.",
+    choices: cards.concat([{ text: "Go back.", fn: () => setScenario(generateYearScenario()) }]),
+    footer
   });
 }
 
@@ -2146,7 +2624,7 @@ function startBusinessAction() {
   s.field = s.field || "Business";
   s.job = "Founder";
   s.company = `${s.name} Studio`;
-  s.salary = 30 + Math.round(Math.random() * 20);
+  s.salary = 30 + Math.round(Math.random() * 15);
   s.peakSalary = Math.max(s.peakSalary || 0, s.salary);
   addLog(`${s.name} starts a business.`);
   render();
@@ -2181,7 +2659,7 @@ function commitCrimeOutcome(kind) {
   addLog(`${s.name} is charged after a ${kind === "minor" ? "minor offence" : kind === "dui" ? "DUI" : "fraud case"}.`);
   showLetter({ type: "Legal Notice", title: "Charge Filed", body: `A charge has now moved out of rumor and into process.
 
-Severity: ${kind}
+Severity ${kind}
 This may lead to a warning, fine, probation, community service, or jail depending on outcome.`, meta: `Canadian legal context influences the result, but this remains a simplified simulation.` });
   render();
   setScenario(legalScenario());
@@ -2262,10 +2740,10 @@ function resolveSchoolApplications(applied, stage, major, tier) {
   if (!accepted.length) {
     setScenario({
       title: "Application Results",
-      body: "Your applications come back with no offer this round. What do you do next?",
+      body: "Your applications come back with no offers this round. What do you do next?",
       choices: [
         { text: "Apply again to a less competitive path.", fn: () => choosePostSecondaryType(stage) },
-        { text: "Take a gap year.", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.educationStage = "High School Graduate"; s.postSecondaryStatus = "No offer this round"; advanceYear({ hope: -1, purpose: 1 }); } },
+        { text: "Take a gap year.", fn: () => { startGapYear(); s.postSecondaryStatus = "No offer this round"; advanceYear({ hope: -1, purpose: 1 }); } },
         { text: "Start working.", fn: () => { s.schoolStage = "Working Years"; s.inSchool = false; s.educationStage = "High School Graduate"; s.field = "General"; s.postSecondaryStatus = "No offer this round"; advanceYear({ hope: -1 }); } }
       ]
     });
@@ -2279,13 +2757,13 @@ function resolveSchoolApplications(applied, stage, major, tier) {
     title: "Application Results",
     body: "You receive offers. Which one do you accept?",
     choices: accepted.map((school, idx) => ({
-      text: `${school} — about $${costMap[tier][idx] || costMap[tier][0]}k per year`,
+      text: `${school} - about $${costMap[tier][idx] || costMap[tier][0]}k per year`,
       fn: () => {
         s.schoolStage = stage;
         s.inSchool = true;
         s.major = major;
         s.field = fieldFromMajor(major);
-        s.postSecondaryStatus = `Accepted — ${school}`;
+        s.postSecondaryStatus = `Accepted - ${school}`;
         s.yearsInPostSecondary = 0;
         const upfront = Math.max(0.5, ((costMap[tier][idx] || costMap[tier][0]) * (s.movedOut ? 0.2 : 0.08)).toFixed(1));
         s.money -= Number(upfront);
@@ -2293,18 +2771,18 @@ function resolveSchoolApplications(applied, stage, major, tier) {
           type: "Admissions Office",
           title: "Offer of Admission",
           body: `${s.name},\n\nYou have been admitted to ${school} for ${major}.`,
-          meta: `Estimated yearly cost: $${costMap[tier][idx] || costMap[tier][0]}k`
+          meta: `Estimated yearly cost about $${costMap[tier][idx] || costMap[tier][0]}k`
         });
         advanceYear({ hope: 1, stress: 1 });
       }
-    })).concat([{ text: "Take a gap year instead.", fn: () => { s.schoolStage = "Gap Year"; s.inSchool = false; s.postSecondaryStatus = "Deferred"; advanceYear({ hope: 1, purpose: 1 }); } }, { text: "Go back.", fn: () => chooseSchoolOffer(stage, major, tier) }])
+    })).concat([{ text: "Take a gap year instead.", fn: () => { startGapYear(); s.postSecondaryStatus = "Deferred"; advanceYear({ hope: 1, purpose: 1 }); } }, { text: "Go back.", fn: () => chooseSchoolOffer(stage, major, tier) }])
   });
 }
 
 function pendingOfferScenario() {
   const o = app.state.pendingOffer;
   return {
-    title: `Age ${app.state.age} — A job offer turns into a decision`,
+    title: `Age ${app.state.age} - A job offer turns into a decision`,
     body: `Someone finally puts possibility into writing. This role is real enough to change your next year.\n\nCompany: ${o.company}\nRole: ${o.title}\nSalary: $${Math.round(o.salary)}k\nCulture: ${o.culture}`,
     choices: [
       { text: "Accept the offer.", fn: acceptPendingOffer },
@@ -2322,7 +2800,7 @@ function acceptPendingOffer() {
   s.field = o.field;
   s.jobLevel = o.level;
   s.job = o.title;
-  s.salary = o.salary;
+  s.salary = Math.min(o.salary, realisticSalaryCap(o.field, o.level));
   s.peakSalary = Math.max(s.peakSalary || 0, s.salary);
   s.pendingOffer = null;
   addLog(`${s.name} accepts a role at ${s.company}.`);
@@ -2390,8 +2868,8 @@ function rentHousingAction() {
   ];
   setScenario({
     title: "Choose a rental",
-    body: "Renting can buy flexibility, but it can also keep money flowing away from ownership.",
-    choices: options.map(([label, rent, name]) => ({ text: `${label} — $${rent}k / year`, fn: () => { s.rent = rent; s.rentedHome = name; s.moves += 1; s.movedOut = true; addLog(`${s.name} moves into a ${label.toLowerCase()}.`); render(); setScenario(generateYearScenario()); } })).concat([{ text: "Stay where you are.", fn: () => setScenario(generateYearScenario()) }])
+    body: "Renting gives you flexibility, but it can also make it harder to build long term stability.",
+    choices: options.map(([label, rent, name]) => ({ text: `${label} - $${rent}k / year`, fn: () => { s.rent = rent; s.rentedHome = name; s.moves += 1; s.movedOut = true; addLog(`${s.name} moves into a ${label.toLowerCase()}.`); render(); setScenario(generateYearScenario()); } })).concat([{ text: "Stay where you are.", fn: () => setScenario(generateYearScenario()) }])
   });
 }
 
@@ -2427,9 +2905,9 @@ function insuranceAction() {
     title: "Insurance",
     body: "What insurance do you want this year?",
     choices: [
-      { text: s.healthInsurance ? "Keep health insurance" : "Buy health insurance — $2k / year", fn: () => { s.healthInsurance = true; addLog(`${s.name} maintains health coverage.`); render(); setScenario(generateYearScenario()); } },
-      { text: s.carInsurance ? "Keep car insurance" : "Buy car insurance — $1.5k / year", fn: () => { s.carInsurance = true; addLog(`${s.name} insures a car.`); render(); setScenario(generateYearScenario()); } },
-      { text: s.homeInsurance ? "Keep home insurance" : "Buy home insurance — $1.8k / year", fn: () => { s.homeInsurance = true; addLog(`${s.name} insures their home.`); render(); setScenario(generateYearScenario()); } },
+      { text: s.healthInsurance ? "Keep health insurance" : "Buy health insurance - $2k / year", fn: () => { s.healthInsurance = true; addLog(`${s.name} maintains health coverage.`); render(); setScenario(generateYearScenario()); } },
+      { text: s.carInsurance ? "Keep car insurance" : "Buy car insurance - $1.5k / year", fn: () => { s.carInsurance = true; addLog(`${s.name} insures a car.`); render(); setScenario(generateYearScenario()); } },
+      { text: s.homeInsurance ? "Keep home insurance" : "Buy home insurance - $1.8k / year", fn: () => { s.homeInsurance = true; addLog(`${s.name} insures their home.`); render(); setScenario(generateYearScenario()); } },
       { text: "Leave insurance unchanged.", fn: () => setScenario(generateYearScenario()) }
     ]
   });
@@ -2523,14 +3001,15 @@ function resolveGraduateApplications(type, focus, tier) {
     title: "Graduate results",
     body: "You receive offers. Which one do you accept?",
     choices: accepted.map(school => ({
-      text: `${school} — about $${costs[tier]}k per year`,
+      text: `${school} - about $${costs[tier]}k per year`,
       fn: () => {
         s.inSchool = true;
         s.schoolStage = type;
         s.gradTrack = focus;
         s.major = focus;
+        s.secondMajor = "";
         s.field = focus === "Law" || focus === "MBA" || focus === "Teaching Credential" ? "General" : fieldFromMajor(focus);
-        s.postSecondaryStatus = `Accepted — ${school}`;
+        s.postSecondaryStatus = `Accepted - ${school}`;
         const upfront = Math.max(0.8, +(costs[tier] * (s.movedOut ? 0.22 : 0.1)).toFixed(1));
         s.money -= upfront;
         s.yearsInPostSecondary = 0;
@@ -2596,9 +3075,9 @@ function showIllnessPopup() {
   showChoiceModal({
     header: "Medical decision",
     title: `${capitalize(s.illness)} requires attention`,
-    body: `You can leave this for later, but recovery usually improves when you deal with it now.`,
+    body: `You can leave this for later, but recovery usually goes better if you deal with it now.`,
     choices: options.map(opt => ({
-      text: `${opt.label} — $${opt.display}`,
+      text: `${opt.label} - $${opt.display}`,
       fn: () => {
         s.money -= opt.cost;
         s.health = clamp(s.health + opt.health, 0, 10);
@@ -2638,22 +3117,6 @@ function readAccount(username) {
   return raw ? JSON.parse(raw) : null;
 }
 
-function updateBadgeShelfPreview() {
-  const username = $("loadUsernameInput").value.trim() || $("usernameInput").value.trim();
-  const shelf = $("badgeShelf");
-  if (!username) {
-    shelf.className = "badge-shelf empty";
-    shelf.textContent = "Enter a username to view saved badges.";
-    return;
-  }
-  const account = readAccount(username);
-  if (!account || !(account.badges || []).length) {
-    shelf.className = "badge-shelf empty";
-    shelf.textContent = "No saved badges found for that username yet.";
-    return;
-  }
-  shelf.className = "badge-shelf";
-  shelf.innerHTML = account.badges.map(b => `<span class="badge">${b}</span>`).join("");
-}
+function updateBadgeShelfPreview() { return; }
 
 document.addEventListener("DOMContentLoaded", init);
