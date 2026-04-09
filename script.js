@@ -90,7 +90,7 @@ const DATA = {
       { title: "Site Supervisor", minEducation: "College / Trades", salary: 88, description: "Lead crews, timelines, and safety on larger projects." }
     ],
     "General": [
-      { title: "Retail Associate", minEducation: "High School Graduate", salary: 39, description: "Entry customer service work with flexible hours." },
+      { title: "Retail Associate", minEducation: "High School Graduate", salary: 39, description: "Entry-level customer service work with flexible hours." },
       { title: "Administrative Assistant", minEducation: "College / Trades", salary: 49, description: "Office support, scheduling, communication, and coordination." },
       { title: "Program Coordinator", minEducation: "University", salary: 61, description: "Coordinate projects, stakeholders, and reporting requirements." }
     ]
