@@ -1,35 +1,35 @@
 const DATA = {
   backgrounds: [
-    { name: "Working Class", note: "Money feels fragile. Practical choices matter early on.", money: 10, discipline: 6, hope: 5, trust: 5 },
-    { name: "Middle Class", note: "There is some stability, but expectations can weigh on you too.", money: 18, discipline: 6, hope: 6, trust: 6 },
-    { name: "Upper Class", note: "Resources open doors, but pressure and image can become a burden too.", money: 32, discipline: 5, hope: 6, trust: 5 }
+    { name: "Working Class", money: 10, discipline: 6, hope: 5, trust: 5 },
+    { name: "Middle Class", money: 18, discipline: 6, hope: 6, trust: 6 },
+    { name: "Upper Class", money: 32, discipline: 5, hope: 6, trust: 5 }
   ],
   identities: [
-    { name: "Woman", note: "Your life may involve navigating gendered expectations and being underestimated sometimes." },
-    { name: "Man", note: "Your life may involve pressure around status, control, and emotional restraint even when you do not want it." },
-    { name: "Non-binary", note: "Your life may ask for self-definition and finding people who understand you." },
-    { name: "Transgender", note: "Your life may ask for courage, self-definition, support, and figuring things out in different ways." }
+    { name: "Woman"},
+    { name: "Man"},
+    { name: "Non-binary"},
+    { name: "Transgender"}
   ],
   talents: [
-    { name: "Sports", note: "Your body picks up movement and competition pretty easily.", performance: 2, discipline: 1 },
-    { name: "Arts", note: "You are drawn to expression, imagination, and creative detail.", hope: 1, purpose: 1 },
-    { name: "Academics", note: "Learning and abstraction come naturally to you most of the time.", discipline: 2, grades: 4 },
-    { name: "Leadership", note: "People often notice your presence and initiative.", trust: 1, performance: 1 },
-    { name: "Technology", note: "You like solving systems and understanding how things work even when it gets frustrating.", grades: 2, purpose: 1 }
+    { name: "Sports", performance: 2, discipline: 1 },
+    { name: "Arts", hope: 1, purpose: 1 },
+    { name: "Academics", discipline: 2, grades: 4 },
+    { name: "Leadership", trust: 1, performance: 1 },
+    { name: "Technology", grades: 2, purpose: 1 }
   ],
   childhoodActivities: ["Story Time", "Drawing", "Soccer", "Dance", "Music", "Swimming"],
   teenActivities: ["Dance Team", "Basketball", "Coding Club", "Debate", "Band", "Drama", "Volunteering", "Part-time Job", "Art Club", "Student Council", "Gym"],
   adultActivities: ["Gym", "Creative Projects", "Volunteering", "Networking", "Family Time", "Reading", "Side Hustle", "Travel", "Therapy", "Community Work"],
   majors: ["Computer Science", "Business", "Engineering", "Arts", "Education", "Medicine", "Social Sciences", "Skilled Trades"],
   worldEvents: [
-    { title: "A virus spreads again", body: "Hospitals fill quickly. Medical systems need more people and stress rises almost everywhere.", effects: { health: -1 }, field: { Medicine: 1.18 } },
-    { title: "A recession tightens the economy", body: "Hiring slows, promotions become harder, and households start to cut back.", effects: { money: -4, stress: 1 }, firing: 0.1, raises: -0.15 },
-    { title: "A technology boom accelerates", body: "Companies rush to hire technical workers, and digital skills are rewarded more strongly.", field: { "Computer Science": 1.18, Engineering: 1.08, Business: 1.04 } },
+    { title: "A virus spreads again", body: "Hospitals start filling up again, and there’s more stress on the healthcare system. Stay safe.", effects: { health: -1 }, field: { Medicine: 1.18 } },
+    { title: "A recession tightens the economy", body: "Jobs become harder to find, promotions slow down, and people start spending less., effects: { money: -4, stress: 1 }, firing: 0.1, raises: -0.15 },
+    { title: "A technology boom accelerates", body: "Tech companies start hiring a lot more, and digital skills become more valuable.", field: { "Computer Science": 1.18, Engineering: 1.08, Business: 1.04 } },
     { title: "Infrastructure spending expands", body: "Governments push large public projects. Skilled trades and engineering benefit more than usual.", field: { "Skilled Trades": 1.16, Engineering: 1.12 } },
     { title: "Arts funding is reduced", body: "Cultural organizations become more unstable. Creative work gets harder to keep going financially.", field: { Arts: 0.88 } },
     { title: "Teacher shortages grow", body: "Schools urgently need workers. Education becomes a bit more stable than usual.", field: { Education: 1.12 } },
-    { title: "Housing costs rise sharply", body: "Rent and mortgages become harder to carry. Even people who were doing fine feel squeezed.", effects: { money: -5, stress: 1 } },
-    { title: "A public mental-health push expands support", body: "Counselling access improves. Some people finally get help earlier.", effects: { hope: 1, stress: -1 } }
+    { title: "Housing costs rise sharply", body: "Rent and housing get more expensive, and even people who were okay start to feel the pressure.", effects: { money: -5, stress: 1 } },
+    { title: "A public mental-health push expands support", body: "Access to counselling improves, so more people can get help earlier.", effects: { hope: 1, stress: -1 } }
   ],
   companies: [
     { name: "Northline Systems", culture: "fast and demanding", raise: 0.05, stability: 0.85 },
@@ -57,17 +57,17 @@ const DATA = {
     "Business": [
       { title: "Sales Associate", minEducation: "High School Graduate", salary: 41, description: "Customer-facing sales and service work with growth potential." },
       { title: "Operations Coordinator", minEducation: "College / Trades", salary: 55, description: "Support scheduling, logistics, reporting, and office operations." },
-      { title: "Business Analyst", minEducation: "University", salary: 72, description: "Analyze processes, data, and performance for strategic decisions." }
+      { title: "Business Analyst", minEducation: "University", salary: 72, description: "Analyze processes, data, and performance for decisions." }
     ],
     "Engineering": [
       { title: "Drafting Technician", minEducation: "College / Trades", salary: 58, description: "Support design and technical drawings for projects." },
       { title: "Project Engineer", minEducation: "University", salary: 82, description: "Work on engineering planning, testing, and project delivery." },
-      { title: "Research Engineer", minEducation: "Graduate School", salary: 95, description: "Handle advanced technical design and specialized development." }
+      { title: "Research Engineer", minEducation: "Graduate School", salary: 95, description: "Handle advanced technical design and development." }
     ],
     "Arts": [
-      { title: "Production Assistant", minEducation: "High School Graduate", salary: 38, description: "Help deliver projects, events, shoots, and creative production tasks." },
+      { title: "Production Assistant", minEducation: "High School Graduate", salary: 38, description: "Help deliver projects,  events, shoots, and creative production tasks." },
       { title: "Graphic Designer", minEducation: "College / Trades", salary: 52, description: "Create visual assets for brands, campaigns, and digital products." },
-      { title: "Creative Strategist", minEducation: "University", salary: 61, description: "Blend concept development, communication, and campaign planning." }
+      { title: "Creative Strategist", minEducation: "University", salary: 61, description: "Blend concept development, communicstion, and campaign planning." }
     ],
     "Education": [
       { title: "After-school Program Worker", minEducation: "High School Graduate", salary: 39, description: "Support children and youth through structured programs." },
@@ -90,8 +90,8 @@ const DATA = {
       { title: "Site Supervisor", minEducation: "College / Trades", salary: 88, description: "Lead crews, timelines, and safety on larger projects." }
     ],
     "General": [
-      { title: "Retail Associate", minEducation: "High School Graduate", salary: 39, description: "Entry customer service work with flexible hours." },
-      { title: "Administrative Assistant", minEducation: "College / Trades", salary: 49, description: "Office support, scheduling, communication, and coordination." },
+      { title: "Retail Associate", minEducation: "High School Graduate", salary: 39, description: "Entry-level customer service work with flexible hours." },
+      { title: "Administrative Assistant", minEducation: "College / Trades", salary: 49, description: "Office supports, scheduling, communications, and coordinations." },
       { title: "Program Coordinator", minEducation: "University", salary: 61, description: "Coordinate projects, stakeholders, and reporting requirements." }
     ]
   }
@@ -1742,7 +1742,8 @@ function scenarioFromPairs(title, body, pairs) {
   };
 }
 
-
+// too lazy to put actual pictures... AHHHHHHHHHH
+//It's been 15 hours on this project, I am so tired
 const ENDING_CHARACTERS = {
   "High Achiever": {
     name: "The Climber",
@@ -3120,3 +3121,5 @@ function readAccount(username) {
 function updateBadgeShelfPreview() { return; }
 
 document.addEventListener("DOMContentLoaded", init);
+
+//we done!
