@@ -1,5 +1,6 @@
 const DATA = {
-  { name: "Working Class", note: "Money feels fragile. Practical choices matter early on.", money: 10, discipline: 6, hope: 5, trust: 5 },
+  backgrounds: [
+    { name: "Working Class", note: "Money feels fragile. Practical choices matter early on.", money: 10, discipline: 6, hope: 5, trust: 5 },
     { name: "Middle Class", note: "There is some stability, but expectations can weigh on you too.", money: 18, discipline: 6, hope: 6, trust: 6 },
     { name: "Upper Class", note: "Resources open doors, but pressure and image can become a burden too.", money: 32, discipline: 5, hope: 6, trust: 5 }
   ],
@@ -22,7 +23,7 @@ const DATA = {
   majors: ["Computer Science", "Business", "Engineering", "Arts", "Education", "Medicine", "Social Sciences", "Skilled Trades"],
   worldEvents: [
     { title: "A virus spreads again", body: "Hospitals start filling up again, and there’s more stress on the healthcare system. Stay safe.", effects: { health: -1 }, field: { Medicine: 1.18 } },
-    { title: "A recession tightens the economy", body: "Jobs become harder to find, promotions slow down, and people start spending less., effects: { money: -4, stress: 1 }, firing: 0.1, raises: -0.15 },
+    { title: "A recession tightens the economy", body: "Jobs become harder to find, promotions slow down, and people start spending less.", effects: { money: -4, stress: 1 }, firing: 0.1, raises: -0.15 },
     { title: "A technology boom accelerates", body: "Tech companies start hiring a lot more, and digital skills become more valuable.", field: { "Computer Science": 1.18, Engineering: 1.08, Business: 1.04 } },
     { title: "Infrastructure spending expands", body: "Governments push large public projects. Skilled trades and engineering benefit more than usual.", field: { "Skilled Trades": 1.16, Engineering: 1.12 } },
     { title: "Arts funding is reduced", body: "Cultural organizations become more unstable. Creative work gets harder to keep going financially.", field: { Arts: 0.88 } },
