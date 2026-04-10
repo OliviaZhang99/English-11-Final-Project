@@ -1,21 +1,20 @@
 const DATA = {
-  backgrounds: [
-    { name: "Working Class", money: 10, discipline: 6, hope: 5, trust: 5 },
-    { name: "Middle Class", money: 18, discipline: 6, hope: 6, trust: 6 },
-    { name: "Upper Class", money: 32, discipline: 5, hope: 6, trust: 5 }
+  { name: "Working Class", note: "Money feels fragile. Practical choices matter early on.", money: 10, discipline: 6, hope: 5, trust: 5 },
+    { name: "Middle Class", note: "There is some stability, but expectations can weigh on you too.", money: 18, discipline: 6, hope: 6, trust: 6 },
+    { name: "Upper Class", note: "Resources open doors, but pressure and image can become a burden too.", money: 32, discipline: 5, hope: 6, trust: 5 }
   ],
   identities: [
-    { name: "Woman"},
-    { name: "Man"},
-    { name: "Non-binary"},
-    { name: "Transgender"}
+    { name: "Woman", note: "Your life may involve navigating gendered expectations and being underestimated sometimes." },
+    { name: "Man", note: "Your life may involve pressure around status, control, and emotional restraint even when you do not want it." },
+    { name: "Non-binary", note: "Your life may ask for self-definition and finding people who understand you." },
+    { name: "Transgender", note: "Your life may ask for courage, self-definition, support, and figuring things out in different ways." }
   ],
   talents: [
-    { name: "Sports", performance: 2, discipline: 1 },
-    { name: "Arts", hope: 1, purpose: 1 },
-    { name: "Academics", discipline: 2, grades: 4 },
-    { name: "Leadership", trust: 1, performance: 1 },
-    { name: "Technology", grades: 2, purpose: 1 }
+    { name: "Sports", note: "Your body picks up movement and competition pretty easily.", performance: 2, discipline: 1 },
+    { name: "Arts", note: "You are drawn to expression, imagination, and creative detail.", hope: 1, purpose: 1 },
+    { name: "Academics", note: "Learning and abstraction come naturally to you most of the time.", discipline: 2, grades: 4 },
+    { name: "Leadership", note: "People often notice your presence and initiative.", trust: 1, performance: 1 },
+    { name: "Technology", note: "You like solving systems and understanding how things work even when it gets frustrating.", grades: 2, purpose: 1 }
   ],
   childhoodActivities: ["Story Time", "Drawing", "Soccer", "Dance", "Music", "Swimming"],
   teenActivities: ["Dance Team", "Basketball", "Coding Club", "Debate", "Band", "Drama", "Volunteering", "Part-time Job", "Art Club", "Student Council", "Gym"],
