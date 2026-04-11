@@ -164,7 +164,7 @@
       } else {
         freedom += 1;
         peace += 1;
-        story.push("As a child, " + name + " tried not to get pulled into other people's problems.");
+        story.push("As a child, " + name + " tried not to get pulled into problems.");
       }
 
       if (q2 === "study") {
@@ -176,7 +176,7 @@
       } else {
         heart += 1;
         freedom += 1;
-        story.push("In the teenage years, friendships sometimes mattered more than academic pressure.");
+        story.push("In the teenage years, friendships sometimes mattered more than academic success.");
       }
 
       if (q3 === "university") {
@@ -201,7 +201,7 @@
       } else {
         peace += 2;
         success += 1;
-        story.push("In early adulthood, " + name + " stayed ambitious but started drawing lines to survive.");
+        story.push("In early adulthood, " + name + " stayed ambitious but started setting boundaries.");
       }
 
       if (q5 === "relationship") {
@@ -209,10 +209,10 @@
         story.push("At some point, " + name + " tried to make room for people, even when life was already full.");
       } else if (q5 === "career") {
         success += 2;
-        story.push("When life became crowded, work still stayed near the center.");
+        story.push("When life became crowded, work still stayed as a priority.");
       } else {
         freedom += 2;
-        story.push("When life felt too full, " + name + " protected personal space even if it created distance.");
+        story.push("When life felt too full, " + name + " prioritized personal space.
       }
 
       if (q6 === "achievement") {
@@ -227,10 +227,10 @@
 
       if (q7 === "reflect") {
         peace += 2;
-        story.push("Later on, " + name + " slowed down a bit and started thinking more about how everything turned out.");
+        story.push("Later on, " + name + " slowed down a bit and started to think more about how everything turned out.");
       } else if (q7 === "push") {
         success += 2;
-        story.push("Later in life, " + name + " kept going, never fully stepping away from ambition.");
+        story.push("Later in life, " + name + " kept going, and never fully stepping away from ambition.");
       } else if (q7 === "connect") {
         heart += 2;
         story.push("Later in life, " + name + " returned to people and relationships.");
@@ -246,10 +246,10 @@
       }
 
       const endings = [
-        { name: "High Achiever", score: success, text: "You kept going, even when it got tiring. A lot of your life was about goals, pushing forward, and not really stopping." },
-        { name: "Quiet Life", score: peace, text: "You tried to keep things steady. Not perfect, not flashy, just something you could actually live with day to day." },
-        { name: "Big Heart", score: heart, text: "People mattered a lot to you. You showed up, cared, and didn’t really treat relationships like background noise." },
-        { name: "Free Spirit", score: freedom, text: "You didn’t want to feel stuck. A lot of your choices were about having space, even if that made things uncertain sometimes." }
+        { name: "High Achiever", score: success, text: "You kept going, even when it got tiring. A lot of your life was about goals and hardwork." },
+        { name: "Quiet Life", score: peace, text: "You tried to keep things steady. Not perfect, just something you could actually live with day to day." },
+        { name: "Big Heart", score: heart, text: "People mattered a lot to you. You showed up, cared, and treated the relationship seriously." },
+        { name: "Free Spirit", score: freedom, text: "You didn’t want to feel stuck. A lot of your choices were about having space, even if that made things difficult sometimes." }
       ];
 
       endings.sort(function(a, b) {
