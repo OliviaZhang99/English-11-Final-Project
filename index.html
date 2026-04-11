@@ -1,133 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Weight of Becoming</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Weight of Becoming -Olivia Zhang</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.5;
+      margin: 20px;
+      max-width: 760px;
+    }
+
+    h1, h2 {
+      margin-bottom: 10px;
+    }
+
+    .section {
+      margin-bottom: 28px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .age {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .scenario {
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      margin: 7px 0;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 8px;
+      margin-top: 4px;
+    }
+
+    button {
+      padding: 10px 18px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 30px;
+      padding: 15px;
+      border: 1px solid #999;
+      display: none;
+      white-space: pre-line;
+    }
+  </style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div>
-        <h1>The Weight of Becoming</h1>
-        <p class="subtitle">Olivia Zhang English 11 Final Project</p>
-      </div>
-      <div class="top-actions">
-        <button id="homeBtn" class="ghost hidden">Main Menu</button>
-      </div>
-    </header>
+  <h1>The Weight of Becoming</h1>
+  <p>Read each life situation, choose what you would do, then submit to see what kind of life you lived.</p>
 
-    <main class="layout">
-      <section class="main-panel">
-        
-        <!-- MENU SCREEN -->
-        <div id="menuScreen" class="screen active">
-          <div class="card hero menu-hero">
-            <div class="hero-copy">
-              <p class="eyebrow">Interactive narrative game</p>
-              <h2>The Weight of Becoming</h2>
-              <p class="menu-intro">
-                A life moves forward one year at a time. Some choices help. Some choices make things harder.
-                Some things happen before you are ready for them.
-              </p>
-            </div>
-          </div>
-
-          <div class="grid two menu-grid">
-            <div class="card">
-              <h3>Start a New Life</h3>
-              <div class="field-grid">
-                <label>
-                  <span>Name</span>
-                  <input id="nameInput" type="text" placeholder="Enter a name" />
-                </label>
-                <label>
-                  <span>Background</span>
-                  <select id="backgroundSelect"></select>
-                </label>
-                <label>
-                  <span>Identity</span>
-                  <select id="identitySelect"></select>
-                </label>
-                <label>
-                  <span>Talent</span>
-                  <select id="talentSelect"></select>
-                </label>
-              </div>
-              <div class="button-row wrap">
-                <button id="randomizeBtn">Randomize Setup</button>
-                <button id="startBtn" class="primary">Start New Life</button>
-              </div>
-              <p class="small-note">Choose a name, background, identity, and talent, then start.</p>
-            </div>
-
-            <div class="card menu-side-card">
-              <h3>Before You Start</h3>
-              <p class="menu-side-copy">
-                Choose a name, background, identity, and talent. Then start. 
-                The choices you make affect the life year by year.
-              </p>
-
-              <h4 style="margin-top: 12px;">Developer Note</h4>
-              <p class="menu-side-copy">
-                This game was inspired by different life simulation games. Please enjoy.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- GAME SCREEN -->
-        <div id="gameScreen" class="screen">
-          <div class="card scene-card">
-            <div class="scene-header">
-              <div>
-                <p id="ageLabel" class="eyebrow">Age 0</p>
-                <h2 id="sceneTitle">A life begins.</h2>
-              </div>
-              <div id="statusPills" class="pill-row"></div>
-            </div>
-            <div id="narrative" class="narrative"></div>
-            <div id="choiceArea" class="choices"></div>
-          </div>
-
-          <div id="actionCard" class="card action-card">
-            <div class="actions-header">
-              <h3>Life actions</h3>
-            </div>
-            <div id="actionButtons" class="button-row wrap"></div>
-          </div>
-
-          <div class="card log-card">
-            <h3>Recent life log</h3>
-            <div id="logArea" class="log-area"></div>
-          </div>
-        </div>
-
-      </section>
-
-      <!-- SIDEBAR -->
-      <aside class="sidebar">
-        <div class="card summary-card">
-          <h3>Life Summary</h3>
-          <div id="summaryArea" class="summary"></div>
-        </div>
-        <div class="card badge-card">
-          <h3>Badges</h3>
-          <div id="badgesArea" class="badge-grid"></div>
-        </div>
-      </aside>
-    </main>
-  </div>
-
-  <!-- MODAL -->
-  <div id="modal" class="modal hidden" aria-hidden="true">
-    <div class="modal-box">
-      <button id="closeModalBtn" class="modal-close">×</button>
-      <div id="modalContent"></div>
+  <form id="lifeForm">
+    <div class="section">
+      <h2>Start</h2>
+      <label>
+        Name
+        <input type="text" id="name" placeholder="Enter your name">
+      </label>
     </div>
-  </div>
 
-  <script src="script.js"></script>
+    <div class="section">
+      <div class="age">Age 6</div>
+      <div class="scenario">At school, your teacher says you are doing well, but another student is struggling and asks for help during free time.</div>
+      <label><input type="radio" name="q1" value="help" checked> Help them even if it slows your own work</label>
+      <label><input type="radio" name="q1" value="focus"> Focus on your own work and keep improving</label>
+      <label><input type="radio" name="q1" value="avoid"> Avoid getting involved</label>
+    </div>
+
+    <div class="section">
+      <div class="age">Age 14</div>
+      <div class="scenario">You have a big test coming up, but your friends want you to go out with them after school.</div>
+      <label><input type="radio" name="q2" value="study" checked> Stay home and study</label>
+      <label><input type="radio" name="q2" value="balance"> Go out for a bit, then come back and study later</label>
+      <label><input type="radio" name="q2" value="friends"> Ignore the test and enjoy the time with friends</label>
+    </div>
+
+    <div class="section">
+      <div class="age">Age 18</div>
+      <div class="scenario">Graduation comes, and you are unsure what to do next.</div>
+      <label><input type="radio" name="q3" value="university" checked> Go to university for more opportunities</label>
+      <label><input type="radio" name="q3" value="work"> Start working and make money right away</label>
+      <label><input type="radio" name="q3" value="explore"> Take time to explore what you actually want</label>
+    </div>
+
+    <div class="section">
+      <div class="age">Age 24</div>
+      <div class="scenario">Your first serious job is stressful. The pay is decent, but you are tired all the time.</div>
+      <label><input type="radio" name="q4" value="push" checked> Keep pushing because success matters</label>
+      <label><input type="radio" name="q4" value="leave"> Leave and find something healthier</label>
+      <label><input type="radio" name="q4" value="adapt"> Stay, but set stronger boundaries</label>
+    </div>
+
+    <div class="section">
+      <div class="age">Age 31</div>
+      <div class="scenario">Someone close to you wants more time and attention, but your life is already full.</div>
+      <label><input type="radio" name="q5" value="relationship" checked> Make more room for them</label>
+      <label><input type="radio" name="q5" value="career"> Be honest that work still comes first</label>
+      <label><input type="radio" name="q5" value="distance"> Pull away and protect your space</label>
+    </div>
+
+    <div class="section">
+      <div class="age">Age 42</div>
+      <div class="scenario">You finally have some stability. Now you have to decide what matters most in the next part of life.</div>
+      <label><input type="radio" name="q6" value="achievement" checked> Building more success</label>
+      <label><input type="radio" name="q6" value="peace"> Protecting your peace</label>
+      <label><input type="radio" name="q6" value="people"> Investing in people you love</label>
+      <label><input type="radio" name="q6" value="freedom"> Living more freely and on your own terms</label>
+    </div>
+
+    <div class="section">
+      <div class="age">Age 55</div>
+      <div class="scenario">Looking back, you realize time is more limited. How do you respond?</div>
+      <label><input type="radio" name="q7" value="reflect" checked> Slow down and reflect more</label>
+      <label><input type="radio" name="q7" value="push"> Keep pushing and doing more</label>
+      <label><input type="radio" name="q7" value="connect"> Reconnect with people</label>
+      <label><input type="radio" name="q7" value="enjoy"> Just enjoy life day by day</label>
+    </div>
+
+    <button type="submit">Submit Life</button> type="submit">Submit Life</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    document.getElementById("lifeForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("name").value.trim() || "You";
+      const q1 = document.querySelector('input[name="q1"]:checked').value;
+      const q2 = document.querySelector('input[name="q2"]:checked').value;
+      const q3 = document.querySelector('input[name="q3"]:checked').value;
+      const q4 = document.querySelector('input[name="q4"]:checked').value;
+      const q5 = document.querySelector('input[name="q5"]:checked').value;
+      const q6 = document.querySelector('input[name="q6"]:checked').value;
+      const q7 = document.querySelector('input[name="q7"]:checked').value;
+
+      let success = 0;
+      let peace = 0;
+      let heart = 0;
+      let freedom = 0;
+
+      let story = [];
+
+      if (q1 === "help") {
+        heart += 2;
+        story.push("As a kid, " + name + " noticed when people were struggling and usually stepped in.");
+      } else if (q1 === "focus") {
+        success += 2;
+        story.push("As a kid, " + name + " got used to focusing and just getting things done.");
+      } else {
+        freedom += 1;
+        peace += 1;
+        story.push("As a child, " + name + " tried not to get pulled into other people's problems.");
+      }
+
+      if (q2 === "study") {
+        success += 2;
+        story.push("As a teenager, a lot of the time responsibility came before fun.");
+      } else if (q2 === "balance") {
+        peace += 2;
+        story.push("As a teenager, " + name + " tried to balance pressure and actually enjoying life.");
+      } else {
+        heart += 1;
+        freedom += 1;
+        story.push("In the teenage years, friendships sometimes mattered more than academic pressure.");
+      }
+
+      if (q3 === "university") {
+        success += 2;
+        story.push("After graduation, " + name + " picked the path that seemed safest or most useful.");
+      } else if (q3 === "work") {
+        peace += 1;
+        heart += 1;
+        story.push("After graduation, real life started quickly through work and responsibility.");
+      } else {
+        freedom += 2;
+        story.push("After graduation, " + name + " took time to figure life out instead of rushing into a fixed plan.");
+      }
+
+      if (q4 === "push") {
+        success += 2;
+        story.push("In early adulthood, " + name + " pushed through stress because success still felt important.");
+      } else if (q4 === "leave") {
+        freedom += 1;
+        peace += 2;
+        story.push("In early adulthood, " + name + " decided that a healthier life mattered more than status.");
+      } else {
+        peace += 2;
+        success += 1;
+        story.push("In early adulthood, " + name + " stayed ambitious but started drawing lines to survive.");
+      }
+
+      if (q5 === "relationship") {
+        heart += 2;
+        story.push("At some point, " + name + " tried to make room for people, even when life was already full.");
+      } else if (q5 === "career") {
+        success += 2;
+        story.push("When life became crowded, work still stayed near the center.");
+      } else {
+        freedom += 2;
+        story.push("When life felt too full, " + name + " protected personal space even if it created distance.");
+      }
+
+      if (q6 === "achievement") {
+        success += 3;
+      } else if (q6 === "peace") {
+        peace += 3;
+      } else if (q6 === "people") {
+        heart += 3;
+      } else {
+        freedom += 3;
+      }
+
+      if (q7 === "reflect") {
+        peace += 2;
+        story.push("Later on, " + name + " slowed down a bit and started thinking more about how everything turned out.");
+      } else if (q7 === "push") {
+        success += 2;
+        story.push("Later in life, " + name + " kept going, never fully stepping away from ambition.");
+      } else if (q7 === "connect") {
+        heart += 2;
+        story.push("Later in life, " + name + " returned to people and relationships.");
+      } else {
+        freedom += 2;
+        story.push("Later in life, " + name + " focused on simply enjoying each day as it came.");
+      } if (q6 === "peace") {
+        peace += 3;
+      } else if (q6 === "people") {
+        heart += 3;
+      } else {
+        freedom += 3;
+      }
+
+      const endings = [
+        { name: "High Achiever", score: success, text: "You kept going, even when it got tiring. A lot of your life was about goals, pushing forward, and not really stopping." },
+        { name: "Quiet Life", score: peace, text: "You tried to keep things steady. Not perfect, not flashy, just something you could actually live with day to day." },
+        { name: "Big Heart", score: heart, text: "People mattered a lot to you. You showed up, cared, and didn’t really treat relationships like background noise." },
+        { name: "Free Spirit", score: freedom, text: "You didn’t want to feel stuck. A lot of your choices were about having space, even if that made things uncertain sometimes." }
+      ];
+
+      endings.sort(function(a, b) {
+        return b.score - a.score;
+      });
+
+      const best = endings[0];
+
+      const resultBox = document.getElementById("result");
+      resultBox.style.display = "block";
+      resultBox.textContent =
+        "Life Result\n\n" +
+        name + " became: " + best.name + "\n\n" +
+        best.text + "\n\n" +
+        "Life Summary:\n" +
+        story.join(" ") + "\n\n" +
+        "Score Breakdown:\n" +
+        "High Achiever: " + success + "\n" +
+        "Quiet Life: " + peace + "\n" +
+        "Big Heart: " + heart + "\n" +
+        "Free Spirit: " + freedom;
+
+      resultBox.scrollIntoView({ behavior: "smooth" });
+    });
+  </script>
 </body>
 </html>
