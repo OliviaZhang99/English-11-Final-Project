@@ -1,0 +1,198 @@
+/*https://www.youtube.com/watch?v=wsTv9y931o8*/
+/*https://www.youtube.com/watch?v=2oCN2q1x3c4&list=PLZPZq0r_RZOOxqHgOzPyCzIl4AJjXbCYt*/
+/*https://www.youtube.com/watch?v=wRNinF7YQqQ*/
+
+/* this styles the whole page */
+body {
+    /* sets font for everything */
+    font-family: Arial, sans-serif;
+    /* background color (kinda light blue gray) */
+    background-color: #f4f6fb;
+    /* remove default spacing */
+    margin: 0;
+    /* remove default padding */
+    padding: 0;
+}
+/* main container that holds everything */
+.container {
+    /* takes 80% of screen */
+    width: 80%;
+    /* but dont get too big */
+    max-width: 900px;
+    /* centers it + space top/bottom */
+    margin: 40px auto;
+    /* white box */
+    background-color: white;
+    /* space inside */
+    padding: 25px;
+    /* rounded corners */
+    border-radius: 12px;
+    /* little shadow so it looks nicer */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+/* main title */
+h1 {
+    /* center text */
+    text-align: center;
+    /* small gap under */
+    margin-bottom: 5px;
+}
+/* subtitle text */
+.subtitle {
+    /* center it */
+    text-align: center;
+    /* gray color */
+    color: #666;
+    /* space under */
+    margin-bottom: 25px;
+}
+/* form layout (inputs + button) */
+.form-box {
+    /* use grid layout */
+    display: grid;
+    /* column sizes (first one bigger) */
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    /* gap between stuff */
+    gap: 10px;
+    /* space under form */
+    margin-bottom: 25px;
+}
+/* styles for inputs, dropdowns, buttons */
+.form-box input,
+.form-box select,
+.form-box button {
+    /* padding inside */
+    padding: 10px;
+    /* text size */
+    font-size: 14px;
+    /* light border */
+    border: 1px solid #ccc;
+    /* rounded edges */
+    border-radius: 8px;
+}
+/* add button */
+.form-box button {
+    /* blue background */
+    background-color: #4a6cf7;
+    /* white text */
+    color: white;
+    /* remove border */
+    border: none;
+    /* cursor pointer when hover */
+    cursor: pointer;
+}
+/* hover effect */
+.form-box button:hover {
+    /* darker blue */
+    background-color: #3556d8;
+}
+/* top row (progress section) */
+.top-row {
+    /* side by side */
+    display: flex;
+    /* space between */
+    gap: 20px;
+    /* space below */
+    margin-bottom: 25px;
+}
+/* summary box */
+.summary-box,
+.calendar-box {
+    /* equal width */
+    flex: 1;
+    /* light bg */
+    background-color: #f8f9ff;
+    /* inside spacing */
+    padding: 15px;
+    /* rounded */
+    border-radius: 10px;
+}
+/* section title */
+.task-section h2 {
+    /* space below */
+    margin-bottom: 15px;
+}
+/* removes bullets from list */
+#taskList {
+    /* no dots */
+    list-style: none;
+    /* no padding */
+    padding: 0;
+}
+/* each task box */
+.task-item {
+    /* light gray */
+    background-color: #f9f9f9;
+    /* border */
+    border: 1px solid #ddd;
+    /* left colored line */
+    border-left: 6px solid #4a6cf7;
+    /* spacing inside */
+    padding: 15px;
+    /* space between tasks */
+    margin-bottom: 12px;
+    /* rounded */
+    border-radius: 10px;
+    /* layout */
+    display: flex;
+    /* space between text + buttons */
+    justify-content: space-between;
+    /* center vertically */
+    align-items: center;
+}
+/* task text area */
+.task-info {
+    /* dont let it be too wide look ugly*/
+    max-width: 70%;
+}
+/* paragraphs inside task */
+.task-info p {
+    /* small spacing */
+    margin: 4px 0;
+}
+/* completed task style */
+.completed {
+    /* line through text */
+    text-decoration: line-through;
+    /* faded */
+    opacity: 0.6;
+}
+/* buttons container */
+.task-buttons button {
+    /* space between buttons */
+    margin-left: 8px;
+    /* size */
+    padding: 8px 10px;
+    /* no border */
+    border: none;
+    /* rounded */
+    border-radius: 6px;
+    /* pointer */
+    cursor: pointer;
+}
+/* complete button */
+.complete-btn {
+    /* green */
+    background-color: #4caf50;
+    /* white text */
+    color: white;
+}
+/* delete button */
+.delete-btn {
+    /* red */
+    background-color: #e74c3c;
+    /* white text */
+    color: white;
+}
+/* high priority (red line) */
+.high {
+    border-left-color: #e74c3c;
+}
+/* medium priority (orange) */
+.medium {
+    border-left-color: #f39c12;
+}
+/* low priority (green) */
+.low {
+    border-left-color: #2ecc71;
+}
